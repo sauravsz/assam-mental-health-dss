@@ -8,27 +8,28 @@ export function App() {
   const [activeTab, setActiveTab] = useState<'state' | 'planner' | 'queue'>('planner')
 
   return (
-    <div className="min-h-screen bg-slate-100/70 text-slate-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} stalledCount={434} />
 
-      <main className="max-w-7xl mx-auto px-4 py-6 w-full flex-1">
+      <main className="max-w-6xl mx-auto px-4 py-8 w-full flex-1">
         {activeTab === 'state' && <StatePolicyView />}
         {activeTab === 'planner' && <DMHPCampPlanner />}
         {activeTab === 'queue' && <RetentionQueue />}
       </main>
 
-      <footer className="bg-slate-900 border-t border-slate-800 text-slate-400 py-6 px-4 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <footer className="bg-white border-t border-slate-200/80 text-slate-500 py-8 px-4 text-xs mt-12">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
-            <p className="font-semibold text-slate-300">
-              Assam Mental Health Decision Support System (AMH-DSS) · Prototype v1.0
+            <p className="font-semibold text-slate-800">
+              Assam Mental Health Care Navigator · Operational Prototype v1.0
             </p>
-            <p className="text-[11px] text-slate-500 mt-0.5">
-              National Health Mission (NHM) Assam & Health & Family Welfare Department · NESFIC 2026 Proposal
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Government of Assam · National Health Mission (NHM) · Health &amp; Family Welfare Department
             </p>
           </div>
-          <div className="text-[11px] text-slate-400">
-            Formulation: Capacitated $p$-Median MILP & Poisson Surveillance | Lead: Saurav Sinha (Assam University)
+          <div className="text-[11px] text-slate-400 flex flex-col sm:items-end gap-0.5">
+            <span>Decision Support System · Capacitated p-Median Optimization &amp; Anomaly Surveillance</span>
+            <span className="text-slate-500 font-medium">Assam University, Silchar</span>
           </div>
         </div>
       </footer>
