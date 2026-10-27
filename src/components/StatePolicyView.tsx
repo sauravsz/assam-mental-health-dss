@@ -28,43 +28,43 @@ export const StatePolicyView = () => {
       </div>
 
       {/* Top 4 KPI Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Tele-MANAS Inbound</span>
-            <PhoneCall className="w-4 h-4 text-blue-600" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider truncate">Inbound Calls</span>
+            <PhoneCall className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 shrink-0" />
           </div>
-          <div className="text-2xl font-bold text-slate-900">10,000</div>
-          <p className="text-xs text-slate-500 mt-1">Statewide monthly call cohort</p>
+          <div className="text-lg sm:text-2xl font-bold text-slate-900">10,000</div>
+          <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 truncate">Monthly intake</p>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Verified Physical Care</span>
-            <TrendingDown className="w-4 h-4 text-rose-500" />
+        <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider truncate">Care Verified</span>
+            <TrendingDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-500 shrink-0" />
           </div>
-          <div className="text-2xl font-bold text-rose-600">5.8%</div>
-          <p className="text-xs text-slate-500 mt-1">
-            <strong className="text-rose-600 font-semibold">94.2% drop-off</strong> across funnel
+          <div className="text-lg sm:text-2xl font-bold text-rose-600">5.8%</div>
+          <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 truncate">
+            <strong className="text-rose-600 font-semibold">94.2% drop</strong>
           </p>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Poisson Surge Alerts</span>
-            <ShieldAlert className="w-4 h-4 text-amber-500" />
+        <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider truncate">Poisson Surges</span>
+            <ShieldAlert className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 shrink-0" />
           </div>
-          <div className="text-2xl font-bold text-amber-600">{totalSurgeCount} Districts</div>
-          <p className="text-xs text-slate-500 mt-1">Statistically anomalous distress ($Z &gt; 2.5$)</p>
+          <div className="text-lg sm:text-2xl font-bold text-amber-600">{totalSurgeCount} Dists</div>
+          <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 truncate">Z &gt; 2.5 alert</p>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Flood Trauma Shocks</span>
-            <Waves className="w-4 h-4 text-cyan-600" />
+        <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 mb-1 sm:mb-2">
+            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider truncate">Flood Shocks</span>
+            <Waves className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-600 shrink-0" />
           </div>
-          <div className="text-2xl font-bold text-cyan-600">{totalFloodAffected} Districts</div>
-          <p className="text-xs text-slate-500 mt-1">Barak & Brahmaputra basin inundation</p>
+          <div className="text-lg sm:text-2xl font-bold text-cyan-600">{totalFloodAffected} Dists</div>
+          <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 truncate">Inundated areas</p>
         </div>
       </div>
 
@@ -177,11 +177,16 @@ export const StatePolicyView = () => {
           </div>
         </div>
 
+        <div className="md:hidden px-3 py-1 bg-slate-100 text-[10px] text-slate-500 border-b border-slate-200 flex items-center justify-between">
+          <span>👉 Swipe table to see Z-Scores &amp; Camps</span>
+          <span className="font-semibold text-slate-700">District fixed</span>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left text-slate-700">
-            <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[11px] border-b border-slate-200">
+            <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[10px] sm:text-[11px] border-b border-slate-200">
               <tr>
-                <th className="py-2.5 px-3">District</th>
+                <th className="py-2.5 px-3 sticky left-0 bg-slate-100 z-20 shadow-[1px_0_3px_rgba(0,0,0,0.06)]">District</th>
                 <th className="py-2.5 px-3">Zone</th>
                 <th className="py-2.5 px-3 text-right">Population</th>
                 <th className="py-2.5 px-3 text-right">Calls (30d)</th>
@@ -201,15 +206,15 @@ export const StatePolicyView = () => {
                     d.name === 'Cachar' || d.name === 'Kamrup Metropolitan' ? 'bg-blue-50/40 font-medium' : ''
                   }`}
                 >
-                  <td className="py-2.5 px-3 font-semibold text-slate-900 flex items-center gap-1.5">
+                  <td className="py-2.5 px-3 font-semibold text-slate-900 sticky left-0 bg-white z-10 shadow-[1px_0_3px_rgba(0,0,0,0.06)] flex items-center gap-1.5 whitespace-nowrap">
                     {d.name}
                     {(d.name === 'Cachar' || d.name === 'Kamrup Metropolitan') && (
-                      <span className="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded font-bold">
+                      <span className="text-[9px] bg-blue-100 text-blue-700 px-1 py-0.2 rounded font-bold">
                         PILOT
                       </span>
                     )}
                   </td>
-                  <td className="py-2.5 px-3 text-slate-600">{d.zone}</td>
+                  <td className="py-2.5 px-3 text-slate-600 whitespace-nowrap">{d.zone}</td>
                   <td className="py-2.5 px-3 text-right font-mono text-slate-600">{d.population.toLocaleString()}</td>
                   <td className="py-2.5 px-3 text-right font-mono font-bold text-slate-900">{d.callsLast30Days}</td>
                   <td className="py-2.5 px-3 text-right font-mono text-slate-700">{d.callsPer100k}</td>

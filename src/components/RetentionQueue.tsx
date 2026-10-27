@@ -160,52 +160,58 @@ export const RetentionQueue = () => {
               Sorted by stall duration (&gt;14 days). Click "Log Outreach" to update care continuity status.
             </p>
           </div>
-
-          <div className="flex flex-wrap items-center gap-2 text-xs">
+          <div className="grid grid-cols-1 sm:flex sm:flex-wrap items-center gap-2 text-xs w-full sm:w-auto">
             {/* Search Input */}
-            <div className="relative">
+            <div className="relative w-full sm:w-48">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search block, ID, facility..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs w-48 text-slate-700 focus:outline-blue-500"
+                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs w-full text-slate-700 focus:outline-blue-500"
               />
             </div>
 
-            {/* District Filter */}
-            <select
-              value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="bg-white border border-slate-300 rounded-lg px-2 py-1.5 text-xs text-slate-700 font-medium"
-            >
-              <option value="All">All Districts</option>
-              <option value="Cachar">Cachar District</option>
-              <option value="Kamrup Metro">Kamrup Metro</option>
-            </select>
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
+              {/* District Filter */}
+              <select
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+                className="bg-white border border-slate-300 rounded-lg px-2 py-1.5 text-xs text-slate-700 font-medium w-full sm:w-auto"
+              >
+                <option value="All">All Districts</option>
+                <option value="Cachar">Cachar District</option>
+                <option value="Kamrup Metro">Kamrup Metro</option>
+              </select>
 
-            {/* Diagnosis Filter */}
-            <select
-              value={selectedDiagnosis}
-              onChange={(e) => setSelectedDiagnosis(e.target.value)}
-              className="bg-white border border-slate-300 rounded-lg px-2 py-1.5 text-xs text-slate-700 font-medium"
-            >
-              <option value="All">All mhGAP Categories</option>
-              <option value="Depression">Depression</option>
-              <option value="Anxiety">Anxiety</option>
-              <option value="Substance">Substance Use</option>
-              <option value="Self-Harm">Self-Harm Risk</option>
-              <option value="Psychosis">Psychosis</option>
-            </select>
+              {/* Diagnosis Filter */}
+              <select
+                value={selectedDiagnosis}
+                onChange={(e) => setSelectedDiagnosis(e.target.value)}
+                className="bg-white border border-slate-300 rounded-lg px-2 py-1.5 text-xs text-slate-700 font-medium w-full sm:w-auto"
+              >
+                <option value="All">All mhGAP</option>
+                <option value="Depression">Depression</option>
+                <option value="Anxiety">Anxiety</option>
+                <option value="Substance">Substance</option>
+                <option value="Self-Harm">Self-Harm</option>
+                <option value="Psychosis">Psychosis</option>
+              </select>
+            </div>
           </div>
+        </div>
+
+        <div className="md:hidden px-3 py-1 bg-slate-100 text-[10px] text-slate-500 border-b border-slate-200 flex items-center justify-between">
+          <span>👉 Swipe to view facility, duration &amp; status</span>
+          <span className="font-semibold text-slate-700">ID fixed</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left text-slate-700">
-            <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[11px] border-b border-slate-200">
+            <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[10px] sm:text-[11px] border-b border-slate-200">
               <tr>
-                <th className="py-2.5 px-3">Referral ID</th>
+                <th className="py-2.5 px-3 sticky left-0 bg-slate-100 z-20 shadow-[1px_0_3px_rgba(0,0,0,0.06)]">Referral ID</th>
                 <th className="py-2.5 px-3">Pseudonymized Hash</th>
                 <th className="py-2.5 px-3">Location</th>
                 <th className="py-2.5 px-3">Profile</th>
@@ -219,8 +225,10 @@ export const RetentionQueue = () => {
             <tbody className="divide-y divide-slate-100">
               {filteredRecords.slice(0, 15).map((r) => (
                 <tr key={r.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="py-2.5 px-3 font-mono font-bold text-slate-900">{r.id}</td>
-                  <td className="py-2.5 px-3 font-mono text-[11px] text-slate-500">
+                  <td className="py-2.5 px-3 font-mono font-bold text-slate-900 sticky left-0 bg-white z-10 shadow-[1px_0_3px_rgba(0,0,0,0.06)] whitespace-nowrap">
+                    {r.id}
+                  </td>
+                  <td className="py-2.5 px-3 font-mono text-[11px] text-slate-500 whitespace-nowrap">
                     <span className="bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
                       {r.callerHash.slice(0, 14)}
                     </span>

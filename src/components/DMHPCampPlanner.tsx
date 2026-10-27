@@ -131,43 +131,43 @@ export const DMHPCampPlanner = () => {
 
         {/* Middle & Right: The Empirical Benchmark Comparison */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
             {/* Status Quo */}
-            <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+            <div className="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-xs">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">
                 Status Quo (Intuitive HQ)
               </span>
-              <div className="text-xl font-bold text-slate-700 font-mono">
+              <div className="text-lg sm:text-xl font-bold text-slate-700 font-mono">
                 {result.baselineMeanTravelTime} <span className="text-xs font-normal text-slate-500">min</span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-1">
-                Stationed at: {baselineFacilities.map((f) => f.name.split(' ')[0]).join(' + ')}
+              <p className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">
+                At: {baselineFacilities.map((f) => f.name.split(' ')[0]).join(' + ')}
               </p>
             </div>
 
             {/* Optimal MILP */}
-            <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-4 shadow-xs">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block mb-1">
+            <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3 sm:p-4 shadow-xs">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 block mb-0.5">
                 AMH-DSS Optimal Siting
               </span>
-              <div className="text-xl font-bold text-emerald-700 font-mono">
+              <div className="text-lg sm:text-xl font-bold text-emerald-700 font-mono">
                 {result.meanTravelTime} <span className="text-xs font-normal text-emerald-600">min</span>
               </div>
-              <p className="text-[11px] text-emerald-700 mt-1 font-medium">
-                Sited at: {activeFacilities.map((f) => f.name.split(' ')[0]).join(' + ')}
+              <p className="text-[10px] sm:text-[11px] text-emerald-700 mt-0.5 font-medium">
+                At: {activeFacilities.map((f) => f.name.split(' ')[0]).join(' + ')}
               </p>
             </div>
 
             {/* Net Gain */}
-            <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 shadow-xs">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-800 block mb-1">
+            <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-3 sm:p-4 shadow-xs">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-800 block mb-0.5">
                 Net Travel Reduction
               </span>
-              <div className="text-xl font-bold text-blue-700 font-mono">
+              <div className="text-lg sm:text-xl font-bold text-blue-700 font-mono">
                 -{result.travelTimeReductionPct}%
               </div>
-              <p className="text-[11px] text-blue-700 mt-1">
-                Saves ~{Math.round(result.baselineMeanTravelTime - result.meanTravelTime)} min travel per rural patient
+              <p className="text-[10px] sm:text-[11px] text-blue-700 mt-0.5">
+                Saves ~{Math.round(result.baselineMeanTravelTime - result.meanTravelTime)} min / rural patient
               </p>
             </div>
           </div>
@@ -288,12 +288,16 @@ export const DMHPCampPlanner = () => {
             {activeFacilities.length} Camps Mobilized
           </div>
         </div>
+        <div className="md:hidden px-3 py-1 bg-slate-100 text-[10px] text-slate-500 border-b border-slate-200 flex items-center justify-between">
+          <span>👉 Swipe to view drug stock &amp; capacity</span>
+          <span className="font-semibold text-slate-700">Location fixed</span>
+        </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left text-slate-700">
-            <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[11px] border-b border-slate-200">
+            <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[10px] sm:text-[11px] border-b border-slate-200">
               <tr>
-                <th className="py-2.5 px-3">Camp Location</th>
+                <th className="py-2.5 px-3 sticky left-0 bg-slate-100 z-20 shadow-[1px_0_3px_rgba(0,0,0,0.06)]">Camp Location</th>
                 <th className="py-2.5 px-3">Revenue Block</th>
                 <th className="py-2.5 px-3">Assigned Catchment</th>
                 <th className="py-2.5 px-3 text-right">Intake Capacity</th>
@@ -315,11 +319,11 @@ export const DMHPCampPlanner = () => {
 
                 return (
                   <tr key={fac.id} className="hover:bg-slate-50 font-medium">
-                    <td className="py-2.5 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                    <td className="py-2.5 px-3 font-bold text-slate-900 sticky left-0 bg-white z-10 shadow-[1px_0_3px_rgba(0,0,0,0.06)] flex items-center gap-1.5 whitespace-nowrap">
                       <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                       {fac.name}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-600">{fac.blockName}</td>
+                    <td className="py-2.5 px-3 text-slate-600 whitespace-nowrap">{fac.blockName}</td>
                     <td className="py-2.5 px-3 text-slate-800 font-semibold">
                       {catchment.join(', ')}
                     </td>
