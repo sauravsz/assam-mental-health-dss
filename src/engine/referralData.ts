@@ -40,7 +40,7 @@ export function generateSyntheticStalledReferrals(count: number = 434): Referral
     const assignedFacility = FACILITIES[Math.floor(r4 * FACILITIES.length)]
     const language = district === 'Cachar' ? (r5 > 0.3 ? 'Bengali' : 'Assamese') : (r5 > 0.2 ? 'Assamese' : 'Bengali')
     const ageBand = AGE_BANDS[Math.floor(r6 * AGE_BANDS.length)]
-    const gender = GENDERS[Math.floor(pseudoRand(i * 131) * 3)] // mostly M / F
+    const gender = GENDERS[Math.floor(pseudoRand(i * 131) * 3)]
 
     const hex1 = Math.floor(pseudoRand(i * 151) * 0xffffff).toString(16).padStart(6, '0')
     const hex2 = Math.floor(pseudoRand(i * 173) * 0xffffff).toString(16).padStart(6, '0')
@@ -86,22 +86,66 @@ export function generateSyntheticStalledReferrals(count: number = 434): Referral
   return records
 }
 
-// Small-cell suppression helper enforcing DPDP 2023 & MHCA 2017
+export interface SuppressedCell {
+  group: string
+  count: number | string
+  isMasked: boolean
+  suppressionType: 'none' | 'primary' | 'secondary'
+}
+
+/**
+ * Complementary (Secondary) Suppression Engine enforcing DPDP 2023 & MHCA 2017:
+ * 1. Primary Suppression: Any cell with count 1 <= n < threshold is suppressed (<10).
+ * 2. Secondary (Complementary) Suppression: If exactly 1 cell is suppressed in a table,
+ *    the second-smallest cell is also suppressed to prevent algebraic subtraction leaks.
+ */
 export function applySmallCellSuppression<T>(
   data: T[],
   groupFn: (item: T) => string,
   threshold: number = 10
-): { group: string; count: number | string; isMasked: boolean }[] {
+): SuppressedCell[] {
   const counts: Record<string, number> = {}
   data.forEach((item) => {
     const key = groupFn(item)
     counts[key] = (counts[key] || 0) + 1
   })
 
-  return Object.entries(counts).map(([group, count]) => {
-    if (count < threshold) {
-      return { group, count: `<${threshold} (Masked)`, isMasked: true }
+  const cells: SuppressedCell[] = Object.entries(counts).map(([group, count]) => ({
+    group,
+    count,
+    isMasked: false,
+    suppressionType: 'none',
+  }))
+
+  // 1. Primary suppression pass
+  const primaryIndices: number[] = []
+  for (let i = 0; i < cells.length; i++) {
+    if (typeof cells[i].count === 'number' && (cells[i].count as number) < threshold) {
+      cells[i].count = `<${threshold} (Primary)`
+      cells[i].isMasked = true
+      cells[i].suppressionType = 'primary'
+      primaryIndices.push(i)
     }
-    return { group, count, isMasked: false }
-  })
+  }
+
+  // 2. Secondary (complementary) suppression pass if exactly 1 cell is suppressed
+  if (primaryIndices.length === 1 && cells.length > 1) {
+    let minUnmaskedVal = Infinity
+    let minUnmaskedIdx = -1
+    for (let i = 0; i < cells.length; i++) {
+      if (!cells[i].isMasked && typeof cells[i].count === 'number') {
+        if ((cells[i].count as number) < minUnmaskedVal) {
+          minUnmaskedVal = cells[i].count as number
+          minUnmaskedIdx = i
+        }
+      }
+    }
+    if (minUnmaskedIdx !== -1) {
+      cells[minUnmaskedIdx].count = `Masked (Sec. Suppression)`
+      cells[minUnmaskedIdx].isMasked = true
+      cells[minUnmaskedIdx].suppressionType = 'secondary'
+    }
+  }
+
+  return cells
 }

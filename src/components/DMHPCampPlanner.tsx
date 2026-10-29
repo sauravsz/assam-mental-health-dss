@@ -140,11 +140,10 @@ export const DMHPCampPlanner = () => {
               -{result.travelTimeReductionPct}% Faster
             </div>
             <p className="text-xs text-blue-700 mt-1">
-              Saves <strong className="font-semibold">~16 minutes</strong> of travel per rural patient
+              Saves <strong className="font-semibold">~{Math.max(0, Math.round(result.baselineMeanTravelTime - result.meanTravelTime))} minutes</strong> of travel per rural patient
             </p>
           </div>
         </div>
-
         {/* Clean Schematic Map */}
         <div className="mt-6 border border-slate-200/80 rounded-xl p-4 bg-slate-900 text-white overflow-hidden">
           <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">

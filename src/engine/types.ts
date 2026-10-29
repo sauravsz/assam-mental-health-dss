@@ -41,6 +41,8 @@ export interface DistrictDistress {
   callsPer100k: number
   poissonExpected: number
   zScore: number
+  pValue: number
+  pValueFormatted: string
   floodCrisis: boolean
   isSurge: boolean
   allocatedCamps: number

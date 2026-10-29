@@ -227,19 +227,26 @@ export const RetentionQueue = () => {
           {showTechnicalDetails && (
             <div className="p-4 space-y-3 bg-white border-t border-slate-200 text-xs text-slate-700">
               <div className="bg-slate-50 p-3 rounded-lg space-y-1">
-                <p className="font-semibold text-slate-900">Small-Cell Re-Identification Protection (DPDP 2023):</p>
-                <p className="text-slate-600 text-[11px]">
-                  Any reporting group with count n &lt; 10 is automatically masked to prevent deanonymization in small villages.
+                <p className="font-semibold text-slate-900">Primary + Secondary Complementary Suppression (DPDP 2023):</p>
+                <p className="text-slate-600 text-[11px] leading-relaxed">
+                  Cells with count n &lt; 10 undergo <strong>Primary Suppression</strong>. If only one cell is masked in a slice, <strong>Secondary (Complementary) Suppression</strong> is applied to the next smallest cell to eliminate algebraic subtraction leaks against marginal totals.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-2 pt-2">
                 {smallCellStats.slice(0, 8).map((stat, idx) => (
-                  <div key={idx} className="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-[11px] font-mono">
+                  <div
+                    key={idx}
+                    className={`border rounded-lg px-2.5 py-1 text-[11px] font-mono ${
+                      stat.suppressionType === 'primary'
+                        ? 'bg-rose-50 text-rose-700 border-rose-200 font-bold'
+                        : stat.suppressionType === 'secondary'
+                        ? 'bg-amber-50 text-amber-700 border-amber-200 font-semibold'
+                        : 'bg-slate-50 text-slate-800 border-slate-200'
+                    }`}
+                  >
                     <span className="text-slate-500 font-sans">{stat.group}:</span>{' '}
-                    <span className={stat.isMasked ? 'text-rose-600 font-bold' : 'text-slate-800'}>
-                      {stat.count}
-                    </span>
+                    <span>{stat.count}</span>
                   </div>
                 ))}
               </div>
@@ -247,7 +254,6 @@ export const RetentionQueue = () => {
           )}
         </div>
       </div>
-
       {/* Action Dialog */}
       {activeRecordForAction && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
