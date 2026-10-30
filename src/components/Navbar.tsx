@@ -1,4 +1,4 @@
-import { Activity, ShieldCheck, MapPin, Database, Terminal, Edit3, RotateCcw } from 'lucide-react'
+import { Activity, ShieldCheck, MapPin, Database, Edit3, RotateCcw } from 'lucide-react'
 
 interface NavbarProps {
   activeTab: 'state' | 'planner' | 'queue'
@@ -9,6 +9,13 @@ interface NavbarProps {
   resetToDefaults: () => void
 }
 
+// Anthropic 4-spoke radial-spike mark
+const AnthropicSpike = ({ className = "w-4 h-4 text-[#cc785c]" }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M12 2L13.2 9.8L21 11L13.2 12.2L12 20L10.8 12.2L3 11L10.8 9.8L12 2Z" />
+  </svg>
+)
+
 export const Navbar = ({
   activeTab,
   setActiveTab,
@@ -18,56 +25,59 @@ export const Navbar = ({
   resetToDefaults,
 }: NavbarProps) => {
   return (
-    <header className="bg-[#07080a]/95 backdrop-blur-md border-b border-[#242728] sticky top-0 z-50">
-      {/* Top Quiet Meta Banner */}
-      <div className="bg-[#07080a] border-b border-[#242728]/70 px-4 py-1 text-[11px] text-[#9c9c9d] flex items-center justify-between">
+    <header className="bg-[#faf9f5]/95 backdrop-blur-md border-b border-[#e6dfd8] sticky top-0 z-50">
+      {/* Top Institutional Editorial Strip */}
+      <div className="bg-[#f5f0e8] border-b border-[#e6dfd8]/80 px-4 py-1 text-[11px] text-[#6c6a64] flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#59d499]"></span>
-          <span className="font-medium text-[#cdcdcd] tracking-tight">
-            Government of Assam · National Health Mission (NHM) · Decision Support System
+          <AnthropicSpike className="w-3 h-3 text-[#cc785c]" />
+          <span className="font-medium text-[#252523]">
+            Government of Assam · National Health Mission (NHM) · Decision Support
           </span>
         </div>
-        <div className="flex items-center gap-3 text-[#6a6b6c]">
-          <span className="flex items-center gap-1.5 text-[11px] text-[#9c9c9d]">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#59d499]" />
+        <div className="flex items-center gap-3 text-[#8e8b82]">
+          <span className="flex items-center gap-1.5 text-[11px] text-[#3d3d3a]">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#5db872]" />
             <span>MHCA 2017 §23 &amp; DPDP Compliant</span>
           </span>
-          <span className="hidden sm:inline text-[#242728]">|</span>
-          <span className="hidden sm:inline text-[#9c9c9d]">Pilot: Cachar &amp; Kamrup Metro</span>
+          <span className="hidden sm:inline text-[#e6dfd8]">|</span>
+          <span className="hidden sm:inline text-[#6c6a64]">Pilot: Cachar &amp; Kamrup Metro</span>
         </div>
       </div>
 
-      {/* Main Command Bar Navigation */}
-      <div className="max-w-6xl mx-auto px-4 h-14 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4">
+      {/* Main Navigation Bar */}
+      <div className="max-w-6xl mx-auto px-4 h-16 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#121212] border border-[#242728] flex items-center justify-center text-white shrink-0">
-            <Terminal className="w-4 h-4 text-[#57c1ff]" />
+          <div className="w-9 h-9 rounded-lg bg-[#efe9de] border border-[#e6dfd8] flex items-center justify-center text-[#141413] shrink-0">
+            <AnthropicSpike className="w-4 h-4 text-[#cc785c]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-semibold text-[#f4f4f6] tracking-tight">
-                Mental Health DSS
+              <h1 className="text-lg sm:text-xl font-normal text-[#141413] font-serif-claude tracking-tight">
+                Mental Health Care Navigator
               </h1>
-              <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-[#101111] text-[#9c9c9d] border border-[#242728]">
-                v1.0
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#f5f0e8] text-[#cc785c] border border-[#e6dfd8]">
+                Decision Support
               </span>
             </div>
+            <p className="text-xs text-[#6c6a64] hidden sm:block">
+              Earlier identification · Capacitated van siting · Closed-loop patient retention
+            </p>
           </div>
         </div>
 
-        {/* Center / Right controls */}
+        {/* Right side controls: Tabs + Edit/Reset Actions */}
         <div className="flex items-center justify-between sm:justify-end gap-2 w-full md:w-auto">
-          {/* Pill Tabs */}
-          <nav className="flex items-center bg-[#0d0d0d] p-1 rounded-lg border border-[#242728] gap-1">
+          {/* Category Tabs */}
+          <nav className="flex items-center bg-[#f5f0e8] p-1 rounded-lg border border-[#e6dfd8] gap-1">
             <button
               onClick={() => setActiveTab('state')}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'state'
-                  ? 'bg-[#18191a] text-[#ffffff] border border-white/10'
-                  : 'text-[#9c9c9d] hover:text-[#f4f4f6]'
+                  ? 'bg-[#efe9de] text-[#141413] shadow-xs font-medium border border-[#e6dfd8]'
+                  : 'text-[#6c6a64] hover:text-[#141413]'
               }`}
             >
-              <Database className="w-3.5 h-3.5" />
+              <Database className="w-3.5 h-3.5 text-[#cc785c]" />
               <span>Call Trends</span>
             </button>
 
@@ -75,11 +85,11 @@ export const Navbar = ({
               onClick={() => setActiveTab('planner')}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'planner'
-                  ? 'bg-[#18191a] text-[#ffffff] border border-white/10'
-                  : 'text-[#9c9c9d] hover:text-[#f4f4f6]'
+                  ? 'bg-[#efe9de] text-[#141413] shadow-xs font-medium border border-[#e6dfd8]'
+                  : 'text-[#6c6a64] hover:text-[#141413]'
               }`}
             >
-              <MapPin className="w-3.5 h-3.5" />
+              <MapPin className="w-3.5 h-3.5 text-[#cc785c]" />
               <span>Van Siting</span>
             </button>
 
@@ -87,14 +97,14 @@ export const Navbar = ({
               onClick={() => setActiveTab('queue')}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'queue'
-                  ? 'bg-[#18191a] text-[#ffffff] border border-white/10'
-                  : 'text-[#9c9c9d] hover:text-[#f4f4f6]'
+                  ? 'bg-[#efe9de] text-[#141413] shadow-xs font-medium border border-[#e6dfd8]'
+                  : 'text-[#6c6a64] hover:text-[#141413]'
               }`}
             >
-              <Activity className="w-3.5 h-3.5" />
+              <Activity className="w-3.5 h-3.5 text-[#cc785c]" />
               <span>Retention</span>
               {stalledCount > 0 && (
-                <span className="bg-[#ff6161] text-[#ffffff] text-[9px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
+                <span className="bg-[#cc785c] text-white text-[9px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
                   {stalledCount}
                 </span>
               )}
@@ -105,24 +115,24 @@ export const Navbar = ({
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => setIsEditMode((prev) => !prev)}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer border ${
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer border ${
                 isEditMode
-                  ? 'bg-[#18191a] text-[#ffc533] border-[#ffc533]/40'
-                  : 'bg-[#101111] text-[#cdcdcd] border-[#242728] hover:text-white hover:bg-[#121212]'
+                  ? 'bg-[#cc785c] text-white border-[#cc785c] shadow-xs'
+                  : 'bg-[#faf9f5] text-[#141413] border-[#e6dfd8] hover:bg-[#f5f0e8]'
               }`}
               title="Toggle interactive scenario editing"
             >
               <Edit3 className="w-3.5 h-3.5" />
-              <span>{isEditMode ? 'Editing On' : 'Edit Scenario'}</span>
+              <span>{isEditMode ? 'Editing Active' : 'Edit Scenario'}</span>
             </button>
 
             <button
               onClick={() => {
-                if (window.confirm('Reset all values to official NHM Cachar defaults?')) {
+                if (window.confirm('Reset all values back to official NHM Cachar defaults?')) {
                   resetToDefaults()
                 }
               }}
-              className="p-1.5 rounded-lg text-xs text-[#9c9c9d] hover:text-white bg-[#101111] border border-[#242728] hover:bg-[#121212] transition-all cursor-pointer"
+              className="p-2 rounded-md text-xs text-[#6c6a64] hover:text-[#141413] bg-[#faf9f5] border border-[#e6dfd8] hover:bg-[#f5f0e8] transition-all cursor-pointer shadow-2xs"
               title="Reset all values to official defaults"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -131,21 +141,21 @@ export const Navbar = ({
         </div>
       </div>
 
-      {/* Edit Mode Active Thin Strip */}
+      {/* Edit Mode Active Warm Ribbon */}
       {isEditMode && (
-        <div className="bg-[#101111] border-t border-b border-[#242728] px-4 py-1.5 text-[11px] text-[#cdcdcd] flex items-center justify-between">
+        <div className="bg-[#f5f0e8] border-t border-b border-[#e6dfd8] px-4 py-1.5 text-[11px] text-[#3d3d3a] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ffc533] animate-pulse"></span>
-            <span className="font-semibold text-white">Scenario Edit Mode:</span>
-            <span className="text-[#9c9c9d]">
-              Click any value or use the command palette below. Changes recalculate linear programming &amp; surveillance in real-time.
+            <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c] animate-pulse"></span>
+            <span className="font-semibold text-[#141413]">Scenario Reconfiguration Active:</span>
+            <span className="text-[#6c6a64]">
+              You can modify block populations, flood multipliers, clinic capacities, and district calls.
             </span>
           </div>
           <button
             onClick={resetToDefaults}
-            className="text-[10px] font-semibold text-[#57c1ff] hover:underline cursor-pointer"
+            className="text-[10px] font-semibold text-[#cc785c] hover:underline cursor-pointer"
           >
-            Reset Defaults
+            Reset to Benchmark
           </button>
         </div>
       )}

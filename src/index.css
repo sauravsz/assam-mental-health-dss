@@ -2,62 +2,67 @@
 
 @layer base {
   :root {
-    --raycast-canvas: #07080a;
-    --raycast-surface: #0d0d0d;
-    --raycast-surface-elevated: #101111;
-    --raycast-surface-card: #121212;
-    --raycast-button-fg: #18191a;
-    --raycast-hairline: #242728;
-    --raycast-hairline-soft: rgba(255, 255, 255, 0.08);
-    --raycast-hairline-strong: rgba(255, 255, 255, 0.16);
-
-    --raycast-ink: #f4f4f6;
-    --raycast-body: #cdcdcd;
-    --raycast-charcoal: #d3d3d4;
-    --raycast-mute: #9c9c9d;
-    --raycast-ash: #6a6b6c;
-    --raycast-stone: #434345;
-
-    --raycast-accent-blue: #57c1ff;
-    --raycast-accent-red: #ff6161;
-    --raycast-accent-green: #59d499;
-    --raycast-accent-yellow: #ffc533;
+    --claude-primary: #cc785c;
+    --claude-primary-active: #a9583e;
+    --claude-primary-disabled: #e6dfd8;
+    --claude-ink: #141413;
+    --claude-body: #3d3d3a;
+    --claude-body-strong: #252523;
+    --claude-muted: #6c6a64;
+    --claude-muted-soft: #8e8b82;
+    --claude-hairline: #e6dfd8;
+    --claude-hairline-soft: #ebe6df;
+    --claude-canvas: #faf9f5;
+    --claude-surface-soft: #f5f0e8;
+    --claude-surface-card: #efe9de;
+    --claude-surface-cream-strong: #e8e0d2;
+    --claude-surface-dark: #181715;
+    --claude-surface-dark-elevated: #252320;
+    --claude-surface-dark-soft: #1f1e1b;
+    --claude-on-primary: #ffffff;
+    --claude-on-dark: #faf9f5;
+    --claude-on-dark-soft: #a09d96;
+    --claude-accent-teal: #5db8a6;
+    --claude-accent-amber: #e8a55a;
+    --claude-success: #5db872;
+    --claude-warning: #d4a017;
+    --claude-error: #c64545;
 
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-feature-settings: "calt", "kern", "liga", "ss03";
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
-    background-color: var(--raycast-canvas);
-    color: var(--raycast-body);
-    font-feature-settings: "calt", "kern", "liga", "ss03";
+    background-color: var(--claude-canvas);
+    color: var(--claude-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Raycast Keycap Utility */
-.keycap {
-  background: linear-gradient(180deg, #141517 0%, #0d0d0f 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 1px 2px rgba(0, 0, 0, 0.6);
+.font-serif-claude {
+  font-family: 'Cormorant Garamond', 'Tiempos Headline', Garamond, 'Times New Roman', serif;
+  letter-spacing: -0.02em;
 }
 
-/* Custom Minimal Raycast Scrollbar */
+.font-mono-code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Custom Editorial Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #07080a;
+  background: #faf9f5;
 }
 ::-webkit-scrollbar-thumb {
-  background: #242728;
+  background: #e6dfd8;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #434345;
+  background: #6c6a64;
 }

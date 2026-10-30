@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, CornerDownLeft, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { Sparkles, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { parseNaturalLanguageCommand, type ParsedCommandResult } from '../engine/commandParser'
 import type { Block, Facility } from '../engine/types'
 import type { RawDistrictData } from '../engine/scenarioDataContext'
@@ -23,11 +23,12 @@ interface NaturalLanguageBarProps {
 }
 
 const PRESET_COMMANDS = [
-  { label: 'Flood Katigorah 2.5x', cmd: 'Severe flood hits Katigorah to 2.5x', tag: 'Disaster' },
-  { label: 'Deploy 3 Mobile Vans', cmd: 'We received an extra van, set vans to 3', tag: 'Fleet' },
-  { label: 'Dima Hasao 80 Calls', cmd: 'Outbreak in Dima Hasao, set calls to 80', tag: 'Surveillance' },
-  { label: 'Katigorah Fluoxetine Depleted', cmd: 'Katigorah ran out of Fluoxetine', tag: 'Pharmacy' },
-  { label: 'Reset Benchmark', cmd: 'Reset everything to benchmark', tag: 'System' },
+  'Severe flood hits Katigorah to 2.5x',
+  'We received an extra van, set vans to 3',
+  'Outbreak in Dima Hasao, set calls to 80',
+  'Katigorah ran out of Fluoxetine',
+  'Increase Silchar capacity to 150',
+  'Reset everything to benchmark',
 ]
 
 export const NaturalLanguageBar = ({
@@ -74,116 +75,101 @@ export const NaturalLanguageBar = ({
   }
 
   return (
-    <div className="bg-[#0d0d0d] border border-[#242728] rounded-xl overflow-hidden mb-6 shadow-2xl">
-      {/* Top Command Palette Header Bar */}
-      <div className="bg-[#0a0a0c] px-4 py-2.5 border-b border-[#242728] flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {/* macOS traffic light dots */}
-          <div className="flex items-center gap-1.5 mr-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#242728] border border-white/5"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#242728] border border-white/5"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#242728] border border-white/5"></span>
+    <div className="bg-[#efe9de] border border-[#e6dfd8] rounded-xl p-5 sm:p-6 mb-8 transition-all">
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-md bg-[#faf9f5] border border-[#e6dfd8] text-[#cc785c] flex items-center justify-center">
+            <Sparkles className="w-3.5 h-3.5" />
           </div>
-          <span className="text-xs font-medium text-[#f4f4f6]">
-            Raycast Scenario Palette
-          </span>
-          <span className="text-[11px] text-[#6a6b6c]">/</span>
-          <span className="text-[11px] text-[#9c9c9d] hidden sm:inline">
-            Direct Natural Language Intent Bus
-          </span>
+          <h2 className="text-lg sm:text-xl font-normal text-[#141413] font-serif-claude tracking-tight">
+            Conversational Scenario Controller
+          </h2>
         </div>
-
-        <div className="flex items-center gap-1.5 text-[11px] text-[#9c9c9d]">
-          <span className="keycap px-1.5 py-0.5 rounded text-[10px] text-[#cdcdcd] font-mono">
-            ⌘ K
-          </span>
-          <span className="hidden sm:inline text-[#6a6b6c]">to focus</span>
-        </div>
+        <span className="text-xs text-[#8e8b82] hidden sm:inline">
+          Natural Language Engine · Sub-25ms Simplex
+        </span>
       </div>
 
-      <div className="p-4 sm:p-5">
-        {/* Command Search Input */}
-        <form onSubmit={handleSubmit} className="relative flex items-center">
-          <Search className="w-4 h-4 text-[#6a6b6c] absolute left-3.5 pointer-events-none" />
+      <p className="text-sm text-[#6c6a64] mb-4 leading-relaxed">
+        Describe changes in conversational language. The algorithm identifies your intention, adjusts district or village parameters, and solves the Two-Phase Transportation Linear Program in real-time.
+      </p>
 
-          <input
-            type="text"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Type in plain English (e.g. 'Flood Katigorah 2.5x', 'Set vans to 3', 'Dima Hasao calls 80', 'Reset')..."
-            className="w-full bg-[#101111] border border-[#242728] focus:border-white/20 rounded-lg pl-10 pr-24 py-2.5 text-xs sm:text-sm text-[#f4f4f6] placeholder:text-[#6a6b6c] focus:outline-none transition-colors"
-          />
+      {/* Input Box Styled as Claude Prompt Input */}
+      <form onSubmit={handleSubmit} className="relative flex items-center">
+        <input
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="e.g. 'Severe floods hit Katigorah', 'Set vans to 3', 'Dima Hasao calls jump to 80', 'Reset'..."
+          className="w-full bg-[#faf9f5] border border-[#e6dfd8] focus:border-[#cc785c] rounded-lg pl-4 pr-24 py-3 text-sm text-[#141413] placeholder:text-[#8e8b82] focus:outline-none focus:ring-2 focus:ring-[#cc785c]/15 transition-all"
+        />
 
-          <div className="absolute right-1.5 flex items-center gap-1.5">
-            {prompt.trim() && (
-              <button
-                type="button"
-                onClick={() => setPrompt('')}
-                className="text-[#6a6b6c] hover:text-[#cdcdcd] text-xs px-1.5 py-1"
-              >
-                Clear
-              </button>
-            )}
-
-            {/* White Raycast Primary Pill */}
+        <div className="absolute right-1.5 flex items-center gap-1.5">
+          {prompt.trim() && (
             <button
-              type="submit"
-              className="bg-[#ffffff] hover:bg-[#e8e8e8] text-[#000000] font-medium px-3 py-1.5 rounded-md text-xs flex items-center gap-1 transition-all cursor-pointer"
-            >
-              <span>Execute</span>
-              <CornerDownLeft className="w-3 h-3 text-black/60" />
-            </button>
-          </div>
-        </form>
-
-        {/* Output Feedback Card */}
-        {result && (
-          <div
-            className={`mt-3 p-3 rounded-lg text-xs flex items-start justify-between gap-2 border ${
-              result.success
-                ? 'bg-[#101111] border-[#59d499]/40 text-[#f4f4f6]'
-                : 'bg-[#101111] border-[#ff6161]/40 text-[#f4f4f6]'
-            }`}
-          >
-            <div className="flex items-start gap-2">
-              {result.success ? (
-                <CheckCircle2 className="w-4 h-4 text-[#59d499] shrink-0 mt-0.5" />
-              ) : (
-                <AlertCircle className="w-4 h-4 text-[#ff6161] shrink-0 mt-0.5" />
-              )}
-              <div>
-                <span className="font-semibold text-white">
-                  {result.success ? 'Command Executed:' : 'Parse Notice:'}
-                </span>{' '}
-                <span className="text-[#cdcdcd]">{result.feedback}</span>
-              </div>
-            </div>
-            <button
-              onClick={() => setResult(null)}
-              className="text-[#6a6b6c] hover:text-white text-xs px-1"
-            >
-              ✕
-            </button>
-          </div>
-        )}
-
-        {/* Quick Command Suggestions */}
-        <div className="mt-3.5 pt-3 border-t border-[#242728] flex flex-wrap items-center gap-1.5">
-          <span className="text-[11px] text-[#6a6b6c] mr-1">Suggestions:</span>
-          {PRESET_COMMANDS.map((item, idx) => (
-            <button
-              key={idx}
               type="button"
-              onClick={() => handleRunCommand(item.cmd)}
-              className="text-[11px] bg-[#101111] hover:bg-[#18191a] text-[#cdcdcd] hover:text-white px-2.5 py-1 rounded-md border border-[#242728] transition-all flex items-center gap-1.5 cursor-pointer"
+              onClick={() => setPrompt('')}
+              className="text-[#8e8b82] hover:text-[#141413] text-xs px-2 py-1"
             >
-              <span>{item.label}</span>
-              <span className="keycap px-1 py-0.2 rounded text-[9px] text-[#6a6b6c]">
-                {item.tag}
-              </span>
+              Clear
             </button>
-          ))}
+          )}
+
+          {/* Claude Signature Coral CTA Button */}
+          <button
+            type="submit"
+            className="bg-[#cc785c] hover:bg-[#a9583e] active:bg-[#a9583e] text-white font-medium px-4 py-2 rounded-md text-xs flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+          >
+            <span>Run</span>
+            <ArrowRight className="w-3 h-3" />
+          </button>
         </div>
+      </form>
+
+      {/* Result Card */}
+      {result && (
+        <div
+          className={`mt-4 p-3.5 rounded-lg text-xs flex items-start justify-between gap-2 border transition-all ${
+            result.success
+              ? 'bg-[#faf9f5] border-[#5db872]/60 text-[#141413]'
+              : 'bg-[#faf9f5] border-[#e8a55a]/60 text-[#141413]'
+          }`}
+        >
+          <div className="flex items-start gap-2.5">
+            {result.success ? (
+              <CheckCircle2 className="w-4 h-4 text-[#5db872] shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-[#e8a55a] shrink-0 mt-0.5" />
+            )}
+            <div>
+              <span className="font-semibold text-[#141413]">
+                {result.success ? 'Scenario Adjusted:' : 'Advisory:'}
+              </span>{' '}
+              <span className="text-[#3d3d3a]">{result.feedback}</span>
+            </div>
+          </div>
+          <button
+            onClick={() => setResult(null)}
+            className="text-[#8e8b82] hover:text-[#141413] text-xs font-bold px-1 cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Suggestion Chips */}
+      <div className="mt-4 pt-3.5 border-t border-[#e6dfd8] flex flex-wrap items-center gap-2">
+        <span className="text-xs font-medium text-[#6c6a64] mr-1">Suggestions:</span>
+        {PRESET_COMMANDS.map((item, idx) => (
+          <button
+            key={idx}
+            type="button"
+            onClick={() => handleRunCommand(item)}
+            className="text-xs bg-[#faf9f5] hover:bg-[#f5f0e8] text-[#3d3d3a] hover:text-[#141413] px-3 py-1 rounded-md border border-[#e6dfd8] transition-all cursor-pointer"
+          >
+            {item}
+          </button>
+        ))}
       </div>
     </div>
   )
