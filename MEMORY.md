@@ -15,10 +15,11 @@ Operational Decision Support System for Government of Assam — National Health 
 - **Engine 2 (Planning):** Capacitated $p$-Median Facility Location problem with an exact client-side Two-Phase Primal Simplex Transportation LP solver ($\min \sum d_i c_{ij} x_{ij} + M \sum u_i$). Eliminates greedy index bias and guarantees global optimality in $<25\text{ ms}$. Replicates exact 31.0% travel-time reduction in Cachar District (35.3 min vs 51.2 min baseline).
 - **Engine 3 (Retention):** Closed-loop care tracking for stalled referrals ($>14$ days) with verified statutory consent and human counsellors (zero robocalls). Modeled as an Absorbing Markov Chain ($N = (I - Q)^{-1}$) with verified 3.2% absorption recovery probability.
 - **Compliance:** MHCA 2017 §23, DPDP Act 2023, salted SHA-256 pseudonymization. Enforces Primary ($n < 10$) and Secondary (Complementary) cell suppression to algebraically prevent subtraction leaks.
-- **Frontend Design:** Clean Expo design system, mobile-optimized segmented control, hairline borders, plain-English human framing, expandable mathematical drawers.
+- **Frontend Design:** PCB Schematic Architecture design specification (`#0F3B2C` deep circuit green, `#B87333` copper traces, `#D98C53` accent, `#EAD0AC` silk text, `#FFD700` gold pads).
+- **Typography:** Display & Hero headings in `Fraunces` / `New York`; Body and technical UI in `SF Pro` & `Helvetica Neue`. Zero emojis in UI (Lucide hardware icons only).
 - **Natural Language AI Controller:** Client-side intent parser (`commandParser.ts`) enabling direct conversational simulation commands (e.g. "Severe flood hits Katigorah", "Set vans to 3", "Katigorah ran out of Fluoxetine") with real-time reactive LP recalculations.
 
 ## Current State & Next Steps
-- Status: Production-grade mathematical foundation verified, local builds passing (425ms), test suite passing, deployed to Vercel edge, repository synchronized with GitHub (`main` at `94ff026`).
+- Status: Production-grade mathematical foundation verified, local builds passing (412ms), deployed to Vercel edge, repository synchronized with GitHub (`main` at `a871b57`).
   1. Review the 8-page Student & Faculty Guide before presenting to the MBA advisor.
   2. Final submission of the 11-page USPR proposal PDF to the NHM Assam challenge portal before 10 Nov 2026.

@@ -2,57 +2,62 @@
 
 @layer base {
   :root {
-    --pcb-bg: #0F3B2C;
-    --pcb-sub: #09231A;
-    --pcb-surface: #144837;
-    --pcb-surface-hover: #1A5944;
-    --pcb-copper: #B87333;
-    --pcb-copper-bright: #D98C53;
-    --pcb-silk: #EAD0AC;
-    --pcb-silk-muted: #C2AB8E;
-    --pcb-gold: #FFD700;
-    --pcb-silver: #C0C0C0;
-    --pcb-trace: #1B634C;
+    --raycast-canvas: #07080a;
+    --raycast-surface: #0d0d0d;
+    --raycast-surface-elevated: #101111;
+    --raycast-surface-card: #121212;
+    --raycast-button-fg: #18191a;
+    --raycast-hairline: #242728;
+    --raycast-hairline-soft: rgba(255, 255, 255, 0.08);
+    --raycast-hairline-strong: rgba(255, 255, 255, 0.16);
 
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    --raycast-ink: #f4f4f6;
+    --raycast-body: #cdcdcd;
+    --raycast-charcoal: #d3d3d4;
+    --raycast-mute: #9c9c9d;
+    --raycast-ash: #6a6b6c;
+    --raycast-stone: #434345;
+
+    --raycast-accent-blue: #57c1ff;
+    --raycast-accent-red: #ff6161;
+    --raycast-accent-green: #59d499;
+    --raycast-accent-yellow: #ffc533;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: "calt", "kern", "liga", "ss03";
     color-scheme: dark;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
-    background-color: var(--pcb-bg);
-    color: var(--pcb-silk);
+    background-color: var(--raycast-canvas);
+    color: var(--raycast-body);
+    font-feature-settings: "calt", "kern", "liga", "ss03";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: 
-      radial-gradient(circle at 1px 1px, rgba(184, 115, 51, 0.12) 1px, transparent 0),
-      linear-gradient(to right, rgba(22, 91, 69, 0.18) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(22, 91, 69, 0.18) 1px, transparent 1px);
-    background-size: 32px 32px, 32px 32px, 32px 32px;
   }
 }
 
-.font-serif-display {
-  font-family: 'Fraunces', 'New York', Georgia, serif;
+/* Raycast Keycap Utility */
+.keycap {
+  background: linear-gradient(180deg, #141517 0%, #0d0d0f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-.font-sans-tech {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-}
-
-/* Custom PCB Scrollbar */
+/* Custom Minimal Raycast Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #09231A;
+  background: #07080a;
 }
 ::-webkit-scrollbar-thumb {
-  background: #B87333;
-  border-radius: 4px;
+  background: #242728;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #D98C53;
+  background: #434345;
 }

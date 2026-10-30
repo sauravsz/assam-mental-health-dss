@@ -101,62 +101,61 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
   }, [records])
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto font-sans-tech">
+    <div className="space-y-6 max-w-5xl mx-auto">
       {/* ── SECTION 1: CONTEXT & STATUTORY SAFEGUARD ── */}
-      <section className="bg-[#144837]/90 border border-[#B87333]/70 rounded-lg p-5 sm:p-6 shadow-[0_2px_14px_rgba(0,0,0,0.3)] relative">
-        {/* PCB Solder Pins */}
-        <div className="absolute top-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-[#B87333]"></div>
-        <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#B87333]"></div>
-        <div className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-[#B87333]"></div>
-        <div className="absolute bottom-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#B87333]"></div>
-
+      <section className="bg-[#0d0d0d] border border-[#242728] rounded-xl p-6 shadow-xl">
         <div className="max-w-2xl">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-[#FFD700] bg-[#09231A] px-2.5 py-1 rounded border border-[#B87333]/50">
-            MODULE 03 // CLOSED_LOOP_RETENTION_BUS
-          </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#EAD0AC] font-serif-display tracking-tight mt-2.5">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-[#101111] text-[#ffc533] border border-[#242728]">
+              Module 03 · Care Continuity
+            </span>
+            <span className="text-xs text-[#6a6b6c]">•</span>
+            <span className="text-xs text-[#9c9c9d]">14-Day SLA Watchdog</span>
+          </div>
+
+          <h2 className="text-xl sm:text-2xl font-semibold text-[#f4f4f6] tracking-tight">
             Care Continuity &amp; Stalled Referral Ledger
           </h2>
-          <p className="text-xs sm:text-sm text-[#C2AB8E] leading-relaxed mt-1.5">
-            Tracks callers advised to complete clinical psychiatric consults. When 14 days elapse with no facility verification, the case routes into the certified human counsellor work queue.
+          <p className="text-sm text-[#cdcdcd] leading-relaxed mt-1.5">
+            Tracks helpline callers advised to complete in-person psychiatric visits. When 14 days elapse with no clinic verification, cases route to the certified human counsellor work queue.
           </p>
         </div>
 
         {/* Statutory Safeguard Strip */}
-        <div className="mt-4 p-3 bg-[#09231A] border border-[#B87333]/60 rounded text-xs text-[#EAD0AC] flex items-center justify-between gap-2">
+        <div className="mt-5 p-3 bg-[#101111] border border-[#242728] rounded-lg text-xs text-[#cdcdcd] flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#FFD700] shrink-0" />
+            <ShieldCheck className="w-4 h-4 text-[#59d499] shrink-0" />
             <span>
-              <strong className="text-[#FFD700]">Statutory Compliance Invariant:</strong> 100% of candidates have recorded intake consent. Zero automated robocalling permitted under Section 23 of the Mental Healthcare Act 2017.
+              <strong className="text-white">Statutory Compliance Invariant:</strong> 100% of candidates have recorded intake consent. Zero automated robocalling permitted under Section 23 of the Mental Healthcare Act 2017.
             </span>
           </div>
           {isEditMode && (
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="bg-[#D98C53] hover:bg-[#B87333] text-[#09231A] font-bold px-2.5 py-1 rounded text-xs flex items-center gap-1.5 shrink-0 transition-all cursor-pointer font-sans-tech"
+              className="bg-white hover:bg-[#e8e8e8] text-black font-semibold px-2.5 py-1 rounded-md text-xs flex items-center gap-1.5 shrink-0 transition-all cursor-pointer"
             >
               <PlusCircle className="w-3.5 h-3.5" />
-              <span>{showAddForm ? 'Cancel Add' : '+ Insert Test Ticket'}</span>
+              <span>{showAddForm ? 'Cancel Add' : '+ Add Test Ticket'}</span>
             </button>
           )}
         </div>
 
         {/* Add Referral Form when in Edit Mode */}
         {isEditMode && showAddForm && (
-          <form onSubmit={handleAddCase} className="mt-4 p-4 bg-[#09231A] border border-[#FFD700] rounded space-y-3 text-xs font-mono">
+          <form onSubmit={handleAddCase} className="mt-4 p-4 bg-[#101111] border border-[#242728] rounded-lg space-y-3 text-xs">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-[#FFD700] flex items-center gap-1.5">
-                <Edit3 className="w-3.5 h-3.5 text-[#D98C53]" /> INJECT_SYNTHETIC_STALLED_TICKET
+              <span className="font-semibold text-white flex items-center gap-1.5">
+                <Edit3 className="w-3.5 h-3.5 text-[#57c1ff]" /> Register Synthetic Stalled Ticket
               </span>
-              <span className="text-[10px] text-[#C2AB8E]">Auto-evaluates complementary suppression</span>
+              <span className="text-[10px] text-[#6a6b6c]">Auto-evaluates complementary suppression</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
               <div>
-                <label className="text-[11px] text-[#C2AB8E] block mb-1">Block Node:</label>
+                <label className="text-[11px] text-[#9c9c9d] block mb-1">Block Node:</label>
                 <select
                   value={newBlock}
                   onChange={(e) => setNewBlock(e.target.value)}
-                  className="w-full bg-[#144837] border border-[#B87333] rounded p-1.5 text-xs text-[#FFD700]"
+                  className="w-full bg-[#07080a] border border-[#242728] rounded p-1.5 text-xs text-white"
                 >
                   <option value="Katigorah">Katigorah (Cachar)</option>
                   <option value="Sonai">Sonai (Cachar)</option>
@@ -171,11 +170,11 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
               </div>
 
               <div>
-                <label className="text-[11px] text-[#C2AB8E] block mb-1">mhGAP Category:</label>
+                <label className="text-[11px] text-[#9c9c9d] block mb-1">mhGAP Category:</label>
                 <select
                   value={newDiagnosis}
                   onChange={(e) => setNewDiagnosis(e.target.value as ReferralRecord['mhgapCode'])}
-                  className="w-full bg-[#144837] border border-[#B87333] rounded p-1.5 text-xs text-[#FFD700]"
+                  className="w-full bg-[#07080a] border border-[#242728] rounded p-1.5 text-xs text-white"
                 >
                   <option value="Depression">Depression</option>
                   <option value="Anxiety">Anxiety</option>
@@ -186,11 +185,11 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
               </div>
 
               <div>
-                <label className="text-[11px] text-[#C2AB8E] block mb-1">Assigned Clinic:</label>
+                <label className="text-[11px] text-[#9c9c9d] block mb-1">Assigned Clinic:</label>
                 <select
                   value={newFacility}
                   onChange={(e) => setNewFacility(e.target.value)}
-                  className="w-full bg-[#144837] border border-[#B87333] rounded p-1.5 text-xs text-[#FFD700]"
+                  className="w-full bg-[#07080a] border border-[#242728] rounded p-1.5 text-xs text-white"
                 >
                   <option value="Katigorah CHC">Katigorah CHC</option>
                   <option value="Sonai BPHC">Sonai BPHC</option>
@@ -201,77 +200,83 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
               </div>
 
               <div>
-                <label className="text-[11px] text-[#C2AB8E] block mb-1">Days Stalled:</label>
+                <label className="text-[11px] text-[#9c9c9d] block mb-1">Days Stalled:</label>
                 <input
                   type="number"
                   min="14"
                   max="60"
                   value={newDays}
                   onChange={(e) => setNewDays(parseInt(e.target.value) || 14)}
-                  className="w-full bg-[#144837] border border-[#B87333] rounded p-1.5 text-xs font-mono text-[#FFD700]"
+                  className="w-full bg-[#07080a] border border-[#242728] rounded p-1.5 text-xs font-mono text-white"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className="bg-[#D98C53] hover:bg-[#B87333] text-[#09231A] font-bold px-4 py-1.5 rounded text-xs cursor-pointer"
+              className="bg-white hover:bg-[#e8e8e8] text-black font-semibold px-4 py-1.5 rounded-md text-xs cursor-pointer"
             >
-              Commit Ticket to Bus
+              Commit Ticket
             </button>
           </form>
         )}
 
         {/* 3 Metric Registers */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-5 border-t border-[#B87333]/30">
-          <div className="bg-[#09231A] border border-[#D98C53] rounded-lg p-4">
-            <span className="text-xs font-mono uppercase text-[#D98C53] block mb-1">STALLED_SLA (&gt;14d)</span>
-            <div className="text-3xl font-bold text-[#D98C53] font-serif-display">{counts.stalled}</div>
-            <p className="text-xs text-[#C2AB8E] mt-1 font-mono text-[11px]">Awaiting counsellor review</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-5 border-t border-[#242728]">
+          <div className="bg-[#101111] border border-[#242728] rounded-lg p-4">
+            <span className="text-xs uppercase tracking-wider text-[#ff6161] block mb-1 font-mono">
+              Stalled SLA (&gt;14d)
+            </span>
+            <div className="text-2xl sm:text-3xl font-semibold text-[#ff6161]">{counts.stalled}</div>
+            <p className="text-xs text-[#6a6b6c] mt-1 font-mono text-[11px]">Awaiting counsellor review</p>
           </div>
 
-          <div className="bg-[#09231A] border border-[#B87333]/50 rounded-lg p-4">
-            <span className="text-xs font-mono uppercase text-[#C2AB8E] block mb-1">OUTREACH_ACTIVE</span>
-            <div className="text-3xl font-bold text-[#EAD0AC] font-serif-display">{counts.inFollowup + counts.ashaDispatched}</div>
-            <p className="text-xs text-[#C2AB8E] mt-1 font-mono text-[11px]">Callback or ASHA dispatch</p>
+          <div className="bg-[#101111] border border-[#242728] rounded-lg p-4">
+            <span className="text-xs uppercase tracking-wider text-[#ffc533] block mb-1 font-mono">
+              Outreach Active
+            </span>
+            <div className="text-2xl sm:text-3xl font-semibold text-white">{counts.inFollowup + counts.ashaDispatched}</div>
+            <p className="text-xs text-[#6a6b6c] mt-1 font-mono text-[11px]">Callback or ASHA visit</p>
           </div>
 
-          <div className="bg-[#165B45] border border-[#FFD700] rounded-lg p-4 shadow-[0_0_12px_rgba(255,215,0,0.1)]">
-            <span className="text-xs font-mono uppercase text-[#FFD700] block mb-1">CARE_RECOVERED</span>
-            <div className="text-3xl font-bold text-[#FFD700] font-serif-display">{counts.resolved}</div>
-            <p className="text-xs text-[#EAD0AC] mt-1 font-mono text-[11px]">Verified clinic attendance</p>
+          <div className="bg-[#101111] border border-[#59d499]/40 rounded-lg p-4">
+            <span className="text-xs uppercase tracking-wider text-[#59d499] block mb-1 font-mono">
+              Care Recovered
+            </span>
+            <div className="text-2xl sm:text-3xl font-semibold text-[#59d499]">{counts.resolved}</div>
+            <p className="text-xs text-[#6a6b6c] mt-1 font-mono text-[11px]">Verified clinic attendance</p>
           </div>
         </div>
       </section>
 
       {/* ── SECTION 2: QUEUE TABLE & ACTIONS ── */}
-      <section className="bg-[#144837]/90 border border-[#B87333]/70 rounded-lg shadow-[0_2px_14px_rgba(0,0,0,0.3)] overflow-hidden p-5 sm:p-6">
+      <section className="bg-[#0d0d0d] border border-[#242728] rounded-xl shadow-xl overflow-hidden p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
-            <h3 className="text-base font-bold text-[#EAD0AC] font-serif-display tracking-wide">
+            <h3 className="text-base font-semibold text-[#f4f4f6] tracking-tight">
               Prioritized Stalled Referral Queue ({filteredRecords.length} Cases)
             </h3>
-            <p className="text-xs text-[#C2AB8E] mt-0.5">
+            <p className="text-xs text-[#9c9c9d] mt-0.5">
               Select "Check In" to record structured telephonic outreach or dispatch village health workers.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
             <div className="relative w-full sm:w-48">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#B87333]" />
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-[#6a6b6c]" />
               <input
                 type="text"
                 placeholder="Search case, block, hub..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-[#09231A] border border-[#B87333] rounded text-xs w-full text-[#FFD700] placeholder:text-[#C2AB8E]/50 focus:outline-none"
+                className="pl-8 pr-3 py-1.5 bg-[#101111] border border-[#242728] rounded-lg text-xs w-full text-white placeholder:text-[#6a6b6c] focus:outline-none"
               />
             </div>
 
             <select
               value={selectedDistrict}
               onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="bg-[#09231A] border border-[#B87333] rounded px-2.5 py-1.5 text-xs text-[#FFD700]"
+              className="bg-[#101111] border border-[#242728] rounded-lg px-2.5 py-1.5 text-xs text-white"
             >
               <option value="All">All Districts</option>
               <option value="Cachar">Cachar District</option>
@@ -282,50 +287,50 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
 
         {/* Case Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left font-mono">
-            <thead className="bg-[#09231A] text-[#FFD700] uppercase text-[10px] border-b border-[#B87333]/40">
+          <table className="w-full text-xs text-left">
+            <thead className="bg-[#101111] text-[#9c9c9d] uppercase text-[10px] border-b border-[#242728]">
               <tr>
                 <th className="py-2.5 px-3">Ticket ID</th>
                 <th className="py-2.5 px-3">Block Node</th>
-                <th className="py-2.5 px-3">mhGAP Profile</th>
+                <th className="py-2.5 px-3">mhGAP Category</th>
                 <th className="py-2.5 px-3 text-center">Stall Age</th>
-                <th className="py-2.5 px-3">Target Hub</th>
+                <th className="py-2.5 px-3">Target Clinic</th>
                 <th className="py-2.5 px-3 text-center">Status</th>
                 <th className="py-2.5 px-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#B87333]/20">
+            <tbody className="divide-y divide-[#242728]">
               {filteredRecords.slice(0, 10).map((r) => (
-                <tr key={r.id} className="hover:bg-[#1A5944] transition-colors">
-                  <td className="py-3 px-3 font-bold text-[#FFD700] whitespace-nowrap">
+                <tr key={r.id} className="hover:bg-[#101111] transition-colors">
+                  <td className="py-3 px-3 font-mono font-medium text-white whitespace-nowrap">
                     {r.id}
                   </td>
                   <td className="py-3 px-3">
-                    <span className="font-semibold text-[#EAD0AC] block">{r.block}</span>
-                    <span className="text-[10px] text-[#C2AB8E]">{r.district}</span>
+                    <span className="font-medium text-[#f4f4f6] block">{r.block}</span>
+                    <span className="text-[10px] text-[#6a6b6c]">{r.district}</span>
                   </td>
                   <td className="py-3 px-3">
-                    <span className="text-[#EAD0AC] block font-sans-tech">{r.mhgapCode}</span>
-                    <span className="text-[10px] text-[#C2AB8E]">{r.language} · {r.ageBand}</span>
+                    <span className="text-white block">{r.mhgapCode}</span>
+                    <span className="text-[10px] text-[#6a6b6c]">{r.language} · {r.ageBand}</span>
                   </td>
                   <td className="py-3 px-3 text-center">
-                    <span className="font-mono font-bold text-[#09231A] bg-[#D98C53] px-2 py-0.5 rounded text-[10px]">
+                    <span className="font-mono text-xs text-[#ff6161]">
                       {r.daysStalled}d
                     </span>
                   </td>
-                  <td className="py-3 px-3 text-[#C2AB8E] whitespace-nowrap">
+                  <td className="py-3 px-3 text-[#cdcdcd] whitespace-nowrap">
                     {r.assignedFacility}
                   </td>
                   <td className="py-3 px-3 text-center">
                     <span
-                      className={`text-[9px] px-2 py-0.5 rounded font-mono font-semibold ${
+                      className={`text-[10px] px-2 py-0.5 rounded font-medium ${
                         r.status === 'Resolved'
-                          ? 'bg-[#165B45] text-[#FFD700] border border-[#FFD700]'
+                          ? 'bg-[#59d499]/15 text-[#59d499] border border-[#59d499]/30'
                           : r.status === 'ASHA Dispatched'
-                          ? 'bg-[#09231A] text-[#D98C53] border border-[#D98C53]'
+                          ? 'bg-[#57c1ff]/15 text-[#57c1ff] border border-[#57c1ff]/30'
                           : r.status === 'Follow-up Initiated'
-                          ? 'bg-[#09231A] text-[#FFD700] border border-[#FFD700]/70'
-                          : 'bg-[#8A2E1B] text-[#FFD700]'
+                          ? 'bg-[#ffc533]/15 text-[#ffc533] border border-[#ffc533]/30'
+                          : 'bg-[#ff6161]/15 text-[#ff6161] border border-[#ff6161]/30'
                       }`}
                     >
                       {r.status}
@@ -334,9 +339,9 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
                   <td className="py-3 px-3 text-right whitespace-nowrap">
                     <button
                       onClick={() => setActiveRecordForAction(r)}
-                      className="bg-[#D98C53] hover:bg-[#B87333] text-[#09231A] px-3 py-1.5 rounded text-xs font-bold transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
+                      className="bg-white hover:bg-[#e8e8e8] text-black px-2.5 py-1 rounded text-xs font-semibold transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
                     >
-                      <Phone className="w-3 h-3 text-current" />
+                      <Phone className="w-3 h-3 text-black" />
                       <span>Check In</span>
                     </button>
                   </td>
@@ -347,41 +352,41 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
         </div>
 
         {/* Technical Drawer */}
-        <div className="border border-[#B87333]/50 rounded-lg overflow-hidden mt-6 bg-[#09231A]">
+        <div className="border border-[#242728] rounded-xl overflow-hidden mt-6 bg-[#07080a]">
           <button
             onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-            className="w-full px-4 py-3 bg-[#09231A] hover:bg-[#144837] text-left flex items-center justify-between text-xs font-semibold text-[#EAD0AC] transition-colors cursor-pointer font-mono"
+            className="w-full px-4 py-3 bg-[#0d0d0d] hover:bg-[#101111] text-left flex items-center justify-between text-xs font-medium text-[#9c9c9d] hover:text-white transition-colors cursor-pointer"
           >
-            <span>// INSPECT PRIMARY &amp; SECONDARY COMPLEMENTARY SUPPRESSION MASK</span>
+            <span>Show Primary &amp; Secondary Complementary Suppression Architecture</span>
             {showTechnicalDetails ? (
-              <ChevronUp className="w-4 h-4 text-[#D98C53]" />
+              <ChevronUp className="w-4 h-4 text-[#6a6b6c]" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-[#D98C53]" />
+              <ChevronDown className="w-4 h-4 text-[#6a6b6c]" />
             )}
           </button>
 
           {showTechnicalDetails && (
-            <div className="p-4 space-y-3 bg-[#061812] border-t border-[#B87333]/40 text-xs text-[#EAD0AC]">
-              <div className="bg-[#09231A] p-3 rounded border border-[#B87333]/30 space-y-1 font-mono">
-                <p className="font-semibold text-[#FFD700]">Primary + Secondary Complementary Suppression (DPDP 2023):</p>
-                <p className="text-[#C2AB8E] text-[11px] leading-relaxed font-sans-tech">
+            <div className="p-4 space-y-3 bg-[#07080a] border-t border-[#242728] text-xs text-[#cdcdcd]">
+              <div className="bg-[#101111] p-3 rounded-lg border border-[#242728] space-y-1">
+                <p className="font-semibold text-white">Primary + Secondary Complementary Suppression (DPDP 2023):</p>
+                <p className="text-[#9c9c9d] text-[11px] leading-relaxed">
                   Cells with count n &lt; 10 undergo <strong>Primary Suppression</strong>. If exactly one cell in a reporting slice is masked, <strong>Secondary (Complementary) Suppression</strong> is automatically enforced on the second-smallest cell to eliminate algebraic subtraction attacks against marginal totals.
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-2 pt-2 font-mono">
+              <div className="flex flex-wrap gap-2 pt-2">
                 {smallCellStats.slice(0, 8).map((stat, idx) => (
                   <div
                     key={idx}
-                    className={`border rounded px-2.5 py-1 text-[11px] ${
+                    className={`border rounded px-2.5 py-1 text-[11px] font-mono ${
                       stat.suppressionType === 'primary'
-                        ? 'bg-[#09231A] text-[#FFD700] border-[#D98C53] font-bold'
+                        ? 'bg-[#ff6161]/10 text-[#ff6161] border-[#ff6161]/30 font-semibold'
                         : stat.suppressionType === 'secondary'
-                        ? 'bg-[#09231A] text-[#D98C53] border-[#B87333] font-semibold'
-                        : 'bg-[#144837] text-[#EAD0AC] border-[#B87333]/40'
+                        ? 'bg-[#ffc533]/10 text-[#ffc533] border-[#ffc533]/30 font-semibold'
+                        : 'bg-[#101111] text-[#cdcdcd] border-[#242728]'
                     }`}
                   >
-                    <span className="text-[#C2AB8E] font-sans-tech">{stat.group}:</span>{' '}
+                    <span className="text-[#6a6b6c]">{stat.group}:</span>{' '}
                     <span>{stat.count}</span>
                   </div>
                 ))}
@@ -393,78 +398,78 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
 
       {/* Action Dialog Modal */}
       {activeRecordForAction && (
-        <div className="fixed inset-0 bg-[#061812]/80 backdrop-blur-xs flex items-center justify-center p-4 z-50 font-sans-tech">
-          <div className="bg-[#144837] rounded-lg max-w-md w-full p-6 shadow-2xl border-2 border-[#B87333] space-y-4">
-            <div className="flex items-center justify-between border-b border-[#B87333]/40 pb-3">
+        <div className="fixed inset-0 bg-[#07080a]/80 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-[#0d0d0d] rounded-xl max-w-md w-full p-6 shadow-2xl border border-[#242728] space-y-4">
+            <div className="flex items-center justify-between border-b border-[#242728] pb-3">
               <div>
-                <h3 className="text-base font-bold text-[#EAD0AC] font-serif-display">Log Counsellor Outreach</h3>
-                <p className="text-xs text-[#C2AB8E] font-mono">
+                <h3 className="text-base font-semibold text-[#f4f4f6]">Log Counsellor Outreach</h3>
+                <p className="text-xs text-[#6a6b6c] font-mono">
                   Ticket {activeRecordForAction.id} · Node: {activeRecordForAction.block}
                 </p>
               </div>
               <button
                 onClick={() => setActiveRecordForAction(null)}
-                className="text-[#C2AB8E] hover:text-[#FFD700] text-sm font-bold p-1 cursor-pointer"
+                className="text-[#6a6b6c] hover:text-white text-sm font-bold p-1 cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
-            <div className="bg-[#09231A] p-3.5 rounded border border-[#B87333]/40 text-xs space-y-1 text-[#EAD0AC]">
+            <div className="bg-[#101111] p-3 rounded-lg border border-[#242728] text-xs space-y-1 text-[#cdcdcd]">
               <div className="flex justify-between">
-                <span className="text-[#C2AB8E]">Language:</span>
-                <span className="font-semibold text-[#FFD700]">{activeRecordForAction.language}</span>
+                <span className="text-[#6a6b6c]">Language:</span>
+                <span className="font-semibold text-white">{activeRecordForAction.language}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#C2AB8E]">Assigned Hub:</span>
-                <span className="font-semibold text-[#EAD0AC]">{activeRecordForAction.assignedFacility}</span>
+                <span className="text-[#6a6b6c]">Assigned Hub:</span>
+                <span className="font-medium text-white">{activeRecordForAction.assignedFacility}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#C2AB8E]">Stall Duration:</span>
-                <span className="font-mono text-[#D98C53] font-bold">{activeRecordForAction.daysStalled} days</span>
+                <span className="text-[#6a6b6c]">Stall Duration:</span>
+                <span className="font-mono text-[#ff6161] font-bold">{activeRecordForAction.daysStalled} days</span>
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#EAD0AC]">Outreach Interaction Notes:</label>
+              <label className="text-xs font-medium text-[#9c9c9d]">Outreach Notes:</label>
               <textarea
                 rows={2}
                 value={actionNotes}
                 onChange={(e) => setActionNotes(e.target.value)}
-                placeholder="e.g. Counsellor called patient; coordinated with mobile van camp..."
-                className="w-full text-xs p-2.5 bg-[#09231A] border border-[#B87333] rounded focus:outline-none focus:border-[#FFD700] text-[#EAD0AC]"
+                placeholder="e.g. Counsellor called patient; transport coordinated for Sonai camp..."
+                className="w-full text-xs p-2.5 bg-[#101111] border border-[#242728] rounded-lg focus:outline-none focus:border-white/30 text-white"
               />
             </div>
 
             <div className="space-y-2 pt-1">
-              <span className="text-xs font-semibold text-[#EAD0AC] block font-mono">UPDATE CASE STATE:</span>
+              <span className="text-xs font-medium text-[#9c9c9d] block">Update Status:</span>
               <div className="grid grid-cols-1 gap-2">
                 <button
                   onClick={() => handleUpdateStatus('Follow-up Initiated')}
-                  className="w-full text-left p-3 rounded border border-[#B87333]/60 bg-[#09231A] hover:bg-[#165B45] hover:border-[#FFD700] text-xs flex items-center justify-between text-[#EAD0AC] transition-all cursor-pointer"
+                  className="w-full text-left p-3 rounded-lg border border-[#242728] bg-[#101111] hover:bg-[#141517] hover:border-white/20 text-xs flex items-center justify-between text-white transition-all cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-[#FFD700]" />
-                    <span>Callback completed — scheduled for mobile van camp</span>
+                    <Phone className="w-3.5 h-3.5 text-[#57c1ff]" />
+                    <span>Callback completed — scheduled for mobile camp</span>
                   </span>
                 </button>
 
                 <button
                   onClick={() => handleUpdateStatus('ASHA Dispatched')}
-                  className="w-full text-left p-3 rounded border border-[#B87333]/60 bg-[#09231A] hover:bg-[#165B45] hover:border-[#FFD700] text-xs flex items-center justify-between text-[#EAD0AC] transition-all cursor-pointer"
+                  className="w-full text-left p-3 rounded-lg border border-[#242728] bg-[#101111] hover:bg-[#141517] hover:border-white/20 text-xs flex items-center justify-between text-white transition-all cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <Home className="w-3.5 h-3.5 text-[#D98C53]" />
+                    <Home className="w-3.5 h-3.5 text-[#ffc533]" />
                     <span>Phone unreachable — dispatched Block ASHA for home visit</span>
                   </span>
                 </button>
 
                 <button
                   onClick={() => handleUpdateStatus('Resolved')}
-                  className="w-full text-left p-3 rounded border border-[#B87333]/60 bg-[#09231A] hover:bg-[#165B45] hover:border-[#FFD700] text-xs flex items-center justify-between text-[#EAD0AC] transition-all cursor-pointer"
+                  className="w-full text-left p-3 rounded-lg border border-[#242728] bg-[#101111] hover:bg-[#141517] hover:border-white/20 text-xs flex items-center justify-between text-white transition-all cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#FFD700]" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#59d499]" />
                     <span>Verified in-person clinical visit completed</span>
                   </span>
                 </button>
