@@ -15,10 +15,9 @@ Operational Decision Support System for Government of Assam — National Health 
 - **Engine 2 (Planning):** Capacitated $p$-Median Facility Location problem with an exact client-side Two-Phase Primal Simplex Transportation LP solver ($\min \sum d_i c_{ij} x_{ij} + M \sum u_i$). Eliminates greedy index bias and guarantees global optimality in $<25\text{ ms}$. Replicates exact 31.0% travel-time reduction in Cachar District (35.3 min vs 51.2 min baseline).
 - **Engine 3 (Retention):** Closed-loop care tracking for stalled referrals ($>14$ days) with verified statutory consent and human counsellors (zero robocalls). Modeled as an Absorbing Markov Chain ($N = (I - Q)^{-1}$) with verified 3.2% absorption recovery probability.
 - **Compliance:** MHCA 2017 §23, DPDP Act 2023, salted SHA-256 pseudonymization. Enforces Primary ($n < 10$) and Secondary (Complementary) cell suppression to algebraically prevent subtraction leaks.
-- **Frontend Design:** Raycast developer-tools dark canvas architecture (`#07080a` canvas, `#0d0d0d` surface, `#101111` elevated, `#121212` card) with 1px `#242728` hairline borders, zero drop shadows, and signature red gradient hero launch stripe.
-- **Typography:** Inter with site-wide `font-feature-settings: "calt", "kern", "liga", "ss03"` (single-story open `g`), white primary CTA pill (`#ffffff` on `#000000`), and category accents (`#59d499`, `#57c1ff`, `#ff6161`, `#ffc533`).
-- **Natural Language AI Controller:** Raycast command-palette input row (`store-search-bar` style) with keycaps (`⌘ K`, `↵`), preset tags, and immediate intent parsing for real-time LP recalculations.
+- **Frontend Design:** Claude warm-canvas editorial design system (`#faf9f5` cream canvas, `#efe9de` feature cards, `#f5f0e8` soft surfaces, `#181715` dark product surfaces) with 1px `#e6dfd8` hairline borders and Anthropic 4-spoke radial-spike marks.
+- **Typography:** Display headlines in Cormorant Garamond / Tiempos Headline (`font-serif-claude` weight 400 with negative tracking); body and interface in Inter; code blocks in JetBrains Mono. Primary CTAs in warm coral (`#cc785c` with white text).
+- **Natural Language AI Controller:** Claude-style prompt bar (`#efe9de` card with `#faf9f5` prompt input) with preset pills and intent parsing for real-time Two-Phase Simplex LP recalculations.
 
 ## Current State & Next Steps
-- Status: Production-grade mathematical foundation verified, local builds passing (394ms), deployed to Vercel edge, repository synchronized with GitHub (`main` at `5c59beb`).
-  2. Final submission of the 11-page USPR proposal PDF to the NHM Assam challenge portal before 10 Nov 2026.
+- Status: Production-grade mathematical foundation verified, local builds passing (347ms), deployed to Vercel edge, repository synchronized with GitHub (`main` at `8796a46`).

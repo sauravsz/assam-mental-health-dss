@@ -42,9 +42,11 @@
   }
 }
 
+.font-header-sfpro,
 .font-serif-claude {
-  font-family: 'Cormorant Garamond', 'Tiempos Headline', Garamond, 'Times New Roman', serif;
-  letter-spacing: -0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.025em;
+  font-weight: 600;
 }
 
 .font-mono-code {
