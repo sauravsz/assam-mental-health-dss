@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Navbar } from './components/Navbar'
+import { NaturalLanguageBar } from './components/NaturalLanguageBar'
 import { StatePolicyView } from './components/StatePolicyView'
 import { DMHPCampPlanner } from './components/DMHPCampPlanner'
 import { RetentionQueue } from './components/RetentionQueue'
@@ -7,12 +8,14 @@ import { useScenarioData } from './engine/scenarioDataContext'
 
 export function App() {
   const [activeTab, setActiveTab] = useState<'state' | 'planner' | 'queue'>('planner')
+  const [numVans, setNumVans] = useState<number>(2)
 
   const {
     isEditMode,
     setIsEditMode,
     blocks,
     facilities,
+    rawDistricts,
     districts,
     referrals,
     setReferrals,
@@ -26,6 +29,11 @@ export function App() {
 
   const stalledCount = referrals.filter((r) => r.status === 'Stalled').length
 
+  const handleReset = () => {
+    resetToDefaults()
+    setNumVans(2)
+  }
+
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans">
       <Navbar
@@ -34,10 +42,26 @@ export function App() {
         stalledCount={stalledCount}
         isEditMode={isEditMode}
         setIsEditMode={setIsEditMode}
-        resetToDefaults={resetToDefaults}
+        resetToDefaults={handleReset}
       />
 
-      <main className="max-w-6xl mx-auto px-4 py-8 w-full flex-1">
+      <main className="max-w-6xl mx-auto px-4 py-6 w-full flex-1">
+        {/* Natural Language AI Command Bar */}
+        <NaturalLanguageBar
+          blocks={blocks}
+          facilities={facilities}
+          rawDistricts={rawDistricts}
+          setActiveTab={setActiveTab}
+          updateBlock={updateBlock}
+          updateFacilityCapacity={updateFacilityCapacity}
+          updateMedicineStock={updateMedicineStock}
+          updateDistrictCalls={updateDistrictCalls}
+          toggleDistrictFlood={toggleDistrictFlood}
+          resetToDefaults={handleReset}
+          setNumVans={setNumVans}
+        />
+
+        {/* Section Surfaces */}
         {activeTab === 'state' && (
           <StatePolicyView
             districts={districts}
@@ -55,6 +79,8 @@ export function App() {
             updateBlock={updateBlock}
             updateFacilityCapacity={updateFacilityCapacity}
             updateMedicineStock={updateMedicineStock}
+            numVans={numVans}
+            setNumVans={setNumVans}
           />
         )}
 

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import type { Block, Facility } from '../engine/types'
 import { TRAVEL_TIME_MATRIX } from '../engine/cacharData'
 import { solveCampAllocation } from '../engine/solver'
-import { Play, Navigation, CheckCircle2, ChevronDown, ChevronUp, Truck, Edit3 } from 'lucide-react'
+import { Navigation, CheckCircle2, ChevronDown, ChevronUp, Truck, Edit3, Sliders, MapPin } from 'lucide-react'
 
 interface DMHPCampPlannerProps {
   blocks: Block[]
@@ -15,6 +15,8 @@ interface DMHPCampPlannerProps {
     med: 'haloperidol' | 'fluoxetine' | 'valproate',
     status: 'Adequate' | 'Low Stock' | 'Critical'
   ) => void
+  numVans: number
+  setNumVans: (n: number) => void
 }
 
 export const DMHPCampPlanner = ({
@@ -24,12 +26,12 @@ export const DMHPCampPlanner = ({
   updateBlock,
   updateFacilityCapacity,
   updateMedicineStock,
+  numVans,
+  setNumVans,
 }: DMHPCampPlannerProps) => {
-  const [numVans, setNumVans] = useState<number>(2)
   const [includeFloodWeight, setIncludeFloodWeight] = useState<boolean>(true)
   const [showTechnicalDetails, setShowTechnicalDetails] = useState<boolean>(false)
   const [showBlockEditor, setShowBlockEditor] = useState<boolean>(false)
-  const [, setSolverTrigger] = useState<number>(0)
 
   // Memoize solver output with reactive blocks & facilities
   const result = useMemo(() => {
@@ -48,28 +50,41 @@ export const DMHPCampPlanner = ({
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Friendly Context Hero */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
-        <div className="max-w-2xl">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-            Step 2 · Fair Resource Planning
-          </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-2.5">
-            Where should the mobile clinic vans go this month?
-          </h2>
-          <p className="text-sm text-slate-600 leading-relaxed mt-2">
-            In Cachar District (1.16 million people across 8 rural blocks), the health department has only{' '}
-            <strong className="text-slate-900 font-semibold">{numVans} mobile mental health vans</strong>.
-            Normally, vans get parked near the main hospital in Silchar town because it is near headquarters.
-            Our optimizer finds the mathematically fairest locations to park them so rural villagers have to travel the least distance.
-          </p>
+      {/* ── SECTION 1: PLANNING BOARD & FLEET PARAMETERS ── */}
+      <section className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div className="max-w-2xl">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+              Module 2 · Mobile Van Siting Optimizer
+            </span>
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-2.5">
+              Where should the mobile clinic vans go this month?
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-1.5">
+              In Cachar District (1.16M population across 8 rural blocks), the health department has only{' '}
+              <strong className="text-slate-900 font-semibold">{numVans} mobile mental health vans</strong>.
+              Our linear programming solver places them where rural villagers travel the least distance.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {isEditMode && (
+              <button
+                onClick={() => setShowBlockEditor(!showBlockEditor)}
+                className="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-semibold px-3 py-2 rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <Sliders className="w-3.5 h-3.5 text-amber-800" />
+                <span>{showBlockEditor ? 'Hide Manual Sliders' : 'Manual Sliders (8 Blocks)'}</span>
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Simple Interactive Controls */}
-        <div className="mt-6 pt-6 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Quick Fleet & Flood Toggles */}
+        <div className="mt-5 pt-5 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-semibold text-slate-700 block mb-2">
-              How many mobile vans are available this month?
+            <label className="text-xs font-semibold text-slate-700 block mb-1.5">
+              Available Mobile Vans ({numVans} Vans):
             </label>
             <div className="grid grid-cols-3 gap-2">
               {[1, 2, 3].map((val) => (
@@ -84,15 +99,15 @@ export const DMHPCampPlanner = ({
                 >
                   <Truck className="w-3.5 h-3.5" />
                   <span>{val} {val === 1 ? 'Van' : 'Vans'}</span>
-                  {val === 2 && <span className="text-[9px] text-emerald-400 font-normal">(Best)</span>}
+                  {val === 2 && <span className="text-[9px] text-emerald-400 font-normal">(Optimal)</span>}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col justify-between">
-            <label className="text-xs font-semibold text-slate-700 block mb-1">
-              Disaster Priority
+          <div>
+            <label className="text-xs font-semibold text-slate-700 block mb-1.5">
+              Monsoon Disaster Factor:
             </label>
             <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
               <label className="flex items-center gap-2.5 cursor-pointer">
@@ -103,38 +118,18 @@ export const DMHPCampPlanner = ({
                   className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
                 />
                 <div className="text-xs text-slate-700">
-                  <span className="font-semibold block">Prioritize flood-hit river villages</span>
-                  <span className="text-[11px] text-slate-500">Gives extra weight to Katigorah &amp; Sonai</span>
+                  <span className="font-semibold block">Prioritize riverine flood catchments</span>
+                  <span className="text-[11px] text-slate-500">Heavily weights flood-affected blocks (Katigorah &amp; Sonai)</span>
                 </div>
               </label>
             </div>
           </div>
         </div>
+      </section>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setSolverTrigger((prev) => prev + 1)}
-            className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-xl text-xs shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <Play className="w-3.5 h-3.5 fill-current" />
-            Recalculate Best Locations Now
-          </button>
-
-          {isEditMode && (
-            <button
-              onClick={() => setShowBlockEditor(!showBlockEditor)}
-              className="w-full sm:w-auto bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-semibold px-4 py-2.5 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <Edit3 className="w-3.5 h-3.5 text-amber-800" />
-              <span>{showBlockEditor ? 'Hide Scenario Editor' : 'Edit 8 Blocks & Clinic Capacities'}</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Editable Block & Clinic Drawer (When Edit Mode is on) */}
+      {/* ── EDITABLE SCENARIO DRAWER (WHEN TOGGLED) ── */}
       {isEditMode && showBlockEditor && (
-        <div className="bg-amber-50/50 border border-amber-200 rounded-2xl p-5 shadow-xs space-y-4">
+        <section className="bg-amber-50/50 border border-amber-200 rounded-2xl p-5 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-amber-200/60 pb-2">
             <div>
               <h3 className="text-sm font-bold text-amber-950 flex items-center gap-2">
@@ -142,18 +137,18 @@ export const DMHPCampPlanner = ({
                 Live Scenario Editor: Cachar 8 Blocks &amp; 6 Clinic Hubs
               </h3>
               <p className="text-xs text-amber-800">
-                Change any population, flood factor, or clinic capacity. The Linear Programming solver re-runs in real time!
+                Tweak any population, flood multiplier, or intake capacity. The Two-Phase Primal Simplex LP recalculates instantly!
               </p>
             </div>
             <span className="text-[10px] bg-amber-200 text-amber-900 font-mono font-bold px-2 py-0.5 rounded">
-              Active LP Engine
+              Active Simplex Engine
             </span>
           </div>
 
           {/* Block Table Inputs */}
           <div>
             <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wide mb-2">
-              1. Revenue Block Populations &amp; Flood Shocks
+              1. Block Population &amp; Flood Multipliers
             </h4>
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left bg-white rounded-xl border border-amber-200 overflow-hidden">
@@ -161,9 +156,9 @@ export const DMHPCampPlanner = ({
                   <tr>
                     <th className="py-2 px-3">Block Name</th>
                     <th className="py-2 px-3">Population</th>
-                    <th className="py-2 px-3">Base Distress Rate</th>
-                    <th className="py-2 px-3">Flood Multiplier (1.0 - 2.5x)</th>
-                    <th className="py-2 px-3 text-right">Computed Burden (dᵢ)</th>
+                    <th className="py-2 px-3">Distress Rate</th>
+                    <th className="py-2 px-3">Flood Shock</th>
+                    <th className="py-2 px-3 text-right">Need Burden (dᵢ)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-amber-100">
@@ -197,7 +192,7 @@ export const DMHPCampPlanner = ({
                           />
                         </td>
                         <td className="py-2 px-3">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5">
                             <input
                               type="number"
                               step="0.1"
@@ -224,14 +219,14 @@ export const DMHPCampPlanner = ({
           {/* Clinic Capacity Inputs */}
           <div>
             <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wide mb-2">
-              2. Clinic Hub Daily Patient Intake Capacities (Kⱼ)
+              2. Clinic Daily Intake Capacity (Patients / Day)
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {facilities.map((f) => (
                 <div key={f.id} className="bg-white p-2.5 rounded-xl border border-amber-200 text-xs">
-                  <div className="font-semibold text-slate-900 truncate">{f.name}</div>
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="text-slate-500 text-[11px]">Daily Capacity:</span>
+                  <div className="font-semibold text-slate-900 truncate">{f.name.split(' ')[0]}</div>
+                  <div className="flex items-center justify-between mt-1.5">
+                    <span className="text-slate-500 text-[11px]">Intake:</span>
                     <div className="flex items-center gap-1">
                       <input
                         type="number"
@@ -249,17 +244,28 @@ export const DMHPCampPlanner = ({
               ))}
             </div>
           </div>
-        </div>
+        </section>
       )}
 
-      {/* The Result Card: Old Way vs New Way */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
-        <h3 className="text-base font-bold text-slate-900 tracking-tight mb-4">
-          The Result: How much travel time does this save?
-        </h3>
+      {/* ── SECTION 2: MAP & CATCHMENT DISPATCH ORDER ── */}
+      <section className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
+        <div>
+          <div className="flex items-center justify-between">
+            <h3 className="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-emerald-600" />
+              Optimal Camp Deployment &amp; Catchment Map
+            </h3>
+            <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              Two-Phase Simplex: {result.solveTimeMs} ms
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Compare the intuitive headquarters baseline vs. the mathematically optimal van deployment.
+          </p>
+        </div>
 
+        {/* 3 Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {/* Old Way */}
           <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4">
             <span className="text-xs font-semibold text-slate-500 block mb-1">
               Conventional Way (HQ Town Bias)
@@ -268,11 +274,10 @@ export const DMHPCampPlanner = ({
               {result.baselineMeanTravelTime} <span className="text-sm font-normal text-slate-500">minutes</span>
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Parked at: {baselineFacilities.map((f) => f.name.split(' ')[0]).join(' & ')}
+              Stationed at: {baselineFacilities.map((f) => f.name.split(' ')[0]).join(' & ')}
             </p>
           </div>
 
-          {/* New Way */}
           <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-4">
             <span className="text-xs font-semibold text-emerald-800 block mb-1">
               Our Optimized Route
@@ -281,11 +286,10 @@ export const DMHPCampPlanner = ({
               {result.meanTravelTime} <span className="text-sm font-normal text-emerald-600">minutes</span>
             </div>
             <p className="text-xs text-emerald-700 font-medium mt-1">
-              Parked at: {activeFacilities.map((f) => f.name.split(' ')[0]).join(' & ')}
+              Stationed at: {activeFacilities.map((f) => f.name.split(' ')[0]).join(' & ')}
             </p>
           </div>
 
-          {/* Time Saved */}
           <div className="bg-blue-50/60 border border-blue-200/80 rounded-xl p-4">
             <span className="text-xs font-semibold text-blue-800 block mb-1">
               Net Impact on Villagers
@@ -299,8 +303,8 @@ export const DMHPCampPlanner = ({
           </div>
         </div>
 
-        {/* Clean Schematic Map */}
-        <div className="mt-6 border border-slate-200/80 rounded-xl p-4 bg-slate-900 text-white overflow-hidden">
+        {/* Cachar District Schematic Map */}
+        <div className="border border-slate-200/80 rounded-xl p-4 bg-slate-900 text-white overflow-hidden">
           <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
             <div className="flex items-center gap-2 text-xs">
               <Navigation className="w-4 h-4 text-emerald-400" />
@@ -308,7 +312,7 @@ export const DMHPCampPlanner = ({
             </div>
             <div className="flex items-center gap-3 text-[10px] text-slate-300">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Van Location
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Active Van
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded bg-amber-400"></span> Village Area
@@ -380,7 +384,7 @@ export const DMHPCampPlanner = ({
                         : 'bg-slate-900/80 text-slate-500'
                     }`}
                   >
-                    {facility.name.split(' ')[0]} {isActive ? '★ VAN' : ''}
+                    {facility.name.split(' ')[0]} {isActive ? '★ ACTIVE' : ''}
                   </span>
                 </div>
               )
@@ -394,178 +398,178 @@ export const DMHPCampPlanner = ({
             </span>
           </div>
         </div>
+      </section>
 
-        {/* Medicine Readiness Checklist with Live Dropdowns */}
-        <div className="mt-6 pt-4 border-t border-slate-100">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+      {/* ── SECTION 3: PHARMACY READINESS CHECKLIST ── */}
+      <section className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               Pharmacy Checklist: Are essential medicines ready at these locations?
             </h4>
-            {isEditMode && (
-              <span className="text-[10px] text-amber-700 font-medium bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                Live Medicine Editor Active
-              </span>
-            )}
+            <p className="text-xs text-slate-500 mt-0.5">
+              Ensures active mobile camp locations have adequate supplies of essential psychiatric medications.
+            </p>
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {activeFacilities.map((fac) => {
-              const hasAlert = Object.values(fac.medicineStock).some((s) => s === 'Critical' || s === 'Low Stock')
-              return (
-                <div
-                  key={fac.id}
-                  className={`p-3.5 rounded-xl border text-xs ${
-                    hasAlert
-                      ? 'bg-amber-50/50 border-amber-200/80 text-amber-900'
-                      : 'bg-emerald-50/50 border-emerald-200/80 text-emerald-900'
-                  }`}
-                >
-                  <div className="flex items-center justify-between font-bold mb-1">
-                    <span>{fac.name}</span>
-                    {hasAlert ? (
-                      <span className="text-[10px] text-amber-700 font-bold bg-amber-100 px-1.5 py-0.2 rounded">
-                        Restock Needed
-                      </span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          {activeFacilities.map((fac) => {
+            const hasAlert = Object.values(fac.medicineStock).some((s) => s === 'Critical' || s === 'Low Stock')
+            return (
+              <div
+                key={fac.id}
+                className={`p-4 rounded-xl border text-xs ${
+                  hasAlert
+                    ? 'bg-amber-50/50 border-amber-200/80 text-amber-900'
+                    : 'bg-emerald-50/50 border-emerald-200/80 text-emerald-900'
+                }`}
+              >
+                <div className="flex items-center justify-between font-bold mb-2">
+                  <span className="text-sm text-slate-900">{fac.name}</span>
+                  {hasAlert ? (
+                    <span className="text-[10px] text-amber-700 font-bold bg-amber-100 px-2 py-0.5 rounded-full">
+                      Restock Needed
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded-full">
+                      Fully Stocked
+                    </span>
+                  )}
+                </div>
+
+                <div className="text-[11px] text-slate-600 space-y-1.5 pt-2 border-t border-slate-200/50">
+                  <div className="flex items-center justify-between">
+                    <span>Haloperidol (Antipsychotic):</span>
+                    {isEditMode ? (
+                      <select
+                        value={fac.medicineStock.haloperidol}
+                        onChange={(e) =>
+                          updateMedicineStock(
+                            fac.id,
+                            'haloperidol',
+                            e.target.value as 'Adequate' | 'Low Stock' | 'Critical'
+                          )
+                        }
+                        className="bg-white border border-slate-300 rounded px-1.5 py-0.5 text-[10px] font-semibold"
+                      >
+                        <option value="Adequate">Adequate</option>
+                        <option value="Low Stock">Low Stock</option>
+                        <option value="Critical">Critical</option>
+                      </select>
                     ) : (
-                      <span className="text-[10px] text-emerald-700 font-bold bg-emerald-100 px-1.5 py-0.2 rounded">
-                        Fully Stocked
+                      <span className="font-semibold text-slate-800">{fac.medicineStock.haloperidol}</span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <span>Fluoxetine (Antidepressant):</span>
+                    {isEditMode ? (
+                      <select
+                        value={fac.medicineStock.fluoxetine}
+                        onChange={(e) =>
+                          updateMedicineStock(
+                            fac.id,
+                            'fluoxetine',
+                            e.target.value as 'Adequate' | 'Low Stock' | 'Critical'
+                          )
+                        }
+                        className="bg-white border border-slate-300 rounded px-1.5 py-0.5 text-[10px] font-semibold"
+                      >
+                        <option value="Adequate">Adequate</option>
+                        <option value="Low Stock">Low Stock</option>
+                        <option value="Critical">Critical</option>
+                      </select>
+                    ) : (
+                      <span className={`font-semibold ${fac.medicineStock.fluoxetine === 'Critical' ? 'text-rose-600 font-bold' : 'text-slate-800'}`}>
+                        {fac.medicineStock.fluoxetine}
                       </span>
                     )}
                   </div>
 
-                  <div className="text-[11px] text-slate-600 space-y-1 mt-2">
-                    <div className="flex items-center justify-between">
-                      <span>Haloperidol (Antipsychotic):</span>
-                      {isEditMode ? (
-                        <select
-                          value={fac.medicineStock.haloperidol}
-                          onChange={(e) =>
-                            updateMedicineStock(
-                              fac.id,
-                              'haloperidol',
-                              e.target.value as 'Adequate' | 'Low Stock' | 'Critical'
-                            )
-                          }
-                          className="bg-white border border-slate-300 rounded px-1.5 py-0.5 text-[10px] font-semibold"
-                        >
-                          <option value="Adequate">Adequate</option>
-                          <option value="Low Stock">Low Stock</option>
-                          <option value="Critical">Critical</option>
-                        </select>
-                      ) : (
-                        <span className="font-semibold">{fac.medicineStock.haloperidol}</span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span>Fluoxetine (Antidepressant):</span>
-                      {isEditMode ? (
-                        <select
-                          value={fac.medicineStock.fluoxetine}
-                          onChange={(e) =>
-                            updateMedicineStock(
-                              fac.id,
-                              'fluoxetine',
-                              e.target.value as 'Adequate' | 'Low Stock' | 'Critical'
-                            )
-                          }
-                          className="bg-white border border-slate-300 rounded px-1.5 py-0.5 text-[10px] font-semibold"
-                        >
-                          <option value="Adequate">Adequate</option>
-                          <option value="Low Stock">Low Stock</option>
-                          <option value="Critical">Critical</option>
-                        </select>
-                      ) : (
-                        <span className={`font-semibold ${fac.medicineStock.fluoxetine === 'Critical' ? 'text-rose-600 font-bold' : ''}`}>
-                          {fac.medicineStock.fluoxetine}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span>Sodium Valproate:</span>
-                      {isEditMode ? (
-                        <select
-                          value={fac.medicineStock.valproate}
-                          onChange={(e) =>
-                            updateMedicineStock(
-                              fac.id,
-                              'valproate',
-                              e.target.value as 'Adequate' | 'Low Stock' | 'Critical'
-                            )
-                          }
-                          className="bg-white border border-slate-300 rounded px-1.5 py-0.5 text-[10px] font-semibold"
-                        >
-                          <option value="Adequate">Adequate</option>
-                          <option value="Low Stock">Low Stock</option>
-                          <option value="Critical">Critical</option>
-                        </select>
-                      ) : (
-                        <span className="font-semibold">{fac.medicineStock.valproate}</span>
-                      )}
-                    </div>
+                  <div className="flex items-center justify-between">
+                    <span>Sodium Valproate:</span>
+                    {isEditMode ? (
+                      <select
+                        value={fac.medicineStock.valproate}
+                        onChange={(e) =>
+                          updateMedicineStock(
+                            fac.id,
+                            'valproate',
+                            e.target.value as 'Adequate' | 'Low Stock' | 'Critical'
+                          )
+                        }
+                        className="bg-white border border-slate-300 rounded px-1.5 py-0.5 text-[10px] font-semibold"
+                      >
+                        <option value="Adequate">Adequate</option>
+                        <option value="Low Stock">Low Stock</option>
+                        <option value="Critical">Critical</option>
+                      </select>
+                    ) : (
+                      <span className="font-semibold text-slate-800">{fac.medicineStock.valproate}</span>
+                    )}
                   </div>
                 </div>
-              )
-            })}
-          </div>
+              </div>
+            )
+          })}
         </div>
+      </section>
 
-        {/* Technical Drawer For Evaluators */}
-        <div className="border border-slate-200 rounded-xl overflow-hidden mt-6">
-          <button
-            onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-            className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 text-left flex items-center justify-between text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
-          >
-            <span>Show Mathematical Formulation &amp; Distance Matrices (For Evaluators)</span>
-            {showTechnicalDetails ? (
-              <ChevronUp className="w-4 h-4 text-slate-500" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-slate-500" />
-            )}
-          </button>
-
-          {showTechnicalDetails && (
-            <div className="p-4 space-y-3 bg-white border-t border-slate-200 text-xs text-slate-700">
-              <div className="bg-slate-50 p-3 rounded-lg space-y-1">
-                <p className="font-semibold text-slate-900">Capacitated p-Median Two-Phase Primal Simplex Transportation LP:</p>
-                <p className="font-mono text-[11px] text-slate-600">
-                  min Z = ∑_&#123;i&#125; ∑_&#123;j&#125; d_i · c_&#123;ij&#125; · x_&#123;ij&#125; + M · ∑_&#123;i&#125; u_i
-                </p>
-                <p className="text-[11px] text-slate-500 mt-1">
-                  Subject to: Demand conservation, facility intake capacity limits, and budget P = {numVans} mobile camp units. Solved via exact Two-Phase Simplex in {result.solveTimeMs} ms.
-                </p>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-left">
-                  <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[10px]">
-                    <tr>
-                      <th className="py-1.5 px-2">Demand Block</th>
-                      <th className="py-1.5 px-2 text-right">Population</th>
-                      <th className="py-1.5 px-2 text-right">Distress Burden</th>
-                      <th className="py-1.5 px-2">Assigned Hub</th>
-                      <th className="py-1.5 px-2 text-right">Travel Time</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {result.assignments.map((a, idx) => (
-                      <tr key={idx}>
-                        <td className="py-1.5 px-2 font-medium">{blocks[a.blockId].name}</td>
-                        <td className="py-1.5 px-2 text-right font-mono">{blocks[a.blockId].population.toLocaleString()}</td>
-                        <td className="py-1.5 px-2 text-right font-mono">{a.demand}</td>
-                        <td className="py-1.5 px-2">{facilities[a.facilityId].name}</td>
-                        <td className="py-1.5 px-2 text-right font-mono font-bold text-emerald-700">{a.travelTime} min</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+      {/* ── SECTION 4: TECHNICAL DRAWER FOR EVALUATORS ── */}
+      <section className="border border-slate-200 rounded-xl overflow-hidden">
+        <button
+          onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
+          className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 text-left flex items-center justify-between text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+        >
+          <span>Show Mathematical Formulation &amp; Distance Matrices (For Evaluators)</span>
+          {showTechnicalDetails ? (
+            <ChevronUp className="w-4 h-4 text-slate-500" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-slate-500" />
           )}
-        </div>
-      </div>
+        </button>
+
+        {showTechnicalDetails && (
+          <div className="p-4 space-y-3 bg-white border-t border-slate-200 text-xs text-slate-700">
+            <div className="bg-slate-50 p-3 rounded-lg space-y-1">
+              <p className="font-semibold text-slate-900">Capacitated p-Median Two-Phase Primal Simplex Transportation LP:</p>
+              <p className="font-mono text-[11px] text-slate-600">
+                min Z = ∑_&#123;i&#125; ∑_&#123;j&#125; d_i · c_&#123;ij&#125; · x_&#123;ij&#125; + M · ∑_&#123;i&#125; u_i
+              </p>
+              <p className="text-[11px] text-slate-500 mt-1">
+                Subject to: Demand conservation, facility intake capacity limits, and budget P = {numVans} mobile camp units. Solved via exact Two-Phase Simplex in {result.solveTimeMs} ms.
+              </p>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs text-left">
+                <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[10px]">
+                  <tr>
+                    <th className="py-1.5 px-2">Demand Block</th>
+                    <th className="py-1.5 px-2 text-right">Population</th>
+                    <th className="py-1.5 px-2 text-right">Distress Burden</th>
+                    <th className="py-1.5 px-2">Assigned Hub</th>
+                    <th className="py-1.5 px-2 text-right">Travel Time</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {result.assignments.map((a, idx) => (
+                    <tr key={idx}>
+                      <td className="py-1.5 px-2 font-medium">{blocks[a.blockId].name}</td>
+                      <td className="py-1.5 px-2 text-right font-mono">{blocks[a.blockId].population.toLocaleString()}</td>
+                      <td className="py-1.5 px-2 text-right font-mono">{a.demand}</td>
+                      <td className="py-1.5 px-2">{facilities[a.facilityId].name}</td>
+                      <td className="py-1.5 px-2 text-right font-mono font-bold text-emerald-700">{a.travelTime} min</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </section>
     </div>
   )
 }
