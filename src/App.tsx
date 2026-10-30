@@ -3,18 +3,68 @@ import { Navbar } from './components/Navbar'
 import { StatePolicyView } from './components/StatePolicyView'
 import { DMHPCampPlanner } from './components/DMHPCampPlanner'
 import { RetentionQueue } from './components/RetentionQueue'
+import { useScenarioData } from './engine/scenarioDataContext'
 
 export function App() {
   const [activeTab, setActiveTab] = useState<'state' | 'planner' | 'queue'>('planner')
 
+  const {
+    isEditMode,
+    setIsEditMode,
+    blocks,
+    facilities,
+    districts,
+    referrals,
+    setReferrals,
+    updateBlock,
+    updateFacilityCapacity,
+    updateMedicineStock,
+    updateDistrictCalls,
+    toggleDistrictFlood,
+    resetToDefaults,
+  } = useScenarioData()
+
+  const stalledCount = referrals.filter((r) => r.status === 'Stalled').length
+
   return (
     <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans">
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} stalledCount={434} />
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        stalledCount={stalledCount}
+        isEditMode={isEditMode}
+        setIsEditMode={setIsEditMode}
+        resetToDefaults={resetToDefaults}
+      />
 
       <main className="max-w-6xl mx-auto px-4 py-8 w-full flex-1">
-        {activeTab === 'state' && <StatePolicyView />}
-        {activeTab === 'planner' && <DMHPCampPlanner />}
-        {activeTab === 'queue' && <RetentionQueue />}
+        {activeTab === 'state' && (
+          <StatePolicyView
+            districts={districts}
+            isEditMode={isEditMode}
+            updateDistrictCalls={updateDistrictCalls}
+            toggleDistrictFlood={toggleDistrictFlood}
+          />
+        )}
+
+        {activeTab === 'planner' && (
+          <DMHPCampPlanner
+            blocks={blocks}
+            facilities={facilities}
+            isEditMode={isEditMode}
+            updateBlock={updateBlock}
+            updateFacilityCapacity={updateFacilityCapacity}
+            updateMedicineStock={updateMedicineStock}
+          />
+        )}
+
+        {activeTab === 'queue' && (
+          <RetentionQueue
+            records={referrals}
+            setRecords={setReferrals}
+            isEditMode={isEditMode}
+          />
+        )}
       </main>
 
       <footer className="bg-white border-t border-slate-200/80 text-slate-500 py-8 px-4 text-xs mt-12">

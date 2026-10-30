@@ -1,13 +1,25 @@
 import { useState } from 'react'
-import { ASSAM_DISTRICTS } from '../engine/stateSurveillance'
-import { PhoneCall, AlertCircle, Waves, ChevronDown, ChevronUp, CheckCircle2 } from 'lucide-react'
+import type { DistrictDistress } from '../engine/types'
+import { PhoneCall, AlertCircle, Waves, ChevronDown, ChevronUp, CheckCircle2, Edit3 } from 'lucide-react'
 
-export const StatePolicyView = () => {
+interface StatePolicyViewProps {
+  districts: DistrictDistress[]
+  isEditMode: boolean
+  updateDistrictCalls: (districtId: string, calls: number) => void
+  toggleDistrictFlood: (districtId: string) => void
+}
+
+export const StatePolicyView = ({
+  districts,
+  isEditMode,
+  updateDistrictCalls,
+  toggleDistrictFlood,
+}: StatePolicyViewProps) => {
   const [showTechnicalDetails, setShowTechnicalDetails] = useState<boolean>(false)
   const [selectedZone, setSelectedZone] = useState<string>('All')
 
-  const surgeDistricts = ASSAM_DISTRICTS.filter((d) => d.isSurge)
-  const filteredDistricts = ASSAM_DISTRICTS.filter((d) => {
+  const surgeDistricts = districts.filter((d) => d.isSurge)
+  const filteredDistricts = districts.filter((d) => {
     if (selectedZone !== 'All' && d.zone !== selectedZone) return false
     return true
   })
@@ -85,6 +97,11 @@ export const StatePolicyView = () => {
               Normally an area receives 2–3 calls per week. When a river floods or crops fail, calls surge. We alert health teams to visit early.
             </p>
           </div>
+          {isEditMode && (
+            <span className="text-[11px] bg-amber-50 text-amber-800 font-semibold px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1.5">
+              <Edit3 className="w-3.5 h-3.5" /> Live Call Editor Active
+            </span>
+          )}
         </div>
 
         {/* Priority Highlight Cards for Surging Districts */}
@@ -110,24 +127,60 @@ export const StatePolicyView = () => {
                   </div>
                   <span className="text-xs text-slate-500">{dist.zone} · Pop: {(dist.population / 100000).toFixed(1)} Lakh</span>
                 </div>
-                <span className="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full font-mono">
-                  +{Math.round(((dist.callsLast30Days - dist.poissonExpected) / dist.poissonExpected) * 100)}% Surge
-                </span>
+                <div className="text-right">
+                  <span className="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full font-mono block">
+                    +{Math.round(((dist.callsLast30Days - dist.poissonExpected) / dist.poissonExpected) * 100)}% Surge
+                  </span>
+                  <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+                    p = {dist.pValueFormatted}
+                  </span>
+                </div>
               </div>
 
+              {/* Editable Call Count when in Edit Mode */}
               <div className="mt-3 flex items-center justify-between text-xs text-slate-600 pt-2 border-t border-slate-200/50">
-                <span className="flex items-center gap-1">
-                  {dist.floodCrisis ? (
-                    <span className="text-cyan-700 font-semibold flex items-center gap-1">
-                      <Waves className="w-3.5 h-3.5" /> Flood Inundated
-                    </span>
+                <div className="flex items-center gap-2">
+                  {isEditMode ? (
+                    <button
+                      onClick={() => toggleDistrictFlood(dist.id)}
+                      className={`text-[10px] font-semibold px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 ${
+                        dist.floodCrisis
+                          ? 'bg-cyan-100 text-cyan-800 border-cyan-300'
+                          : 'bg-slate-100 text-slate-600 border-slate-200'
+                      }`}
+                    >
+                      <Waves className="w-3 h-3" />
+                      <span>{dist.floodCrisis ? 'Flood Active' : 'Normal Weather'}</span>
+                    </button>
                   ) : (
-                    <span>Normal weather</span>
+                    <span>
+                      {dist.floodCrisis ? (
+                        <span className="text-cyan-700 font-semibold flex items-center gap-1 text-[11px]">
+                          <Waves className="w-3.5 h-3.5" /> Flood Inundated
+                        </span>
+                      ) : (
+                        <span className="text-slate-400 text-[11px]">Normal weather</span>
+                      )}
+                    </span>
                   )}
-                </span>
-                <span className="font-medium text-slate-800">
-                  {dist.allocatedCamps} Mobile Vans Currently Sited
-                </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-500 text-[11px]">Calls:</span>
+                  {isEditMode ? (
+                    <input
+                      type="number"
+                      min="0"
+                      max="2000"
+                      step="10"
+                      value={dist.callsLast30Days}
+                      onChange={(e) => updateDistrictCalls(dist.id, parseInt(e.target.value) || 0)}
+                      className="w-16 px-1.5 py-0.5 border border-slate-300 rounded font-mono text-xs font-bold text-slate-900 text-right focus:outline-blue-500"
+                    />
+                  ) : (
+                    <span className="font-bold text-slate-900 font-mono">{dist.callsLast30Days}</span>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -166,6 +219,7 @@ export const StatePolicyView = () => {
                   Fundamental Matrix N = (I - Q)⁻¹. Absorption probability into verified recovery B = N · R is exactly <strong className="text-slate-900">3.2%</strong> (320 / 10,000), proving a 96.8% systemic attrition rate that mandates proactive retention intervention.
                 </p>
               </div>
+
               <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-slate-600">Filter by Geographic Zone:</span>
                 <select
@@ -200,12 +254,26 @@ export const StatePolicyView = () => {
                         <td className="py-2 px-3 font-semibold text-slate-900">{d.name}</td>
                         <td className="py-2 px-3 text-slate-600">{d.zone}</td>
                         <td className="py-2 px-3 text-right font-mono text-slate-600">{d.population.toLocaleString()}</td>
-                        <td className="py-2 px-3 text-right font-mono font-bold text-slate-900">{d.callsLast30Days}</td>
+                        <td className="py-2 px-3 text-right">
+                          {isEditMode ? (
+                            <input
+                              type="number"
+                              min="0"
+                              max="3000"
+                              step="10"
+                              value={d.callsLast30Days}
+                              onChange={(e) => updateDistrictCalls(d.id, parseInt(e.target.value) || 0)}
+                              className="w-16 px-1.5 py-0.5 border border-slate-300 rounded font-mono text-xs font-bold text-slate-900 text-right focus:outline-blue-500"
+                            />
+                          ) : (
+                            <span className="font-mono font-bold text-slate-900">{d.callsLast30Days}</span>
+                          )}
+                        </td>
                         <td className="py-2 px-3 text-right font-mono text-slate-500">{d.poissonExpected}</td>
                         <td className="py-2 px-3 text-center">
                           <span
                             className={`font-mono font-bold px-1.5 py-0.2 rounded text-[10px] ${
-                              d.zScore >= 2.5
+                              d.isSurge
                                 ? 'bg-rose-100 text-rose-700'
                                 : 'bg-slate-100 text-slate-600'
                             }`}
@@ -219,12 +287,12 @@ export const StatePolicyView = () => {
                         <td className="py-2 px-3 text-center">
                           <span
                             className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
-                              d.disparityGap === 'High Deficit'
-                                ? 'bg-rose-50 text-rose-700'
-                                : 'bg-slate-50 text-slate-600'
+                              d.isSurge
+                                ? 'bg-rose-100 text-rose-700 font-bold'
+                                : 'bg-slate-100 text-slate-600'
                             }`}
                           >
-                            {d.disparityGap}
+                            {d.isSurge ? 'Surge (p < 0.01)' : 'Normal'}
                           </span>
                         </td>
                       </tr>

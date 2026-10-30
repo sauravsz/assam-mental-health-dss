@@ -1,16 +1,28 @@
 import { useState, useMemo } from 'react'
 import type { ReferralRecord } from '../engine/types'
-import { generateSyntheticStalledReferrals, applySmallCellSuppression } from '../engine/referralData'
-import { ShieldCheck, Search, CheckCircle2, ChevronDown, ChevronUp, Phone, Home } from 'lucide-react'
+import { applySmallCellSuppression } from '../engine/referralData'
+import { ShieldCheck, Search, CheckCircle2, ChevronDown, ChevronUp, Phone, Home, PlusCircle, Edit3 } from 'lucide-react'
 
-export const RetentionQueue = () => {
-  const [records, setRecords] = useState<ReferralRecord[]>(() => generateSyntheticStalledReferrals(434))
+interface RetentionQueueProps {
+  records: ReferralRecord[]
+  setRecords: React.Dispatch<React.SetStateAction<ReferralRecord[]>>
+  isEditMode: boolean
+}
+
+export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQueueProps) => {
   const [selectedDistrict, setSelectedDistrict] = useState<string>('All')
   const [selectedDiagnosis] = useState<string>('All')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [showTechnicalDetails, setShowTechnicalDetails] = useState<boolean>(false)
   const [activeRecordForAction, setActiveRecordForAction] = useState<ReferralRecord | null>(null)
   const [actionNotes, setActionNotes] = useState<string>('')
+  const [showAddForm, setShowAddForm] = useState<boolean>(false)
+
+  // New Case State
+  const [newBlock, setNewBlock] = useState<string>('Katigorah')
+  const [newDiagnosis, setNewDiagnosis] = useState<ReferralRecord['mhgapCode']>('Depression')
+  const [newFacility, setNewFacility] = useState<string>('Katigorah CHC')
+  const [newDays, setNewDays] = useState<number>(18)
 
   // Filter records
   const filteredRecords = useMemo(() => {
@@ -51,6 +63,33 @@ export const RetentionQueue = () => {
     setActionNotes('')
   }
 
+  const handleAddCase = (e: React.FormEvent) => {
+    e.preventDefault()
+    const newId = `REF-2026-${String(records.length + 1).padStart(4, '0')}`
+    const hex = Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')
+    const newRecord: ReferralRecord = {
+      id: newId,
+      callerHash: `sha256:${hex}a9b8...`,
+      district: ['Dispur', 'Sonapur', 'Chandrapur', 'Azara', 'North Guwahati'].includes(newBlock)
+        ? 'Kamrup Metro'
+        : 'Cachar',
+      block: newBlock,
+      language: 'Bengali',
+      ageBand: '30-44',
+      gender: 'F',
+      mhgapCode: newDiagnosis,
+      tierReached: 2,
+      daysStalled: newDays,
+      assignedFacility: newFacility,
+      consentRecorded: true,
+      status: 'Stalled',
+      followupAttempts: 0,
+      lastContactNote: 'Case registered via intake ledger.',
+    }
+    setRecords([newRecord, ...records])
+    setShowAddForm(false)
+  }
+
   const counts = useMemo(() => {
     return {
       total: records.length,
@@ -79,12 +118,104 @@ export const RetentionQueue = () => {
         </div>
 
         {/* Privacy Invariant Banner */}
-        <div className="mt-4 p-3 bg-emerald-50/70 border border-emerald-200/60 rounded-xl text-xs text-emerald-900 flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>
-            <strong className="font-semibold text-emerald-950">Strict Privacy Guarantee:</strong> 100% of people listed here agreed to follow-up contact during their helpline call. No robot calls or automated messages are ever sent.
-          </span>
+        <div className="mt-4 p-3 bg-emerald-50/70 border border-emerald-200/60 rounded-xl text-xs text-emerald-900 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>
+              <strong className="font-semibold text-emerald-950">Strict Privacy Guarantee:</strong> 100% of people listed here agreed to follow-up contact during their helpline call. No robot calls or automated messages are ever sent.
+            </span>
+          </div>
+          {isEditMode && (
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-2.5 py-1 rounded-lg text-xs flex items-center gap-1.5 shrink-0 transition-all cursor-pointer"
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>{showAddForm ? 'Cancel Add' : '+ Add Test Case'}</span>
+            </button>
+          )}
         </div>
+
+        {/* Add Referral Case Form (When in Edit Mode) */}
+        {isEditMode && showAddForm && (
+          <form onSubmit={handleAddCase} className="mt-4 p-4 bg-amber-50/70 border border-amber-200 rounded-xl space-y-3 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-amber-950 flex items-center gap-1.5">
+                <Edit3 className="w-3.5 h-3.5" /> Add New Test Stalled Referral
+              </span>
+              <span className="text-[10px] text-amber-800">Saves directly to queue and re-evaluates suppression</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+              <div>
+                <label className="text-[11px] font-semibold text-slate-700 block mb-1">Revenue Block:</label>
+                <select
+                  value={newBlock}
+                  onChange={(e) => setNewBlock(e.target.value)}
+                  className="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs text-slate-800"
+                >
+                  <option value="Katigorah">Katigorah (Cachar)</option>
+                  <option value="Sonai">Sonai (Cachar)</option>
+                  <option value="Lakhipur">Lakhipur (Cachar)</option>
+                  <option value="Dholai">Dholai (Cachar)</option>
+                  <option value="Borkhola">Borkhola (Cachar)</option>
+                  <option value="Salchapra">Salchapra (Cachar)</option>
+                  <option value="Silchar Urban">Silchar Urban (Cachar)</option>
+                  <option value="Dispur">Dispur (Kamrup)</option>
+                  <option value="Sonapur">Sonapur (Kamrup)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-slate-700 block mb-1">mhGAP Category:</label>
+                <select
+                  value={newDiagnosis}
+                  onChange={(e) => setNewDiagnosis(e.target.value as ReferralRecord['mhgapCode'])}
+                  className="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs text-slate-800"
+                >
+                  <option value="Depression">Depression</option>
+                  <option value="Anxiety">Anxiety</option>
+                  <option value="Self-Harm">Self-Harm Risk</option>
+                  <option value="Substance">Substance Use</option>
+                  <option value="Psychosis">Psychosis</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-slate-700 block mb-1">Assigned Clinic:</label>
+                <select
+                  value={newFacility}
+                  onChange={(e) => setNewFacility(e.target.value)}
+                  className="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs text-slate-800"
+                >
+                  <option value="Katigorah CHC">Katigorah CHC</option>
+                  <option value="Sonai BPHC">Sonai BPHC</option>
+                  <option value="SM Dev Civil Hospital (HQ)">SM Dev Civil Hospital (HQ)</option>
+                  <option value="Lakhipur BPHC / CHC">Lakhipur BPHC / CHC</option>
+                  <option value="Dholai Model Hospital">Dholai Model Hospital</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-slate-700 block mb-1">Days Stalled:</label>
+                <input
+                  type="number"
+                  min="14"
+                  max="60"
+                  value={newDays}
+                  onChange={(e) => setNewDays(parseInt(e.target.value) || 14)}
+                  className="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs font-mono text-slate-800"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="bg-slate-900 hover:bg-slate-800 text-white font-semibold px-4 py-1.5 rounded-lg text-xs cursor-pointer"
+            >
+              Insert into Referral Queue
+            </button>
+          </form>
+        )}
 
         {/* 3 Simple Action Counters */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-slate-100">
@@ -254,6 +385,7 @@ export const RetentionQueue = () => {
           )}
         </div>
       </div>
+
       {/* Action Dialog */}
       {activeRecordForAction && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
