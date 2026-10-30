@@ -16,9 +16,9 @@ Operational Decision Support System for Government of Assam — National Health 
 - **Engine 3 (Retention):** Closed-loop care tracking for stalled referrals ($>14$ days) with verified statutory consent and human counsellors (zero robocalls). Modeled as an Absorbing Markov Chain ($N = (I - Q)^{-1}$) with verified 3.2% absorption recovery probability.
 - **Compliance:** MHCA 2017 §23, DPDP Act 2023, salted SHA-256 pseudonymization. Enforces Primary ($n < 10$) and Secondary (Complementary) cell suppression to algebraically prevent subtraction leaks.
 - **Frontend Design:** Clean Expo design system, mobile-optimized segmented control, hairline borders, plain-English human framing, expandable mathematical drawers.
+- **Natural Language AI Controller:** Client-side intent parser (`commandParser.ts`) enabling direct conversational simulation commands (e.g. "Severe flood hits Katigorah", "Set vans to 3", "Katigorah ran out of Fluoxetine") with real-time reactive LP recalculations.
 
 ## Current State & Next Steps
-- Status: Production-grade mathematical foundation verified, local builds passing (347ms), test suite passing, deployed to Vercel edge, repository synchronized with GitHub (`main` at `32f14f6`).
-- Next Actions:
+- Status: Production-grade mathematical foundation verified, local builds passing (425ms), test suite passing, deployed to Vercel edge, repository synchronized with GitHub (`main` at `94ff026`).
   1. Review the 8-page Student & Faculty Guide before presenting to the MBA advisor.
   2. Final submission of the 11-page USPR proposal PDF to the NHM Assam challenge portal before 10 Nov 2026.

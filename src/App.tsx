@@ -35,7 +35,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-slate-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#0F3B2C] text-[#EAD0AC] flex flex-col font-sans-tech">
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -93,19 +93,19 @@ export function App() {
         )}
       </main>
 
-      <footer className="bg-white border-t border-slate-200/80 text-slate-500 py-8 px-4 text-xs mt-12">
+      <footer className="bg-[#09231A] border-t border-[#B87333]/40 text-[#C2AB8E] py-8 px-4 text-xs mt-12 font-sans-tech">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
-            <p className="font-semibold text-slate-800">
+            <p className="font-bold text-[#EAD0AC] font-serif-display text-sm">
               Assam Mental Health Care Navigator · Operational Prototype v1.0
             </p>
-            <p className="text-[11px] text-slate-400 mt-0.5">
+            <p className="text-[11px] text-[#C2AB8E] mt-0.5 font-mono">
               Government of Assam · National Health Mission (NHM) · Health &amp; Family Welfare Department
             </p>
           </div>
-          <div className="text-[11px] text-slate-400 flex flex-col sm:items-end gap-0.5">
-            <span>Decision Support System · Capacitated p-Median Optimization &amp; Anomaly Surveillance</span>
-            <span className="text-slate-500 font-medium">Assam University, Silchar</span>
+          <div className="text-[11px] text-[#C2AB8E] flex flex-col sm:items-end gap-0.5 font-mono">
+            <span>Two-Phase Primal Simplex LP &amp; Spatio-Temporal Poisson Surveillance</span>
+            <span className="text-[#FFD700] font-semibold">Assam University, Silchar</span>
           </div>
         </div>
       </footer>

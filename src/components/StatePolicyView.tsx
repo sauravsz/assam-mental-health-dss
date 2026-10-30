@@ -25,148 +25,153 @@ export const StatePolicyView = ({
   })
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Friendly Hero Banner */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+    <div className="space-y-6 max-w-5xl mx-auto font-sans-tech">
+      {/* ── SECTION 1: MACRO FUNNEL & ATTRITION TELEMETRY ── */}
+      <section className="bg-[#144837]/90 border border-[#B87333]/70 rounded-lg p-5 sm:p-6 shadow-[0_2px_14px_rgba(0,0,0,0.3)] relative">
+        {/* PCB Solder Pins */}
+        <div className="absolute top-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-[#B87333]"></div>
+        <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#B87333]"></div>
+        <div className="absolute bottom-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-[#B87333]"></div>
+        <div className="absolute bottom-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#B87333]"></div>
+
         <div className="max-w-2xl">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
-            Step 1 · Understanding The Need
+          <span className="text-[11px] font-mono uppercase tracking-wider text-[#FFD700] bg-[#09231A] px-2.5 py-1 rounded border border-[#B87333]/50">
+            MODULE 01 // TELEMETRY_SURVEILLANCE
           </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-2.5">
-            What is happening across Assam right now?
+          <h2 className="text-xl sm:text-2xl font-bold text-[#EAD0AC] font-serif-display tracking-tight mt-2.5">
+            Care Continuum Funnel &amp; Signal Attenuation
           </h2>
-          <p className="text-sm text-slate-600 leading-relaxed mt-2">
-            Every month, thousands of citizens call the 24/7 Tele-MANAS helpline (14416).
-            While telephone support helps initially, <strong className="text-slate-900 font-semibold">over 94% of people who need to see a doctor in person never reach a clinic</strong> due to stigma, lack of money for bus fares, and long distances.
+          <p className="text-xs sm:text-sm text-[#C2AB8E] leading-relaxed mt-1.5">
+            Tele-MANAS inbound helpline volume across 35 Assam districts. Operational records reveal that{' '}
+            <strong className="text-[#FFD700] font-semibold">over 94% of callers needing in-person psychiatric care drop out</strong> due to stigma, transit distance, and unverified referrals.
           </p>
         </div>
 
-        {/* 3 Simple Care Funnel Steps */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-6 pt-6 border-t border-slate-100">
-          <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
-            <div className="flex items-center justify-between text-slate-500 mb-1">
-              <span className="text-xs font-semibold text-slate-700">1. Citizens Call In</span>
-              <PhoneCall className="w-4 h-4 text-blue-600" />
+        {/* 3 Care Funnel Step Registers */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-6 pt-5 border-t border-[#B87333]/30">
+          <div className="bg-[#09231A] border border-[#B87333]/50 rounded-lg p-4">
+            <div className="flex items-center justify-between text-[#C2AB8E] mb-1">
+              <span className="text-xs font-mono font-semibold uppercase">01. Inbound Intake</span>
+              <PhoneCall className="w-4 h-4 text-[#D98C53]" />
             </div>
-            <div className="text-2xl font-bold text-slate-900">10,000</div>
-            <p className="text-xs text-slate-500 mt-1">Called the helpline this month</p>
+            <div className="text-3xl font-bold text-[#EAD0AC] font-serif-display">10,000</div>
+            <p className="text-xs text-[#C2AB8E] mt-1 font-mono text-[11px]">Tele-MANAS monthly intake</p>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
-            <div className="flex items-center justify-between text-slate-500 mb-1">
-              <span className="text-xs font-semibold text-slate-700">2. Advised to See a Doctor</span>
-              <AlertCircle className="w-4 h-4 text-amber-500" />
+          <div className="bg-[#09231A] border border-[#D98C53] rounded-lg p-4">
+            <div className="flex items-center justify-between text-[#D98C53] mb-1">
+              <span className="text-xs font-mono font-semibold uppercase">02. Tier 2 Specialist</span>
+              <AlertCircle className="w-4 h-4 text-current" />
             </div>
-            <div className="text-2xl font-bold text-amber-600">1,449</div>
-            <p className="text-xs text-slate-500 mt-1">Struggling with severe distress</p>
+            <div className="text-3xl font-bold text-[#D98C53] font-serif-display">1,449</div>
+            <p className="text-xs text-[#C2AB8E] mt-1 font-mono text-[11px]">Severe clinical distress</p>
           </div>
 
-          <div className="bg-rose-50/60 border border-rose-200/60 rounded-xl p-4">
-            <div className="flex items-center justify-between text-rose-700 mb-1">
-              <span className="text-xs font-semibold text-rose-900">3. Actually Saw a Doctor</span>
-              <CheckCircle2 className="w-4 h-4 text-rose-500" />
+          <div className="bg-[#165B45] border border-[#FFD700] rounded-lg p-4 shadow-[0_0_12px_rgba(255,215,0,0.1)]">
+            <div className="flex items-center justify-between text-[#FFD700] mb-1">
+              <span className="text-xs font-mono font-semibold uppercase">03. Verified Clinic Visit</span>
+              <CheckCircle2 className="w-4 h-4 text-current" />
             </div>
-            <div className="text-2xl font-bold text-rose-600">579</div>
-            <p className="text-xs text-rose-600 font-medium mt-1">870 people disappeared</p>
+            <div className="text-3xl font-bold text-[#FFD700] font-serif-display">579</div>
+            <p className="text-xs text-[#EAD0AC] mt-1 font-mono text-[11px]">870 callers lost to follow-up</p>
           </div>
         </div>
 
-        {/* Plain-English Insight Note */}
-        <div className="mt-4 p-3.5 bg-blue-50/70 border border-blue-200/60 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
-          <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 text-[11px] font-bold mt-0.5">
+        {/* Insight note */}
+        <div className="mt-4 p-3 bg-[#09231A] border border-[#B87333]/50 rounded text-xs text-[#EAD0AC] flex items-start gap-2.5">
+          <div className="w-5 h-5 rounded bg-[#D98C53] text-[#09231A] flex items-center justify-center shrink-0 text-[11px] font-bold font-mono mt-0.5">
             !
           </div>
           <div className="leading-relaxed">
-            <strong className="font-semibold text-blue-950">Why this matters:</strong> 870 vulnerable people were told they need clinical psychiatric care, but slipped away after hanging up the phone.
-            Our system solves this by sending <strong className="font-semibold text-blue-950">mobile clinic vans into rural villages</strong> (Tab 2) and having <strong className="font-semibold text-blue-950">human counsellors call them back</strong> (Tab 3).
+            <strong className="font-semibold text-[#FFD700]">Operations Takeaway:</strong> 870 individuals were advised to seek in-person psychiatric consultation, but vanished after call termination. AMH-DSS deploys mobile clinic vans (Tab 2) and counsellor retention callbacks (Tab 3) to close this 94.2% delivery gap.
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* The Spike Detector */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+      {/* ── SECTION 2: DISCRETE POISSON SPIKE DETECTOR ── */}
+      <section className="bg-[#144837]/90 border border-[#B87333]/70 rounded-lg p-5 sm:p-6 shadow-[0_2px_14px_rgba(0,0,0,0.3)]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-              <h3 className="text-base font-bold text-slate-900 tracking-tight">
-                Spike Detector: Where are calls jumping above normal?
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FFD700] shadow-[0_0_6px_#FFD700]"></span>
+              <h3 className="text-base font-bold text-[#EAD0AC] font-serif-display tracking-wide">
+                Poisson Anomaly Surveillance Bus (α = 0.01)
               </h3>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Normally an area receives 2–3 calls per week. When a river floods or crops fail, calls surge. We alert health teams to visit early.
+            <p className="text-xs text-[#C2AB8E] mt-0.5">
+              Exact discrete cumulative tail probability evaluates whether call spikes exceed random chance under baseline λ.
             </p>
           </div>
           {isEditMode && (
-            <span className="text-[11px] bg-amber-50 text-amber-800 font-semibold px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1.5">
-              <Edit3 className="w-3.5 h-3.5" /> Live Call Editor Active
+            <span className="text-[11px] bg-[#09231A] text-[#FFD700] font-mono font-semibold px-2.5 py-1 rounded border border-[#FFD700] flex items-center gap-1.5">
+              <Edit3 className="w-3.5 h-3.5 text-[#D98C53]" /> BUS_REGISTER_WRITE_ENABLED
             </span>
           )}
         </div>
 
-        {/* Priority Highlight Cards for Surging Districts */}
+        {/* Priority Anomaly Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
           {surgeDistricts.slice(0, 4).map((dist) => (
             <div
               key={dist.id}
-              className={`p-4 rounded-xl border transition-all ${
+              className={`p-4 rounded border transition-all ${
                 dist.name === 'Cachar'
-                  ? 'bg-blue-50/40 border-blue-300 ring-2 ring-blue-500/20'
-                  : 'bg-slate-50 border-slate-200/80'
+                  ? 'bg-[#165B45] border-[#FFD700] shadow-[0_0_12px_rgba(255,215,0,0.15)]'
+                  : 'bg-[#09231A] border-[#B87333]/60'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900 text-sm">{dist.name}</span>
+                    <span className="font-bold text-[#EAD0AC] font-serif-display text-sm">{dist.name}</span>
                     {dist.name === 'Cachar' && (
-                      <span className="text-[10px] font-bold bg-blue-600 text-white px-1.5 py-0.2 rounded">
-                        PILOT DISTRICT
+                      <span className="text-[9px] font-mono font-bold bg-[#D98C53] text-[#09231A] px-1.5 py-0.2 rounded">
+                        PILOT_NODE
                       </span>
                     )}
                   </div>
-                  <span className="text-xs text-slate-500">{dist.zone} · Pop: {(dist.population / 100000).toFixed(1)} Lakh</span>
+                  <span className="text-xs text-[#C2AB8E] font-mono">{dist.zone} · Pop: {(dist.population / 100000).toFixed(1)}L</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full font-mono block">
-                    +{Math.round(((dist.callsLast30Days - dist.poissonExpected) / dist.poissonExpected) * 100)}% Surge
+                  <span className="text-xs font-mono font-bold text-[#FFD700] bg-[#09231A] border border-[#FFD700]/70 px-2 py-0.5 rounded block">
+                    +{Math.round(((dist.callsLast30Days - dist.poissonExpected) / dist.poissonExpected) * 100)}% SURGE
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
-                    p = {dist.pValueFormatted}
+                  <span className="text-[10px] text-[#C2AB8E] font-mono mt-0.5 block">
+                    p = {dist.pValueFormatted} // Z = +{dist.zScore.toFixed(2)}
                   </span>
                 </div>
               </div>
 
               {/* Editable Call Count when in Edit Mode */}
-              <div className="mt-3 flex items-center justify-between text-xs text-slate-600 pt-2 border-t border-slate-200/50">
+              <div className="mt-3 flex items-center justify-between text-xs text-[#C2AB8E] pt-2 border-t border-[#B87333]/30">
                 <div className="flex items-center gap-2">
                   {isEditMode ? (
                     <button
                       onClick={() => toggleDistrictFlood(dist.id)}
-                      className={`text-[10px] font-semibold px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 ${
+                      className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 ${
                         dist.floodCrisis
-                          ? 'bg-cyan-100 text-cyan-800 border-cyan-300'
-                          : 'bg-slate-100 text-slate-600 border-slate-200'
+                          ? 'bg-[#165B45] text-[#FFD700] border-[#FFD700]'
+                          : 'bg-[#09231A] text-[#C2AB8E] border-[#B87333]/60'
                       }`}
                     >
-                      <Waves className="w-3 h-3" />
-                      <span>{dist.floodCrisis ? 'Flood Active' : 'Normal Weather'}</span>
+                      <Waves className="w-3 h-3 text-current" />
+                      <span>{dist.floodCrisis ? 'FLOOD_ACTIVE' : 'WEATHER_OK'}</span>
                     </button>
                   ) : (
                     <span>
                       {dist.floodCrisis ? (
-                        <span className="text-cyan-700 font-semibold flex items-center gap-1 text-[11px]">
-                          <Waves className="w-3.5 h-3.5" /> Flood Inundated
+                        <span className="text-[#FFD700] font-semibold flex items-center gap-1 text-[11px] font-mono">
+                          <Waves className="w-3.5 h-3.5" /> FLOOD_INUNDATED
                         </span>
                       ) : (
-                        <span className="text-slate-400 text-[11px]">Normal weather</span>
+                        <span className="text-[#C2AB8E]/70 text-[11px] font-mono">WEATHER_NORMAL</span>
                       )}
                     </span>
                   )}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-slate-500 text-[11px]">Calls:</span>
+                  <span className="text-[#C2AB8E] text-[11px] font-mono">CALLS_30D:</span>
                   {isEditMode ? (
                     <input
                       type="number"
@@ -175,10 +180,10 @@ export const StatePolicyView = ({
                       step="10"
                       value={dist.callsLast30Days}
                       onChange={(e) => updateDistrictCalls(dist.id, parseInt(e.target.value) || 0)}
-                      className="w-16 px-1.5 py-0.5 border border-slate-300 rounded font-mono text-xs font-bold text-slate-900 text-right focus:outline-blue-500"
+                      className="w-16 px-1.5 py-0.5 bg-[#09231A] border border-[#B87333] rounded font-mono text-xs font-bold text-[#FFD700] text-right focus:outline-none focus:border-[#FFD700]"
                     />
                   ) : (
-                    <span className="font-bold text-slate-900 font-mono">{dist.callsLast30Days}</span>
+                    <span className="font-bold text-[#FFD700] font-mono">{dist.callsLast30Days}</span>
                   )}
                 </div>
               </div>
@@ -186,74 +191,73 @@ export const StatePolicyView = ({
           ))}
         </div>
 
-        {/* Clean Accordion for Deep Technical / Evaluation Data */}
-        <div className="border border-slate-200 rounded-xl overflow-hidden mt-6">
+        {/* Technical Register Accordion */}
+        <div className="border border-[#B87333]/50 rounded-lg overflow-hidden mt-6 bg-[#09231A]">
           <button
             onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-            className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 text-left flex items-center justify-between text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+            className="w-full px-4 py-3 bg-[#09231A] hover:bg-[#144837] text-left flex items-center justify-between text-xs font-semibold text-[#EAD0AC] transition-colors cursor-pointer font-mono"
           >
-            <span>Show Full District Data Table &amp; Math Models (For Evaluators)</span>
+            <span>// INSPECT 35-DISTRICT POISSON MATRIX &amp; ABSORBING MARKOV MODEL</span>
             {showTechnicalDetails ? (
-              <ChevronUp className="w-4 h-4 text-slate-500" />
+              <ChevronUp className="w-4 h-4 text-[#D98C53]" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-slate-500" />
+              <ChevronDown className="w-4 h-4 text-[#D98C53]" />
             )}
           </button>
 
           {showTechnicalDetails && (
-            <div className="p-4 space-y-4 bg-white border-t border-slate-200">
-              <div className="bg-slate-50 p-3 rounded-lg text-xs text-slate-700 space-y-2">
-                <p className="font-semibold text-slate-900">Exact Cumulative Poisson Tail Model (Hypothesis Test α = 0.01):</p>
-                <p className="font-mono text-[11px] text-slate-600">
+            <div className="p-4 space-y-4 bg-[#061812] border-t border-[#B87333]/40">
+              <div className="bg-[#09231A] p-3 rounded border border-[#B87333]/30 text-xs text-[#EAD0AC] space-y-2 font-mono">
+                <p className="font-semibold text-[#FFD700]">Discrete Poisson Tail Distribution Formulation:</p>
+                <p className="text-[11px] text-[#C2AB8E]">
                   P(Y ≥ y | λ) = 1 - ∑_&#123;k=0&#125;^&#123;y-1&#125; (λ^k · e^&#123;-λ&#125;) / k!
                 </p>
-                <p className="text-[11px] text-slate-500">
-                  Evaluates exact discrete probability for rural blocks where λ &lt; 10, avoiding Gaussian approximation bias.
+                <p className="text-[11px] text-[#C2AB8E] font-sans-tech">
+                  Evaluates exact discrete probabilities for sparse rural blocks (λ &lt; 10), preventing Gaussian distortion.
                 </p>
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-lg text-xs text-slate-700 space-y-2 border border-slate-200">
-                <p className="font-semibold text-slate-900">Stochastic Care Funnel: Absorbing Markov Chain Model</p>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
-                  Modeled with 4 transient states (Intake, Specialist, eSanjeevani, DMHP) and 2 absorbing states (A₁: Verified Recovery, A₂: Defaulted).
-                  Fundamental Matrix N = (I - Q)⁻¹. Absorption probability into verified recovery B = N · R is exactly <strong className="text-slate-900">3.2%</strong> (320 / 10,000), proving a 96.8% systemic attrition rate that mandates proactive retention intervention.
+              <div className="bg-[#09231A] p-3 rounded border border-[#B87333]/30 text-xs text-[#EAD0AC] space-y-2 font-mono">
+                <p className="font-semibold text-[#FFD700]">Absorbing Markov Chain Care Funnel Ledger:</p>
+                <p className="text-[11px] text-[#C2AB8E] font-sans-tech leading-relaxed">
+                  Modeled across 4 transient states and 2 absorbing states (Recovery A₁ vs Defaulted A₂). Fundamental Matrix N = (I - Q)⁻¹. Absorption probability B[S₁ → A₁] = 3.2% (320 / 10,000), confirming a 96.8% unassisted dropout rate that necessitates proactive retention callback.
                 </p>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-600">Filter by Geographic Zone:</span>
+                <span className="text-xs font-mono text-[#EAD0AC]">FILTER REGION:</span>
                 <select
                   value={selectedZone}
                   onChange={(e) => setSelectedZone(e.target.value)}
-                  className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs text-slate-700 font-medium"
+                  className="bg-[#09231A] border border-[#B87333] rounded px-2.5 py-1 text-xs text-[#FFD700] font-mono"
                 >
                   <option value="All">All 35 Districts</option>
-                  <option value="Barak Valley">Barak Valley</option>
+                  <option value="Barak Valley">Barak Valley (Pilot Focus)</option>
                   <option value="Brahmaputra Valley">Brahmaputra Valley</option>
                   <option value="Hill Districts">Hill Districts</option>
                 </select>
               </div>
 
               <div className="overflow-x-auto max-h-80 overflow-y-auto">
-                <table className="w-full text-xs text-left text-slate-700">
-                  <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[10px] sticky top-0 border-b border-slate-200">
+                <table className="w-full text-xs text-left font-mono">
+                  <thead className="bg-[#09231A] text-[#FFD700] uppercase text-[10px] sticky top-0 border-b border-[#B87333]/40">
                     <tr>
-                      <th className="py-2 px-3">District</th>
+                      <th className="py-2 px-3">District Node</th>
                       <th className="py-2 px-3">Zone</th>
                       <th className="py-2 px-3 text-right">Population</th>
                       <th className="py-2 px-3 text-right">Calls (30d)</th>
-                      <th className="py-2 px-3 text-right">Poisson Base</th>
+                      <th className="py-2 px-3 text-right">Expected λ</th>
                       <th className="py-2 px-3 text-center">Z-Score</th>
                       <th className="py-2 px-3 text-center">p-Value</th>
                       <th className="py-2 px-3 text-center">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-[#B87333]/20">
                     {filteredDistricts.map((d) => (
-                      <tr key={d.id} className="hover:bg-slate-50">
-                        <td className="py-2 px-3 font-semibold text-slate-900">{d.name}</td>
-                        <td className="py-2 px-3 text-slate-600">{d.zone}</td>
-                        <td className="py-2 px-3 text-right font-mono text-slate-600">{d.population.toLocaleString()}</td>
+                      <tr key={d.id} className="hover:bg-[#144837]">
+                        <td className="py-2 px-3 font-semibold text-[#EAD0AC]">{d.name}</td>
+                        <td className="py-2 px-3 text-[#C2AB8E]">{d.zone}</td>
+                        <td className="py-2 px-3 text-right text-[#C2AB8E]">{d.population.toLocaleString()}</td>
                         <td className="py-2 px-3 text-right">
                           {isEditMode ? (
                             <input
@@ -263,36 +267,36 @@ export const StatePolicyView = ({
                               step="10"
                               value={d.callsLast30Days}
                               onChange={(e) => updateDistrictCalls(d.id, parseInt(e.target.value) || 0)}
-                              className="w-16 px-1.5 py-0.5 border border-slate-300 rounded font-mono text-xs font-bold text-slate-900 text-right focus:outline-blue-500"
+                              className="w-16 px-1.5 py-0.5 bg-[#09231A] border border-[#B87333] rounded font-mono text-xs font-bold text-[#FFD700] text-right focus:outline-none"
                             />
                           ) : (
-                            <span className="font-mono font-bold text-slate-900">{d.callsLast30Days}</span>
+                            <span className="font-bold text-[#FFD700]">{d.callsLast30Days}</span>
                           )}
                         </td>
-                        <td className="py-2 px-3 text-right font-mono text-slate-500">{d.poissonExpected}</td>
+                        <td className="py-2 px-3 text-right text-[#C2AB8E]">{d.poissonExpected}</td>
                         <td className="py-2 px-3 text-center">
                           <span
                             className={`font-mono font-bold px-1.5 py-0.2 rounded text-[10px] ${
                               d.isSurge
-                                ? 'bg-rose-100 text-rose-700'
-                                : 'bg-slate-100 text-slate-600'
+                                ? 'bg-[#09231A] text-[#FFD700] border border-[#FFD700]'
+                                : 'bg-[#09231A] text-[#C2AB8E]'
                             }`}
                           >
                             +{d.zScore.toFixed(2)}
                           </span>
                         </td>
-                        <td className="py-2 px-3 text-center font-mono text-[10px] font-semibold text-slate-700">
+                        <td className="py-2 px-3 text-center font-mono text-[10px] font-semibold text-[#FFD700]">
                           {d.pValueFormatted}
                         </td>
                         <td className="py-2 px-3 text-center">
                           <span
-                            className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
+                            className={`text-[10px] px-1.5 py-0.2 rounded font-mono font-semibold ${
                               d.isSurge
-                                ? 'bg-rose-100 text-rose-700 font-bold'
-                                : 'bg-slate-100 text-slate-600'
+                                ? 'bg-[#D98C53] text-[#09231A] font-bold'
+                                : 'bg-[#09231A] text-[#C2AB8E]'
                             }`}
                           >
-                            {d.isSurge ? 'Surge (p < 0.01)' : 'Normal'}
+                            {d.isSurge ? 'SURGE' : 'NOMINAL'}
                           </span>
                         </td>
                       </tr>
@@ -303,7 +307,7 @@ export const StatePolicyView = ({
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Activity, ShieldCheck, MapPin, Database, HeartHandshake, Edit3, RotateCcw } from 'lucide-react'
+import { Activity, ShieldCheck, MapPin, Database, Cpu, Edit3, RotateCcw } from 'lucide-react'
 
 interface NavbarProps {
   activeTab: 'state' | 'planner' | 'queue'
@@ -18,84 +18,87 @@ export const Navbar = ({
   resetToDefaults,
 }: NavbarProps) => {
   return (
-    <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50">
-      {/* Top Quiet Institutional Strip */}
-      <div className="bg-slate-50 border-b border-slate-100 px-4 py-1 text-[11px] text-slate-500 flex items-center justify-between">
+    <header className="bg-[#09231A]/95 backdrop-blur-md border-b border-[#B87333]/40 sticky top-0 z-50">
+      {/* Top Institutional Circuit Trace Strip */}
+      <div className="bg-[#061812] border-b border-[#B87333]/25 px-4 py-1 text-[11px] text-[#C2AB8E] flex items-center justify-between font-sans-tech">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="font-medium text-slate-700">Government of Assam · National Health Mission (NHM)</span>
-        </div>
-        <div className="flex items-center gap-3 text-slate-500">
-          <span className="flex items-center gap-1 text-[11px]">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Mental Healthcare Act &amp; Privacy Compliant</span>
+          <span className="w-2 h-2 rounded-full bg-[#FFD700] ring-2 ring-[#FFD700]/30 animate-pulse"></span>
+          <span className="font-semibold text-[#EAD0AC] tracking-wide">
+            GOVERNMENT OF ASSAM · NATIONAL HEALTH MISSION (NHM) · ARCHITECTURE v1.0
           </span>
-          <span className="hidden sm:inline text-slate-300">|</span>
-          <span className="hidden sm:inline text-slate-600">Pilot: Kamrup &amp; Cachar</span>
+        </div>
+        <div className="flex items-center gap-3 text-[#C2AB8E]">
+          <span className="flex items-center gap-1.5 text-[11px]">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#FFD700]" />
+            <span>MHCA 2017 §23 &amp; DPDP Compliant</span>
+          </span>
+          <span className="hidden sm:inline text-[#B87333]">|</span>
+          <span className="hidden sm:inline text-[#EAD0AC]/80">Pilot Node: Cachar &amp; Kamrup</span>
         </div>
       </div>
 
       {/* Main Bar */}
       <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-xs shrink-0">
-            <HeartHandshake className="w-5 h-5 text-blue-400" />
+          <div className="w-9 h-9 rounded-lg bg-[#144837] border border-[#B87333] text-[#FFD700] flex items-center justify-center shadow-[0_0_12px_rgba(184,115,51,0.25)] shrink-0 relative">
+            <Cpu className="w-5 h-5 text-[#D98C53]" />
+            <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#FFD700]"></div>
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+              <h1 className="text-base sm:text-lg font-bold text-[#EAD0AC] font-serif-display tracking-tight">
                 Mental Health Care Navigator
               </h1>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/60">
-                Decision Support
+              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-[#165B45] text-[#FFD700] border border-[#B87333]/60">
+                DSS CORE
               </span>
             </div>
-            <p className="text-xs text-slate-500 hidden sm:block">
-              Spot distress early · Send mobile clinic vans fairly · Follow up with callers
+            <p className="text-xs text-[#C2AB8E] hidden sm:block font-sans-tech">
+              Early Identification · Capacitated MILP Routing · Closed-Loop Care Retention
             </p>
           </div>
         </div>
 
         {/* Right side controls: Tabs + Edit/Reset Actions */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
-          {/* 3 Clear Segmented Control Tabs */}
-          <nav className="grid grid-cols-3 sm:flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/60">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto font-sans-tech">
+          {/* Segmented Control Tabs styled as PCB trace channels */}
+          <nav className="grid grid-cols-3 sm:flex items-center gap-1 bg-[#09231A] p-1 rounded-lg border border-[#B87333]/50">
             <button
               onClick={() => setActiveTab('state')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === 'state'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  ? 'bg-[#D98C53] text-[#09231A] shadow-xs font-bold'
+                  : 'text-[#EAD0AC] hover:text-white hover:bg-[#144837]'
               }`}
             >
-              <Database className="w-3.5 h-3.5 text-blue-600" />
+              <Database className="w-3.5 h-3.5 text-current" />
               <span>1. Call Trends</span>
             </button>
 
             <button
               onClick={() => setActiveTab('planner')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === 'planner'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  ? 'bg-[#D98C53] text-[#09231A] shadow-xs font-bold'
+                  : 'text-[#EAD0AC] hover:text-white hover:bg-[#144837]'
               }`}
             >
-              <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-              <span>2. Van Routes</span>
+              <MapPin className="w-3.5 h-3.5 text-current" />
+              <span>2. Van Siting</span>
             </button>
 
             <button
               onClick={() => setActiveTab('queue')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === 'queue'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  ? 'bg-[#D98C53] text-[#09231A] shadow-xs font-bold'
+                  : 'text-[#EAD0AC] hover:text-white hover:bg-[#144837]'
               }`}
             >
-              <Activity className="w-3.5 h-3.5 text-rose-500" />
-              <span>3. Follow-Ups</span>
+              <Activity className="w-3.5 h-3.5 text-current" />
+              <span>3. Retention</span>
               {stalledCount > 0 && (
-                <span className="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
+                <span className="bg-[#B87333] text-white text-[9px] px-1.5 py-0.2 rounded font-mono font-bold ml-0.5">
                   {stalledCount}
                 </span>
               )}
@@ -106,10 +109,10 @@ export const Navbar = ({
           <div className="flex items-center gap-1.5 justify-end">
             <button
               onClick={() => setIsEditMode((prev) => !prev)}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer border ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer border ${
                 isEditMode
-                  ? 'bg-amber-500 text-slate-950 border-amber-600 shadow-xs ring-2 ring-amber-400/40'
-                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                  ? 'bg-[#FFD700] text-[#09231A] border-[#FFD700] shadow-[0_0_10px_rgba(255,215,0,0.3)] font-bold'
+                  : 'bg-[#144837] text-[#EAD0AC] border-[#B87333]/60 hover:bg-[#1A5944]'
               }`}
               title="Toggle interactive scenario editing"
             >
@@ -123,7 +126,7 @@ export const Navbar = ({
                   resetToDefaults()
                 }
               }}
-              className="p-1.5 rounded-xl text-xs text-slate-500 hover:text-slate-800 bg-white border border-slate-200 hover:bg-slate-50 transition-all cursor-pointer shadow-2xs"
+              className="p-1.5 rounded-lg text-xs text-[#EAD0AC] hover:text-[#FFD700] bg-[#144837] border border-[#B87333]/60 hover:bg-[#1A5944] transition-all cursor-pointer"
               title="Reset all values to official NHM Cachar defaults"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -132,20 +135,19 @@ export const Navbar = ({
         </div>
       </div>
 
-      {/* Persistent helper ribbon when Edit Mode is active */}
+      {/* Persistent copper ribbon when Edit Mode is active */}
       {isEditMode && (
-        <div className="bg-amber-50 border-t border-b border-amber-200 px-4 py-1.5 text-[11px] text-amber-900 flex items-center justify-between">
+        <div className="bg-[#144837] border-t border-b border-[#B87333] px-4 py-1.5 text-[11px] text-[#FFD700] flex items-center justify-between font-sans-tech">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
-            <span className="font-semibold">Interactive Scenario Edit Mode:</span>
-            <span>
-              You can now edit block population, flood factors, clinic capacities, medicine stocks, and district calls.
-              All models recalculate live!
+            <span className="w-2 h-2 rounded-full bg-[#FFD700] animate-ping"></span>
+            <span className="font-bold">SCENARIO RECONFIGURATION BUS ACTIVE:</span>
+            <span className="text-[#EAD0AC]">
+              Direct parameter modification enabled. Simplex LP and Poisson engines recalculate in real-time.
             </span>
           </div>
           <button
             onClick={resetToDefaults}
-            className="text-[10px] font-bold text-amber-800 underline hover:text-amber-950 cursor-pointer"
+            className="text-[10px] font-bold text-[#D98C53] underline hover:text-[#FFD700] cursor-pointer"
           >
             Reset to Benchmark
           </button>

@@ -1,31 +1,58 @@
 @import "tailwindcss";
 
-:root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color-scheme: light;
+@layer base {
+  :root {
+    --pcb-bg: #0F3B2C;
+    --pcb-sub: #09231A;
+    --pcb-surface: #144837;
+    --pcb-surface-hover: #1A5944;
+    --pcb-copper: #B87333;
+    --pcb-copper-bright: #D98C53;
+    --pcb-silk: #EAD0AC;
+    --pcb-silk-muted: #C2AB8E;
+    --pcb-gold: #FFD700;
+    --pcb-silver: #C0C0C0;
+    --pcb-trace: #1B634C;
+
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--pcb-bg);
+    color: var(--pcb-silk);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(184, 115, 51, 0.12) 1px, transparent 0),
+      linear-gradient(to right, rgba(22, 91, 69, 0.18) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(22, 91, 69, 0.18) 1px, transparent 1px);
+    background-size: 32px 32px, 32px 32px, 32px 32px;
+  }
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background-color: #fafbfc;
-  color: #0f172a;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.font-serif-display {
+  font-family: 'Fraunces', 'New York', Georgia, serif;
 }
 
-/* Custom subtle scrollbar */
+.font-sans-tech {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Custom PCB Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #09231A;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
+  background: #B87333;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #D98C53;
 }
