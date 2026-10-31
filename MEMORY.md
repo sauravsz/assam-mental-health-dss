@@ -16,8 +16,8 @@ Operational Decision Support System for Government of Assam — National Health 
 - **Engine 3 (Retention):** Closed-loop care tracking for stalled referrals ($>14$ days) with verified statutory consent and human counsellors (zero robocalls). Modeled as an Absorbing Markov Chain ($N = (I - Q)^{-1}$) with verified 3.2% absorption recovery probability.
 - **Compliance:** MHCA 2017 §23, DPDP Act 2023, salted SHA-256 pseudonymization. Enforces Primary ($n < 10$) and Secondary (Complementary) cell suppression to algebraically prevent subtraction leaks.
 - **Frontend Design:** Claude warm-canvas editorial design system (`#faf9f5` cream canvas, `#efe9de` feature cards, `#f5f0e8` soft surfaces, `#181715` dark product surfaces) with 1px `#e6dfd8` hairline borders and Anthropic 4-spoke radial-spike marks.
-- **Typography:** Display headlines in Cormorant Garamond / Tiempos Headline (`font-serif-claude` weight 400 with negative tracking); body and interface in Inter; code blocks in JetBrains Mono. Primary CTAs in warm coral (`#cc785c` with white text).
+- **Typography:** Display headlines in SF Pro Display (`-apple-system`, `BlinkMacSystemFont`, `SF Pro Display`, `SF Pro`, `Helvetica Neue`) with tight negative tracking (`-0.025em`) and semi-bold weight (`600`); body and interface in Inter; code blocks in JetBrains Mono. Primary CTAs in warm coral (`#cc785c` with white text).
 - **Natural Language AI Controller:** Claude-style prompt bar (`#efe9de` card with `#faf9f5` prompt input) with preset pills and intent parsing for real-time Two-Phase Simplex LP recalculations.
 
 ## Current State & Next Steps
-- Status: Production-grade mathematical foundation verified, local builds passing (347ms), deployed to Vercel edge, repository synchronized with GitHub (`main` at `8796a46`).
+- Status: Production-grade mathematical foundation verified, local builds passing (359ms), deployed to Vercel edge, repository synchronized with GitHub (`main` at `78e71ee`).

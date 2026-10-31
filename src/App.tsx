@@ -1,13 +1,18 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Navbar } from './components/Navbar'
 import { NaturalLanguageBar } from './components/NaturalLanguageBar'
-import { StatePolicyView } from './components/StatePolicyView'
-import { DMHPCampPlanner } from './components/DMHPCampPlanner'
-import { RetentionQueue } from './components/RetentionQueue'
+import { OverviewTab } from './components/tabs/OverviewTab'
+import { SurveillanceTab } from './components/tabs/SurveillanceTab'
+import { CampSitingTab } from './components/tabs/CampSitingTab'
+import { LogisticsTab } from './components/tabs/LogisticsTab'
+import { QueueTab } from './components/tabs/QueueTab'
 import { useScenarioData } from './engine/scenarioDataContext'
+import { solveCampAllocation } from './engine/solver'
+import { TRAVEL_TIME_MATRIX } from './engine/cacharData'
+import type { DssTab } from './engine/commandParser'
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'state' | 'planner' | 'queue'>('planner')
+  const [activeTab, setActiveTab] = useState<DssTab>('ov')
   const [numVans, setNumVans] = useState<number>(2)
 
   const {
@@ -34,19 +39,25 @@ export function App() {
     setNumVans(2)
   }
 
-  return (
-    <div className="min-h-screen bg-[#faf9f5] text-[#3d3d3a] flex flex-col font-sans selection:bg-[#cc785c]/20 selection:text-[#141413]">
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        stalledCount={stalledCount}
-        isEditMode={isEditMode}
-        setIsEditMode={setIsEditMode}
-        resetToDefaults={handleReset}
-      />
+  // Pre-calculate optimization result for overview & siting
+  const optimizationResult = useMemo(() => {
+    return solveCampAllocation(blocks, facilities, TRAVEL_TIME_MATRIX, numVans, true, 1.0)
+  }, [blocks, facilities, numVans])
 
-      <main className="max-w-6xl mx-auto px-4 py-8 sm:py-10 w-full flex-1">
-        {/* Natural Language Scenario Controller */}
+  return (
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--ink)]">
+      {/* Container matching dss-1 .wrap: max-width 1080px */}
+      <div className="max-w-[1080px] mx-auto px-4 py-5 pb-16">
+        <Navbar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          stalledCount={stalledCount}
+          isEditMode={isEditMode}
+          setIsEditMode={setIsEditMode}
+          resetToDefaults={handleReset}
+        />
+
+        {/* Compact Natural Language Command Bar */}
         <NaturalLanguageBar
           blocks={blocks}
           facilities={facilities}
@@ -61,9 +72,18 @@ export function App() {
           setNumVans={setNumVans}
         />
 
-        {/* Section Surfaces */}
-        {activeTab === 'state' && (
-          <StatePolicyView
+        {/* 5 Distinct Purpose-Built Tabs */}
+        {activeTab === 'ov' && (
+          <OverviewTab
+            blocks={blocks}
+            facilities={facilities}
+            optimizationResult={optimizationResult}
+            includeFloodWeight={true}
+          />
+        )}
+
+        {activeTab === 'surv' && (
+          <SurveillanceTab
             districts={districts}
             isEditMode={isEditMode}
             updateDistrictCalls={updateDistrictCalls}
@@ -71,50 +91,45 @@ export function App() {
           />
         )}
 
-        {activeTab === 'planner' && (
-          <DMHPCampPlanner
+        {activeTab === 'res' && (
+          <CampSitingTab
             blocks={blocks}
             facilities={facilities}
             isEditMode={isEditMode}
             updateBlock={updateBlock}
             updateFacilityCapacity={updateFacilityCapacity}
-            updateMedicineStock={updateMedicineStock}
             numVans={numVans}
             setNumVans={setNumVans}
           />
         )}
 
-        {activeTab === 'queue' && (
-          <RetentionQueue
+        {activeTab === 'med' && (
+          <LogisticsTab
+            blocks={blocks}
+            facilities={facilities}
+            isEditMode={isEditMode}
+            updateMedicineStock={updateMedicineStock}
+          />
+        )}
+
+        {activeTab === 'que' && (
+          <QueueTab
             records={referrals}
             setRecords={setReferrals}
             isEditMode={isEditMode}
           />
         )}
-      </main>
 
-      {/* Claude Dark Navy Editorial Footer */}
-      <footer className="bg-[#181715] text-[#a09d96] py-12 px-4 text-xs mt-20">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-          <div>
-            <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-[#cc785c]">
-                <path d="M12 2L13.2 9.8L21 11L13.2 12.2L12 20L10.8 12.2L3 11L10.8 9.8L12 2Z" />
-              </svg>
-              <p className="font-normal text-[#faf9f5] font-serif-claude text-base tracking-tight">
-                Assam Mental Health Care Navigator
-              </p>
-            </div>
-            <p className="text-[11px] text-[#8e8b82]">
-              Government of Assam · National Health Mission (NHM) · Health &amp; Family Welfare Department
-            </p>
-          </div>
-          <div className="text-[11px] text-[#8e8b82] flex flex-col sm:items-end gap-1">
-            <span>Two-Phase Primal Simplex LP &amp; Spatio-Temporal Poisson Surveillance</span>
-            <span className="text-[#faf9f5] font-medium">Assam University, Silchar</span>
-          </div>
+        {/* Subtle Minimal Footer matching dss-1 print/footer */}
+        <div className="mt-12 pt-4 border-t border-[var(--line)] text-[12px] text-[var(--mut)] flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>
+            Assam Mental Health Decision Support System · Operational Prototype v1.0
+          </span>
+          <span>
+            Two-Phase Primal Simplex LP &amp; Poisson Surveillance · Assam University, Silchar
+          </span>
         </div>
-      </footer>
+      </div>
     </div>
   )
 }

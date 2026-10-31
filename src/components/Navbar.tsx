@@ -1,20 +1,22 @@
-import { Activity, ShieldCheck, MapPin, Database, Edit3, RotateCcw } from 'lucide-react'
+import type { DssTab } from '../engine/commandParser'
+import { RotateCcw, Edit3 } from 'lucide-react'
 
 interface NavbarProps {
-  activeTab: 'state' | 'planner' | 'queue'
-  setActiveTab: (tab: 'state' | 'planner' | 'queue') => void
+  activeTab: DssTab
+  setActiveTab: (tab: DssTab) => void
   stalledCount: number
   isEditMode: boolean
   setIsEditMode: (val: boolean | ((prev: boolean) => boolean)) => void
   resetToDefaults: () => void
 }
 
-// Anthropic 4-spoke radial-spike mark
-const AnthropicSpike = ({ className = "w-4 h-4 text-[#cc785c]" }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M12 2L13.2 9.8L21 11L13.2 12.2L12 20L10.8 12.2L3 11L10.8 9.8L12 2Z" />
-  </svg>
-)
+const TABS: { id: DssTab; label: string }[] = [
+  { id: 'ov', label: 'Overview' },
+  { id: 'surv', label: 'Surveillance' },
+  { id: 'res', label: 'Camp Siting' },
+  { id: 'med', label: 'Medicine & Logistics' },
+  { id: 'que', label: 'Follow-up Queue' },
+]
 
 export const Navbar = ({
   activeTab,
@@ -25,137 +27,82 @@ export const Navbar = ({
   resetToDefaults,
 }: NavbarProps) => {
   return (
-    <header className="bg-[#faf9f5]/95 backdrop-blur-md border-b border-[#e6dfd8] sticky top-0 z-50">
-      {/* Top Institutional Editorial Strip */}
-      <div className="bg-[#f5f0e8] border-b border-[#e6dfd8]/80 px-4 py-1 text-[11px] text-[#6c6a64] flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <AnthropicSpike className="w-3 h-3 text-[#cc785c]" />
-          <span className="font-medium text-[#252523]">
-            Government of Assam · National Health Mission (NHM) · Decision Support
-          </span>
+    <header className="mb-4">
+      {/* Top Header Row matching dss-1 .top */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+        <div>
+          <h1 className="text-[24px] sm:text-[26px] font-semibold text-[var(--ink)] font-serif-fraunces tracking-tight m-0 flex items-center gap-2 flex-wrap">
+            Mental Health Decision Support
+            <span className="text-[12px] font-normal border border-[var(--tea)] text-[var(--tea)] px-2 py-0.2 rounded font-sans">
+              synthetic data
+            </span>
+          </h1>
+          <p className="text-[13px] text-[var(--mut)] m-0 mt-0.5">
+            Government of Assam · National Health Mission (NHM) · Cachar &amp; Kamrup Metro
+          </p>
         </div>
-        <div className="flex items-center gap-3 text-[#8e8b82]">
-          <span className="flex items-center gap-1.5 text-[11px] text-[#3d3d3a]">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#5db872]" />
-            <span>MHCA 2017 §23 &amp; DPDP Compliant</span>
-          </span>
-          <span className="hidden sm:inline text-[#e6dfd8]">|</span>
-          <span className="hidden sm:inline text-[#6c6a64]">Pilot: Cachar &amp; Kamrup Metro</span>
+
+        {/* Right side quick actions */}
+        <div className="flex items-center gap-2 self-start sm:self-auto text-[13px]">
+          <button
+            onClick={() => setIsEditMode((prev) => !prev)}
+            className={`px-2.5 py-1 rounded border text-[13px] font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+              isEditMode
+                ? 'bg-[var(--tea)] text-white border-[var(--tea)]'
+                : 'bg-[var(--panel)] text-[var(--ink)] border-[var(--line)] hover:border-[var(--mut)]'
+            }`}
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>{isEditMode ? 'Editing active' : 'Edit scenario'}</span>
+          </button>
+
+          <button
+            onClick={() => {
+              if (window.confirm('Reset all values to official NHM Cachar defaults?')) {
+                resetToDefaults()
+              }
+            }}
+            className="p-1.5 rounded border border-[var(--line)] bg-[var(--panel)] text-[var(--mut)] hover:text-[var(--ink)] hover:border-[var(--mut)] cursor-pointer"
+            title="Reset to NHM defaults"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
 
-      {/* Main Navigation Bar */}
-      <div className="max-w-6xl mx-auto px-4 h-16 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-[#efe9de] border border-[#e6dfd8] flex items-center justify-center text-[#141413] shrink-0">
-            <AnthropicSpike className="w-4 h-4 text-[#cc785c]" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg sm:text-xl font-normal text-[#141413] font-serif-claude tracking-tight">
-                Mental Health Care Navigator
-              </h1>
-              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#f5f0e8] text-[#cc785c] border border-[#e6dfd8]">
-                Decision Support
-              </span>
-            </div>
-            <p className="text-xs text-[#6c6a64] hidden sm:block">
-              Earlier identification · Capacitated van siting · Closed-loop patient retention
-            </p>
-          </div>
-        </div>
-
-        {/* Right side controls: Tabs + Edit/Reset Actions */}
-        <div className="flex items-center justify-between sm:justify-end gap-2 w-full md:w-auto">
-          {/* Category Tabs */}
-          <nav className="flex items-center bg-[#f5f0e8] p-1 rounded-lg border border-[#e6dfd8] gap-1">
+      {/* Clean horizontal border-bottom navigation matching dss-1 nav */}
+      <nav className="flex items-center gap-1 border-b border-[var(--line)] overflow-x-auto text-[14px]">
+        {TABS.map((tab) => {
+          const isSelected = activeTab === tab.id
+          return (
             <button
-              onClick={() => setActiveTab('state')}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'state'
-                  ? 'bg-[#efe9de] text-[#141413] shadow-xs font-medium border border-[#e6dfd8]'
-                  : 'text-[#6c6a64] hover:text-[#141413]'
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`py-2 px-3.5 border-b-[3px] font-medium whitespace-nowrap cursor-pointer transition-colors ${
+                isSelected
+                  ? 'border-[var(--river)] text-[var(--ink)]'
+                  : 'border-transparent text-[var(--mut)] hover:text-[var(--ink)]'
               }`}
             >
-              <Database className="w-3.5 h-3.5 text-[#cc785c]" />
-              <span>Call Trends</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('planner')}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'planner'
-                  ? 'bg-[#efe9de] text-[#141413] shadow-xs font-medium border border-[#e6dfd8]'
-                  : 'text-[#6c6a64] hover:text-[#141413]'
-              }`}
-            >
-              <MapPin className="w-3.5 h-3.5 text-[#cc785c]" />
-              <span>Van Siting</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('queue')}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'queue'
-                  ? 'bg-[#efe9de] text-[#141413] shadow-xs font-medium border border-[#e6dfd8]'
-                  : 'text-[#6c6a64] hover:text-[#141413]'
-              }`}
-            >
-              <Activity className="w-3.5 h-3.5 text-[#cc785c]" />
-              <span>Retention</span>
-              {stalledCount > 0 && (
-                <span className="bg-[#cc785c] text-white text-[9px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
+              <span>{tab.label}</span>
+              {tab.id === 'que' && stalledCount > 0 && (
+                <span className="ml-1.5 text-[11px] px-1.5 py-0.2 rounded-full bg-[var(--alert)] text-white font-mono font-bold">
                   {stalledCount}
                 </span>
               )}
             </button>
-          </nav>
+          )
+        })}
+      </nav>
 
-          {/* Action CTAs */}
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => setIsEditMode((prev) => !prev)}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer border ${
-                isEditMode
-                  ? 'bg-[#cc785c] text-white border-[#cc785c] shadow-xs'
-                  : 'bg-[#faf9f5] text-[#141413] border-[#e6dfd8] hover:bg-[#f5f0e8]'
-              }`}
-              title="Toggle interactive scenario editing"
-            >
-              <Edit3 className="w-3.5 h-3.5" />
-              <span>{isEditMode ? 'Editing Active' : 'Edit Scenario'}</span>
-            </button>
-
-            <button
-              onClick={() => {
-                if (window.confirm('Reset all values back to official NHM Cachar defaults?')) {
-                  resetToDefaults()
-                }
-              }}
-              className="p-2 rounded-md text-xs text-[#6c6a64] hover:text-[#141413] bg-[#faf9f5] border border-[#e6dfd8] hover:bg-[#f5f0e8] transition-all cursor-pointer shadow-2xs"
-              title="Reset all values to official defaults"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Edit Mode Active Warm Ribbon */}
+      {/* 1-Line Subtle Edit Banner */}
       {isEditMode && (
-        <div className="bg-[#f5f0e8] border-t border-b border-[#e6dfd8] px-4 py-1.5 text-[11px] text-[#3d3d3a] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#cc785c] animate-pulse"></span>
-            <span className="font-semibold text-[#141413]">Scenario Reconfiguration Active:</span>
-            <span className="text-[#6c6a64]">
-              You can modify block populations, flood multipliers, clinic capacities, and district calls.
-            </span>
-          </div>
-          <button
-            onClick={resetToDefaults}
-            className="text-[10px] font-semibold text-[#cc785c] hover:underline cursor-pointer"
-          >
-            Reset to Benchmark
+        <div className="bg-[var(--tea)]/10 border border-[var(--tea)]/30 rounded px-3 py-1 mt-2.5 text-[12.5px] text-[var(--ink)] flex items-center justify-between">
+          <span>
+            <b>Scenario editing enabled:</b> Click inputs or values to test flood shocks, van changes, or clinic capacities.
+          </span>
+          <button onClick={resetToDefaults} className="text-[var(--tea)] font-semibold hover:underline text-xs cursor-pointer">
+            Reset
           </button>
         </div>
       )}
