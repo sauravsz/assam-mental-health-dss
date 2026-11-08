@@ -26,6 +26,7 @@ export function App() {
     updateDistrictCalls,
     toggleDistrictFlood,
     resetToDefaults,
+    logAction,
   } = useScenarioData()
 
   const stalledCount = referrals.filter((r) => r.status === 'Stalled').length
@@ -90,6 +91,7 @@ export function App() {
             records={referrals}
             setRecords={setReferrals}
             isEditMode={isEditMode}
+            onOutcomeLogged={(caseId, status) => logAction('REFERRAL_OUTCOME', `Case ${caseId} outcome set to ${status}`)}
           />
         )}
 

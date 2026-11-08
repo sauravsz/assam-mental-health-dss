@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { DistrictDistress } from '../engine/types'
 import { PhoneCall, AlertCircle, Waves, ChevronDown, ChevronUp, CheckCircle2, Edit3 } from 'lucide-react'
+import { useScenarioData } from '../engine/scenarioDataContext'
 
 interface StatePolicyViewProps {
   districts: DistrictDistress[]
@@ -15,11 +16,16 @@ export const StatePolicyView = ({
   updateDistrictCalls,
   toggleDistrictFlood,
 }: StatePolicyViewProps) => {
+  const { selectedDistrictFilter } = useScenarioData()
   const [showTechnicalDetails, setShowTechnicalDetails] = useState<boolean>(false)
   const [selectedZone, setSelectedZone] = useState<string>('All')
 
-  const surgeDistricts = districts.filter((d) => d.isSurge)
-  const filteredDistricts = districts.filter((d) => {
+  const scopedDistricts = selectedDistrictFilter === 'All Districts'
+    ? districts
+    : districts.filter((d) => d.name === selectedDistrictFilter)
+
+  const surgeDistricts = scopedDistricts.filter((d) => d.isSurge)
+  const filteredDistricts = scopedDistricts.filter((d) => {
     if (selectedZone !== 'All' && d.zone !== selectedZone) return false
     return true
   })

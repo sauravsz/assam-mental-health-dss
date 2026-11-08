@@ -1,15 +1,28 @@
 import { useState, useMemo } from 'react'
 import type { ReferralRecord } from '../engine/types'
 import { applySmallCellSuppression } from '../engine/referralData'
+import { useScenarioData } from '../engine/scenarioDataContext'
 import { ShieldCheck, Search, CheckCircle2, ChevronDown, ChevronUp, Phone, Home, PlusCircle, Edit3 } from 'lucide-react'
 
 interface RetentionQueueProps {
   records: ReferralRecord[]
   setRecords: React.Dispatch<React.SetStateAction<ReferralRecord[]>>
   isEditMode: boolean
+  onOutcomeLogged?: (caseId: string, status: string) => void
 }
 
-export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQueueProps) => {
+export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogged }: RetentionQueueProps) => {
+  const { userRole, selectedDistrictFilter, logAction } = useScenarioData()
+
+  // RBAC scope: Counsellor sees rows (own district when filtered), others see aggregates only
+  const scopedRecords = useMemo(() => {
+    if (userRole !== 'Counsellor') return records
+    if (selectedDistrictFilter === 'All Districts') return records
+    return records.filter((rec) => rec.district === selectedDistrictFilter)
+  }, [records, userRole, selectedDistrictFilter])
+
+  const canViewCases = userRole === 'Counsellor'
+
   const [selectedDistrict, setSelectedDistrict] = useState<string>('All')
   const [selectedDiagnosis] = useState<string>('All')
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -25,7 +38,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
   const [newDays, setNewDays] = useState<number>(18)
 
   const filteredRecords = useMemo(() => {
-    return records.filter((r) => {
+    return scopedRecords.filter((r) => {
       if (selectedDistrict !== 'All' && r.district !== selectedDistrict) return false
       if (selectedDiagnosis !== 'All' && r.mhgapCode !== selectedDiagnosis) return false
       if (searchQuery) {
@@ -38,7 +51,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
       }
       return true
     })
-  }, [records, selectedDistrict, selectedDiagnosis, searchQuery])
+  }, [scopedRecords, selectedDistrict, selectedDiagnosis, searchQuery])
 
   const smallCellStats = useMemo(() => {
     return applySmallCellSuppression(filteredRecords, (r) => `${r.district} - ${r.block}`, 10)
@@ -46,18 +59,24 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
 
   const handleUpdateStatus = (newStatus: ReferralRecord['status']) => {
     if (!activeRecordForAction) return
+    // FUNNEL FIX: only "Facility Visit Confirmed" and "Resolved" close the referral as attended.
+    // Callback / ASHA / Follow-up keep referral open (do NOT inflate clinic-visit %).
+    const caseId = activeRecordForAction.id
     setRecords((prev) =>
-      prev.map((r) =>
-        r.id === activeRecordForAction.id
+      prev.map((rec) =>
+        rec.id === activeRecordForAction.id
           ? {
-              ...r,
+              ...rec,
               status: newStatus,
-              followupAttempts: r.followupAttempts + 1,
+              followupAttempts: rec.followupAttempts + 1,
               lastContactNote: actionNotes || `Status updated to ${newStatus} by Lead Counsellor.`,
             }
-          : r
+          : rec
       )
     )
+    // Cryptographic audit: every outcome is hash-chained (DPDP 2023 trail)
+    logAction('REFERRAL_OUTCOME', `Case ${caseId} outcome set to ${newStatus}`)
+    onOutcomeLogged?.(caseId, newStatus)
     setActiveRecordForAction(null)
     setActionNotes('')
   }
@@ -276,7 +295,17 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
 
         {/* Clean, Human-Friendly Cards / Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left text-slate-700">
+                  {!canViewCases && (
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4 text-xs text-slate-700">
+            <strong>Role scope: {userRole}</strong> — individual case rows are restricted to Counsellor role (DPDP Act 2023 · MHCA 2017 §23).
+            Showing aggregated counts above only. Switch role in the header to Counsellor to view case rows for your district.
+          </div>
+        )}
+
+        {canViewCases ? (
+          <div className="overflow-x-auto rounded-xl border border-slate-200/80">
+
+            <table className="w-full text-xs text-left text-slate-700">
             <thead className="bg-slate-50 text-slate-700 font-semibold uppercase text-[10px] border-b border-slate-200">
               <tr>
                 <th className="py-2.5 px-3">Case ID</th>
@@ -338,6 +367,8 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
               ))}
             </tbody>
           </table>
+          </div>
+        ) : null}
         </div>
 
         {/* Technical Drawer For Evaluators */}

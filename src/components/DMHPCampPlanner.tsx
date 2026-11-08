@@ -51,8 +51,15 @@ export const DMHPCampPlanner = ({
   const activeFacilities = facilities.filter((f) => result.activeFacilityIds.includes(f.id))
   const baselineFacilities = facilities.filter((f) => result.baselineActiveFacilityIds.includes(f.id))
 
+  const { selectedDistrictFilter: plannerScope } = useScenarioData()
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      {plannerScope !== 'All Districts' && plannerScope !== 'Cachar' && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900">
+          Scope note: the van-siting optimizer is modeled on <strong>Cachar District</strong> (8 blocks, 1.17M population). District selector is set to <strong>{plannerScope}</strong> — open State surveillance or Queue for that district's live data.
+        </div>
+      )}
       {/* ── SECTION 1: PLANNING BOARD & FLEET PARAMETERS ── */}
       <section className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
