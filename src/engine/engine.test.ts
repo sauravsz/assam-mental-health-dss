@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { computePoissonTail } from './stateSurveillance'
 import { solveCampAllocation } from './solver'
 import { verifyAuditChain, appendAuditLog, simulateTamper, GENESIS_HASH } from './auditLogger'
+import type { AuditLogEntry } from './types'
 import { CACHAR_BLOCKS, CACHAR_FACILITIES, TRAVEL_TIME_MATRIX } from './cacharData'
 
 describe('Poisson tail', () => {
@@ -42,7 +43,7 @@ describe('Simplex solver', () => {
 })
 
 describe('Audit chain', () => {
-  const base = [{
+  const base: AuditLogEntry[] = [{
     id: 1,
     timestamp: '2026-11-08 09:15:02',
     userRole: 'State Director' as const,
