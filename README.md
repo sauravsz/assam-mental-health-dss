@@ -136,7 +136,7 @@ src/
 
 ## Team
 
-Dr. Debomalya Ghosh (Assam University, Silchar, Dept. of Business Administration) and Soumyodeep Das, merging two prototypes into one deployable system: the React/TypeScript client-side optimizer (Poisson + Simplex + Markov + NL command bar) and the Python/SQLite reference with RBAC, hash-chain audit, and CSV pseudonymization.
+**Saurav Sinha** and **Soumyodeep Das** — merging two prototypes into one deployable system: the React/TypeScript client-side optimizer (Poisson + Simplex + Markov + NL command bar) and the Python/SQLite reference with RBAC, hash-chain audit, and CSV pseudonymization.
 
 ---
 
