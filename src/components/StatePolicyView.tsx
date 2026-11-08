@@ -33,38 +33,38 @@ export const StatePolicyView = ({
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Friendly Hero Banner */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+      <div className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5 sm:p-6 ">
         <div className="max-w-2xl">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+          <span className="text-[12px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
             Step 1 · Understanding The Need
           </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-2.5">
+          <h2 className="text-xl sm:text-2xl font-bold text-[#1c1c1c] tracking-tight mt-2.5">
             What is happening across Assam right now?
           </h2>
-          <p className="text-sm text-slate-600 leading-relaxed mt-2">
+          <p className="text-sm text-[#5f5f5d] leading-relaxed mt-2">
             Every month, thousands of citizens call the 24/7 Tele-MANAS helpline (14416).
-            While telephone support helps initially, <strong className="text-slate-900 font-semibold">over 94% of people who need to see a doctor in person never reach a clinic</strong> due to stigma, lack of money for bus fares, and long distances.
+            While telephone support helps initially, <strong className="text-[#1c1c1c] font-semibold">over 94% of people who need to see a doctor in person never reach a clinic</strong> due to stigma, lack of money for bus fares, and long distances.
           </p>
         </div>
 
         {/* 3 Simple Care Funnel Steps */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-6 pt-6 border-t border-slate-100">
-          <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
-            <div className="flex items-center justify-between text-slate-500 mb-1">
-              <span className="text-xs font-semibold text-slate-700">1. Citizens Call In</span>
+          <div className="bg-[#f7f4ed] border border-[#eceae4]/60 rounded-xl p-4">
+            <div className="flex items-center justify-between text-[#5f5f5d] mb-1">
+              <span className="text-xs font-semibold text-[#1c1c1c]">1. Citizens Call In</span>
               <PhoneCall className="w-4 h-4 text-blue-600" />
             </div>
-            <div className="text-2xl font-bold text-slate-900">10,000</div>
-            <p className="text-xs text-slate-500 mt-1">Called the helpline this month</p>
+            <div className="text-2xl font-bold text-[#1c1c1c]">10,000</div>
+            <p className="text-xs text-[#5f5f5d] mt-1">Called the helpline this month</p>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200/60 rounded-xl p-4">
-            <div className="flex items-center justify-between text-slate-500 mb-1">
-              <span className="text-xs font-semibold text-slate-700">2. Advised to See a Doctor</span>
+          <div className="bg-[#f7f4ed] border border-[#eceae4]/60 rounded-xl p-4">
+            <div className="flex items-center justify-between text-[#5f5f5d] mb-1">
+              <span className="text-xs font-semibold text-[#1c1c1c]">2. Advised to See a Doctor</span>
               <AlertCircle className="w-4 h-4 text-amber-500" />
             </div>
             <div className="text-2xl font-bold text-amber-600">1,449</div>
-            <p className="text-xs text-slate-500 mt-1">Struggling with severe distress</p>
+            <p className="text-xs text-[#5f5f5d] mt-1">Struggling with severe distress</p>
           </div>
 
           <div className="bg-rose-50/60 border border-rose-200/60 rounded-xl p-4">
@@ -79,7 +79,7 @@ export const StatePolicyView = ({
 
         {/* Plain-English Insight Note */}
         <div className="mt-4 p-3.5 bg-blue-50/70 border border-blue-200/60 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
-          <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 text-[11px] font-bold mt-0.5">
+          <div className="w-5 h-5 rounded-full bg-blue-600 text-[#fcfbf8] flex items-center justify-center shrink-0 text-[12px] font-bold mt-0.5">
             !
           </div>
           <div className="leading-relaxed">
@@ -90,21 +90,21 @@ export const StatePolicyView = ({
       </div>
 
       {/* The Spike Detector */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+      <div className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5 sm:p-6 ">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-              <h3 className="text-base font-bold text-slate-900 tracking-tight">
+              <h3 className="text-base font-bold text-[#1c1c1c] tracking-tight">
                 Spike Detector: Where are calls jumping above normal?
               </h3>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-[#5f5f5d] mt-0.5">
               Normally an area receives 2–3 calls per week. When a river floods or crops fail, calls surge. We alert health teams to visit early.
             </p>
           </div>
           {isEditMode && (
-            <span className="text-[11px] bg-amber-50 text-amber-800 font-semibold px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1.5">
+            <span className="text-[12px] bg-amber-50 text-amber-800 font-semibold px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1.5">
               <Edit3 className="w-3.5 h-3.5" /> Live Call Editor Active
             </span>
           )}
@@ -118,41 +118,41 @@ export const StatePolicyView = ({
               className={`p-4 rounded-xl border transition-all ${
                 dist.name === 'Cachar'
                   ? 'bg-blue-50/40 border-blue-300 ring-2 ring-blue-500/20'
-                  : 'bg-slate-50 border-slate-200/80'
+                  : 'bg-[#f7f4ed] border-[#eceae4]'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900 text-sm">{dist.name}</span>
+                    <span className="font-bold text-[#1c1c1c] text-sm">{dist.name}</span>
                     {dist.name === 'Cachar' && (
-                      <span className="text-[10px] font-bold bg-blue-600 text-white px-1.5 py-0.2 rounded">
+                      <span className="text-[12px] font-bold bg-blue-600 text-[#fcfbf8] px-1.5 py-0.2 rounded">
                         PILOT DISTRICT
                       </span>
                     )}
                   </div>
-                  <span className="text-xs text-slate-500">{dist.zone} · Pop: {(dist.population / 100000).toFixed(1)} Lakh</span>
+                  <span className="text-xs text-[#5f5f5d]">{dist.zone} · Pop: {(dist.population / 100000).toFixed(1)} Lakh</span>
                 </div>
                 <div className="text-right">
                   <span className="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full font-mono block">
                     +{Math.round(((dist.callsLast30Days - dist.poissonExpected) / dist.poissonExpected) * 100)}% Surge
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono mt-0.5 block">
+                  <span className="text-[12px] text-[#5f5f5d] font-mono mt-0.5 block">
                     p = {dist.pValueFormatted}
                   </span>
                 </div>
               </div>
 
               {/* Editable Call Count when in Edit Mode */}
-              <div className="mt-3 flex items-center justify-between text-xs text-slate-600 pt-2 border-t border-slate-200/50">
+              <div className="mt-3 flex items-center justify-between text-xs text-[#5f5f5d] pt-2 border-t border-[#eceae4]/50">
                 <div className="flex items-center gap-2">
                   {isEditMode ? (
                     <button
                       onClick={() => toggleDistrictFlood(dist.id)}
-                      className={`text-[10px] font-semibold px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 ${
+                      className={`text-[12px] font-semibold px-2 py-0.5 rounded border transition-all cursor-pointer flex items-center gap-1 ${
                         dist.floodCrisis
                           ? 'bg-cyan-100 text-cyan-800 border-cyan-300'
-                          : 'bg-slate-100 text-slate-600 border-slate-200'
+                          : 'bg-[rgba(28,28,28,0.04)] text-[#5f5f5d] border-[#eceae4]'
                       }`}
                     >
                       <Waves className="w-3 h-3" />
@@ -161,18 +161,18 @@ export const StatePolicyView = ({
                   ) : (
                     <span>
                       {dist.floodCrisis ? (
-                        <span className="text-cyan-700 font-semibold flex items-center gap-1 text-[11px]">
+                        <span className="text-cyan-700 font-semibold flex items-center gap-1 text-[12px]">
                           <Waves className="w-3.5 h-3.5" /> Flood Inundated
                         </span>
                       ) : (
-                        <span className="text-slate-400 text-[11px]">Normal weather</span>
+                        <span className="text-[#5f5f5d] text-[12px]">Normal weather</span>
                       )}
                     </span>
                   )}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-slate-500 text-[11px]">Calls:</span>
+                  <span className="text-[#5f5f5d] text-[12px]">Calls:</span>
                   {isEditMode ? (
                     <input
                       type="number"
@@ -181,10 +181,10 @@ export const StatePolicyView = ({
                       step="10"
                       value={dist.callsLast30Days}
                       onChange={(e) => updateDistrictCalls(dist.id, parseInt(e.target.value) || 0)}
-                      className="w-16 px-1.5 py-0.5 border border-slate-300 rounded font-mono text-xs font-bold text-slate-900 text-right focus:outline-blue-500"
+                      className="w-16 px-1.5 py-0.5 border border-slate-300 rounded font-mono text-xs font-bold text-[#1c1c1c] text-right focus:outline-blue-500"
                     />
                   ) : (
-                    <span className="font-bold text-slate-900 font-mono">{dist.callsLast30Days}</span>
+                    <span className="font-bold text-[#1c1c1c] font-mono">{dist.callsLast30Days}</span>
                   )}
                 </div>
               </div>
@@ -193,45 +193,45 @@ export const StatePolicyView = ({
         </div>
 
         {/* Clean Accordion for Deep Technical / Evaluation Data */}
-        <div className="border border-slate-200 rounded-xl overflow-hidden mt-6">
+        <div className="border border-[#eceae4] rounded-xl overflow-hidden mt-6">
           <button
             onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-            className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100/80 text-left flex items-center justify-between text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+            className="w-full px-4 py-3 bg-[#f7f4ed] hover:bg-[rgba(28,28,28,0.04)]/80 text-left flex items-center justify-between text-xs font-semibold text-[#1c1c1c] transition-colors cursor-pointer"
           >
             <span>Show Full District Data Table &amp; Math Models (For Evaluators)</span>
             {showTechnicalDetails ? (
-              <ChevronUp className="w-4 h-4 text-slate-500" />
+              <ChevronUp className="w-4 h-4 text-[#5f5f5d]" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-slate-500" />
+              <ChevronDown className="w-4 h-4 text-[#5f5f5d]" />
             )}
           </button>
 
           {showTechnicalDetails && (
-            <div className="p-4 space-y-4 bg-white border-t border-slate-200">
-              <div className="bg-slate-50 p-3 rounded-lg text-xs text-slate-700 space-y-2">
-                <p className="font-semibold text-slate-900">Exact Cumulative Poisson Tail Model (Hypothesis Test α = 0.01):</p>
-                <p className="font-mono text-[11px] text-slate-600">
+            <div className="p-4 space-y-4 bg-[#f7f4ed] border-t border-[#eceae4]">
+              <div className="bg-[#f7f4ed] p-3 rounded-lg text-xs text-[#1c1c1c] space-y-2">
+                <p className="font-semibold text-[#1c1c1c]">Exact Cumulative Poisson Tail Model (Hypothesis Test α = 0.01):</p>
+                <p className="font-mono text-[12px] text-[#5f5f5d]">
                   P(Y ≥ y | λ) = 1 - ∑_&#123;k=0&#125;^&#123;y-1&#125; (λ^k · e^&#123;-λ&#125;) / k!
                 </p>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[12px] text-[#5f5f5d]">
                   Evaluates exact discrete probability for rural blocks where λ &lt; 10, avoiding Gaussian approximation bias.
                 </p>
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-lg text-xs text-slate-700 space-y-2 border border-slate-200">
-                <p className="font-semibold text-slate-900">Stochastic Care Funnel: Absorbing Markov Chain Model</p>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
+              <div className="bg-[#f7f4ed] p-3 rounded-lg text-xs text-[#1c1c1c] space-y-2 border border-[#eceae4]">
+                <p className="font-semibold text-[#1c1c1c]">Stochastic Care Funnel: Absorbing Markov Chain Model</p>
+                <p className="text-[12px] text-[#5f5f5d] leading-relaxed">
                   Modeled with 4 transient states (Intake, Specialist, eSanjeevani, DMHP) and 2 absorbing states (A₁: Verified Recovery, A₂: Defaulted).
-                  Fundamental Matrix N = (I - Q)⁻¹. Absorption probability into verified recovery B = N · R is exactly <strong className="text-slate-900">3.2%</strong> (320 / 10,000), proving a 96.8% systemic attrition rate that mandates proactive retention intervention.
+                  Fundamental Matrix N = (I - Q)⁻¹. Absorption probability into verified recovery B = N · R is exactly <strong className="text-[#1c1c1c]">3.2%</strong> (320 / 10,000), proving a 96.8% systemic attrition rate that mandates proactive retention intervention.
                 </p>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-600">Filter by Geographic Zone:</span>
+                <span className="text-xs font-medium text-[#5f5f5d]">Filter by Geographic Zone:</span>
                 <select
                   value={selectedZone}
                   onChange={(e) => setSelectedZone(e.target.value)}
-                  className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs text-slate-700 font-medium"
+                  className="bg-[#f7f4ed] border border-slate-300 rounded-lg px-2.5 py-1 text-xs text-[#1c1c1c] font-medium"
                 >
                   <option value="All">All 35 Districts</option>
                   <option value="Barak Valley">Barak Valley</option>
@@ -241,8 +241,8 @@ export const StatePolicyView = ({
               </div>
 
               <div className="overflow-x-auto max-h-80 overflow-y-auto">
-                <table className="w-full text-xs text-left text-slate-700">
-                  <thead className="bg-slate-100 text-slate-800 font-semibold uppercase text-[10px] sticky top-0 border-b border-slate-200">
+                <table className="w-full text-xs text-left text-[#1c1c1c]">
+                  <thead className="bg-[rgba(28,28,28,0.04)] text-[#1c1c1c] font-semibold uppercase text-[12px] sticky top-0 border-b border-[#eceae4]">
                     <tr>
                       <th className="py-2 px-3">District</th>
                       <th className="py-2 px-3">Zone</th>
@@ -256,10 +256,10 @@ export const StatePolicyView = ({
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {filteredDistricts.map((d) => (
-                      <tr key={d.id} className="hover:bg-slate-50">
-                        <td className="py-2 px-3 font-semibold text-slate-900">{d.name}</td>
-                        <td className="py-2 px-3 text-slate-600">{d.zone}</td>
-                        <td className="py-2 px-3 text-right font-mono text-slate-600">{d.population.toLocaleString()}</td>
+                      <tr key={d.id} className="hover:bg-[#f7f4ed]">
+                        <td className="py-2 px-3 font-semibold text-[#1c1c1c]">{d.name}</td>
+                        <td className="py-2 px-3 text-[#5f5f5d]">{d.zone}</td>
+                        <td className="py-2 px-3 text-right font-mono text-[#5f5f5d]">{d.population.toLocaleString()}</td>
                         <td className="py-2 px-3 text-right">
                           {isEditMode ? (
                             <input
@@ -269,33 +269,33 @@ export const StatePolicyView = ({
                               step="10"
                               value={d.callsLast30Days}
                               onChange={(e) => updateDistrictCalls(d.id, parseInt(e.target.value) || 0)}
-                              className="w-16 px-1.5 py-0.5 border border-slate-300 rounded font-mono text-xs font-bold text-slate-900 text-right focus:outline-blue-500"
+                              className="w-16 px-1.5 py-0.5 border border-slate-300 rounded font-mono text-xs font-bold text-[#1c1c1c] text-right focus:outline-blue-500"
                             />
                           ) : (
-                            <span className="font-mono font-bold text-slate-900">{d.callsLast30Days}</span>
+                            <span className="font-mono font-bold text-[#1c1c1c]">{d.callsLast30Days}</span>
                           )}
                         </td>
-                        <td className="py-2 px-3 text-right font-mono text-slate-500">{d.poissonExpected}</td>
+                        <td className="py-2 px-3 text-right font-mono text-[#5f5f5d]">{d.poissonExpected}</td>
                         <td className="py-2 px-3 text-center">
                           <span
-                            className={`font-mono font-bold px-1.5 py-0.2 rounded text-[10px] ${
+                            className={`font-mono font-bold px-1.5 py-0.2 rounded text-[12px] ${
                               d.isSurge
                                 ? 'bg-rose-100 text-rose-700'
-                                : 'bg-slate-100 text-slate-600'
+                                : 'bg-[rgba(28,28,28,0.04)] text-[#5f5f5d]'
                             }`}
                           >
                             +{d.zScore.toFixed(2)}
                           </span>
                         </td>
-                        <td className="py-2 px-3 text-center font-mono text-[10px] font-semibold text-slate-700">
+                        <td className="py-2 px-3 text-center font-mono text-[12px] font-semibold text-[#1c1c1c]">
                           {d.pValueFormatted}
                         </td>
                         <td className="py-2 px-3 text-center">
                           <span
-                            className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
+                            className={`text-[12px] px-1.5 py-0.2 rounded font-semibold ${
                               d.isSurge
                                 ? 'bg-rose-100 text-rose-700 font-bold'
-                                : 'bg-slate-100 text-slate-600'
+                                : 'bg-[rgba(28,28,28,0.04)] text-[#5f5f5d]'
                             }`}
                           >
                             {d.isSurge ? 'Surge (p < 0.01)' : 'Normal'}

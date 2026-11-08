@@ -1,20 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 @import "tailwindcss";
 
+/* ============================================================
+   AMH-DSS Design Tokens — warm-cream, opacity-derived neutrals
+   (adapted from the Lovable-inspired system: keep layout rules,
+   spacing, type principles; brand + licensed typeface replaced)
+   ============================================================ */
+
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
+
+  /* --- Base (from source design, verbatim) --- */
+  --paper: #f7f4ed;
+  --charcoal: #1c1c1c;
+  --offwhite: #fcfbf8;
+  --muted: #5f5f5d;
+  --hairline: #eceae4;
+  --hairline-strong: rgba(28, 28, 28, 0.4);
+
+  /* --- Type scale (dashboard-rescaled; hard floor 12px) --- */
+  --font-sans: "Figtree", "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --t-display: 32px;
+  --t-display-lh: 1.10;
+  --t-display-tr: -0.9px;
+  --t-page: 24px;
+  --t-section: 18px;
+  --t-card: 15px;
+  --t-body: 14px;
+  --t-body-lh: 1.50;
+  --t-caption: 12px;
+
+  /* --- Radius (kept verbatim) --- */
+  --r-micro: 4px;
+  --r-standard: 6px;
+  --r-compact: 8px;
+  --r-card: 12px;
+  --r-container: 16px;
+  --r-pill: 9999px;
+
+  /* --- Spacing (8px base, kept) --- */
+  --s-1: 8px;
+  --s-2: 10px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 40px;
+
+  /* --- Semantic status scale (deliberate deviation; desaturated, warm-key) --- */
+  --flag-critical: #b3261e;
+  --flag-critical-bg: rgba(179, 38, 30, 0.08);
+  --flag-warn: #8a5a00;
+  --flag-warn-bg: rgba(138, 90, 0, 0.10);
+  --flag-ok: #1e6b34;
+  --flag-ok-bg: rgba(30, 107, 52, 0.08);
+  --flag-info: #34548a;
+  --flag-info-bg: rgba(52, 84, 138, 0.08);
+
+  /* --- Depth (bordered-not-shadowed) --- */
+  --btn-inset: rgba(255, 255, 255, 0.2) 0px 0.5px 0px 0px inset,
+    rgba(0, 0, 0, 0.2) 0px 0px 0px 0.5px inset,
+    rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+  --focus-glow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  --ring: rgba(59, 130, 246, 0.5);
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #fafbfc;
-  color: #0f172a;
+  background-color: var(--paper);
+  color: var(--charcoal);
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: var(--t-body-lh);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom subtle scrollbar */
+h1 {
+  font-size: var(--t-page);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.6px;
+}
+h2 {
+  font-size: var(--t-section);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+}
+
+/* Figures everywhere: tabular numerals for data */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Shared component primitives --- */
+
+.card {
+  background-color: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-card);
+  /* deliberately no box-shadow */
+}
+
+.btn-primary {
+  background-color: var(--charcoal);
+  color: var(--offwhite);
+  padding: 8px 16px;
+  border-radius: var(--r-standard);
+  box-shadow: var(--btn-inset);
+  font-weight: 400;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:active {
+  opacity: 0.8;
+}
+.btn-primary:focus-visible {
+  box-shadow: var(--btn-inset), var(--focus-glow);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--charcoal);
+  padding: 8px 16px;
+  border-radius: var(--r-standard);
+  border: 1px solid var(--hairline-strong);
+  cursor: pointer;
+}
+.btn-ghost:active {
+  opacity: 0.8;
+}
+.btn-ghost:focus-visible {
+  box-shadow: var(--focus-glow);
+}
+
+input, select, textarea {
+  background-color: var(--paper);
+  color: var(--charcoal);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-standard);
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: var(--focus-glow);
+  border-color: var(--ring);
+}
+::placeholder {
+  color: var(--muted);
+}
+
+.flag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  font-size: var(--t-caption);
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.flag-critical {
+  color: var(--flag-critical);
+  background: var(--flag-critical-bg);
+  border-color: rgba(179, 38, 30, 0.25);
+}
+.flag-warn {
+  color: var(--flag-warn);
+  background: var(--flag-warn-bg);
+  border-color: rgba(138, 90, 0, 0.25);
+}
+.flag-ok {
+  color: var(--flag-ok);
+  background: var(--flag-ok-bg);
+  border-color: rgba(30, 107, 52, 0.25);
+}
+.flag-info {
+  color: var(--flag-info);
+  background: var(--flag-info-bg);
+  border-color: rgba(52, 84, 138, 0.25);
+}
+
+/* Subtle warm scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -23,9 +192,17 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
+  background: rgba(28, 28, 28, 0.18);
+  border-radius: var(--r-pill);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(28, 28, 28, 0.3);
+}
+
+/* Density variants */
+.density-comfort {
+  --pad-card: 24px;
+}
+.density-compact {
+  --pad-card: 16px;
 }

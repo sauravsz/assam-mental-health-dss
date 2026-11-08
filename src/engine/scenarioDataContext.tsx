@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import type { Block, Facility, DistrictDistress, ReferralRecord, UserRole, AuditLogEntry, FacilityDrugStock } from './types'
 import { CACHAR_BLOCKS, CACHAR_FACILITIES } from './cacharData'
 import { computePoissonTail } from './stateSurveillance'
@@ -66,7 +66,7 @@ const STORAGE_KEYS = {
   DRUG_STOCKS: 'amh_dss_drug_stocks_v1',
 }
 
-export function useScenarioData() {
+function useScenarioDataInner() {
   const [isEditMode, setIsEditMode] = useState<boolean>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.IS_EDIT_MODE)
@@ -86,7 +86,7 @@ export function useScenarioData() {
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(() => {
     try { const s = localStorage.getItem(STORAGE_KEYS.AUDIT_LOG); return s ? JSON.parse(s) : INITIAL_AUDIT_LOGS } catch { return INITIAL_AUDIT_LOGS }
   })
-  const [customDrugStocks] = useState<Record<number, FacilityDrugStock>>(() => { try { const s = localStorage.getItem(STORAGE_KEYS.DRUG_STOCKS); return s ? JSON.parse(s) : DEFAULT_FACILITY_STOCKS } catch { return DEFAULT_FACILITY_STOCKS } })
+  const [customDrugStocks, setCustomDrugStocks] = useState<Record<number, FacilityDrugStock>>(() => { try { const s = localStorage.getItem(STORAGE_KEYS.DRUG_STOCKS); return s ? JSON.parse(s) : DEFAULT_FACILITY_STOCKS } catch { return DEFAULT_FACILITY_STOCKS } })
   const [isChainValid, setIsChainValid] = useState(true)
   const [chainBreakReason, setChainBreakReason] = useState<string | undefined>()
 
@@ -227,6 +227,15 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
           : f
       )
     )
+    // Keep the numeric stock in sync so badges and daysOfCover never disagree (single source of truth)
+    const numericTarget = status === 'Adequate' ? 2000 : status === 'Low Stock' ? 600 : 100
+    setCustomDrugStocks((prev) => ({
+      ...prev,
+      [facId]: {
+        ...(prev[facId] || DEFAULT_FACILITY_STOCKS[facId] || { haloperidol: 500, fluoxetine: 1000, valproate: 600 }),
+        [med]: numericTarget,
+      },
+    }))
   }
 
   // Update a district call count or flood state
@@ -288,4 +297,21 @@ const computedDistricts = computeDistrictDistressList(rawDistricts)
     toggleDistrictFlood,
     resetToDefaults,
   }
+}
+
+export type ScenarioData = ReturnType<typeof useScenarioDataInner>
+
+const ScenarioContext = createContext<ScenarioData | null>(null)
+
+export function ScenarioProvider({ children }: { children: ReactNode }) {
+  const value = useScenarioDataInner()
+  return <ScenarioContext.Provider value={value}>{children}</ScenarioContext.Provider>
+}
+
+export function useScenarioData(): ScenarioData {
+  const ctx = useContext(ScenarioContext)
+  if (!ctx) {
+    throw new Error('useScenarioData must be used within <ScenarioProvider>')
+  }
+  return ctx
 }

@@ -6,11 +6,13 @@ Government of Assam · National Health Mission (NHM) · Health & Family Welfare 
 
 > Every month, thousands of citizens call the 24/7 Tele-MANAS helpline (14416), but over 94% of people who need to see a doctor in person never reach a clinic due to stigma, lack of money for bus fares, and long distances. This system spots distress early, routes mobile clinic vans fairly, and follows up with callers — under clinical supervision, with privacy and auditable controls.
 
+**State management note (fixed in the redesign):** all screens share one `<ScenarioProvider>` (React context). Role, district, and audit state propagate across every view — verified by the test suite (`bunx vitest run`).
+
 **Live prototype:** https://mentalhealthdss.vercel.app/  
 **Challenge:** https://startup.assam.gov.in/nesfic26/problem-statements/nesfic-d-29  
 **Deadline:** 25 November 2026
 
-**Stack:** React 19 + TypeScript + Vite + Tailwind CSS · Client-side, zero-backend deployment (Vercel Edge).
+**Stack:** React 19 + TypeScript + Vite + Tailwind CSS + Figtree Variable (OFL) · Client-side, zero-backend deployment (Vercel Edge).
 
 ---
 
@@ -22,7 +24,7 @@ Three decision-support modules, one SHA-256 audited data layer, all client-side 
 
 **Engine:** `src/engine/stateSurveillance.ts` — exact cumulative discrete Poisson tail probabilities.
 
-- For each of 35 Assam districts, computes $P(Y \ge y \mid \lambda) = 1 - \sum_{k=0}^{y-1} \frac{\lambda^k e^{-\lambda}}{k!}$ with Z-score thresholding ($Z \ge 2.5$, $p < 0.01$ = alert flag, not proof of crisis)
+- For each of 15 representative Assam districts (pilot framing: Cachar + Kamrup Metropolitan; statewide expansion after validation), computes $P(Y \ge y \mid \lambda) = 1 - \sum_{k=0}^{y-1} \frac{\lambda^k e^{-\lambda}}{k!}$ with Z-score thresholding ($Z \ge 2.5$, $p < 0.01$ = alert flag, not proof of crisis)
 - Distinguish from the Python co-prototype's Gaussian $Z = (y-\lambda)/\sqrt{\lambda}$ approximation, which breaks down for small rural block counts ($n < 30$)
 - Flood multiplier overlays (ASDMA) for monsoon catchments (Katigorah, Sonai, etc.)
 
@@ -53,6 +55,10 @@ subject to demand conservation, facility capacity, and $P$ mobile vans. Baseline
 **Queue order:** crisis flag → repeat callers → longest wait. **4 distinct outcomes** (funnel-inflation fix): *Callback completed*, *Referred to ASHA*, *Facility visit confirmed*, *Refused*. Only "Facility visit confirmed" closes as attended; callbacks/ASHA visits keep the referral open.
 
 **UI:** `RetentionQueue.tsx`. Case rows show Case ID, block, language, facility — never caller hash. Counts under 10 suppressed (primary + secondary complementary suppression, DPDP 2023).
+
+### Views (7) — one screen per decision
+
+Overview (default) · Surveillance · Deployment · Pharmacy · Retention · Audit & Ingest · Method — selected via `?view=settings` deep links. Operators link to Method for formulas instead of embedded math drawers.
 
 ### Module 4 — Security, RBAC, audit & CSV ingest (governance)
 
@@ -89,7 +95,7 @@ src/
   engine/
     types.ts                  # Block, Facility, DistrictDistress, ReferralRecord, UserRole,
                               # AuditLogEntry, DrugBurnMetrics, CsvUploadResult
-    stateSurveillance.ts      # Poisson tail + Markov chain + 35-district table
+    stateSurveillance.ts      # Poisson tail + Markov chain + 15-district table
     solver.ts                 # Two-Phase Simplex p-median LP (pure TS)
     cacharData.ts             # 8-block Cachar travel matrix + facilities
     referralData.ts           # synthetic referrals, secondary suppression
