@@ -1,8 +1,9 @@
-import { Activity, ShieldCheck, MapPin, Database, HeartHandshake, Edit3, RotateCcw } from 'lucide-react'
+import { Activity, ShieldCheck, MapPin, HeartHandshake, Edit3, RotateCcw, Lock } from 'lucide-react'
+import { useScenarioData } from '../engine/scenarioDataContext'
 
 interface NavbarProps {
-  activeTab: 'state' | 'planner' | 'queue'
-  setActiveTab: (tab: 'state' | 'planner' | 'queue') => void
+  activeTab: 'state' | 'planner' | 'queue' | 'audit'
+  setActiveTab: (tab: 'state' | 'planner' | 'queue' | 'audit') => void
   stalledCount: number
   isEditMode: boolean
   setIsEditMode: (val: boolean | ((prev: boolean) => boolean)) => void
@@ -17,21 +18,76 @@ export const Navbar = ({
   setIsEditMode,
   resetToDefaults,
 }: NavbarProps) => {
+  const {
+    userRole,
+    setUserRole,
+    selectedDistrictFilter,
+    setSelectedDistrictFilter,
+    districts,
+    isChainValid,
+    logAction,
+  } = useScenarioData()
+
   return (
     <header className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50">
       {/* Top Quiet Institutional Strip */}
-      <div className="bg-slate-50 border-b border-slate-100 px-4 py-1 text-[11px] text-slate-500 flex items-center justify-between">
+      <div className="bg-slate-50 border-b border-slate-100 px-4 py-1 text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span className="font-medium text-slate-700">Government of Assam · National Health Mission (NHM)</span>
         </div>
-        <div className="flex items-center gap-3 text-slate-500">
+        <div className="flex flex-wrap items-center gap-3 text-slate-500">
           <span className="flex items-center gap-1 text-[11px]">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
             <span>Mental Healthcare Act &amp; Privacy Compliant</span>
           </span>
           <span className="hidden sm:inline text-slate-300">|</span>
-          <span className="hidden sm:inline text-slate-600">Pilot: Kamrup &amp; Cachar</span>
+
+          {/* RBAC Role selector */}
+          <div className="flex items-center gap-1.5">
+            <Lock className="w-3 h-3 text-slate-400" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Role:</span>
+            <select
+              value={userRole}
+              onChange={(e) => {
+                const newRole = e.target.value as typeof userRole
+                setUserRole(newRole)
+                logAction('ROLE_SWITCH', `Switched user role context to ${newRole}`)
+              }}
+              className="bg-white border border-slate-200 rounded px-1.5 py-0.5 text-[11px] font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-900"
+            >
+              <option value="State Director">State Director</option>
+              <option value="District Officer">District Officer</option>
+              <option value="Counsellor">Counsellor</option>
+            </select>
+          </div>
+
+          <span className="hidden sm:inline text-slate-300">|</span>
+
+          {/* District filter */}
+          <div className="flex items-center gap-1.5">
+            <MapPin className="w-3 h-3 text-slate-400" />
+            <select
+              value={selectedDistrictFilter}
+              onChange={(e) => setSelectedDistrictFilter(e.target.value)}
+              className="bg-white border border-slate-200 rounded px-1.5 py-0.5 text-[11px] font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-900"
+            >
+              <option value="All Districts">All Districts</option>
+              {districts.map((d) => (
+                <option key={d.id} value={d.name}>
+                  {d.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <span className="hidden sm:inline text-slate-300">|</span>
+
+          {/* SHA-256 chain status */}
+          <span className={`flex items-center gap-1 text-[11px] font-mono font-semibold ${isChainValid ? 'text-emerald-700' : 'text-rose-700'}`}>
+            <span className={`w-2 h-2 rounded-full ${isChainValid ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
+            SHA-256 {isChainValid ? 'OK' : 'BROKEN'}
+          </span>
         </div>
       </div>
 
@@ -56,75 +112,78 @@ export const Navbar = ({
           </div>
         </div>
 
-        {/* Right side controls: Tabs + Edit/Reset Actions */}
+        {/* Right side controls */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
-          {/* 3 Clear Segmented Control Tabs */}
-          <nav className="grid grid-cols-3 sm:flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/60">
+          {/* 4 Tabs */}
+          <nav className="grid grid-cols-4 sm:flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/60">
             <button
               onClick={() => setActiveTab('state')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'state'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <Database className="w-3.5 h-3.5 text-blue-600" />
-              <span>1. Call Trends</span>
+              <Activity className="w-3.5 h-3.5 text-blue-600" />
+              <span>State</span>
             </button>
-
             <button
               onClick={() => setActiveTab('planner')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'planner'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-              <span>2. Van Routes</span>
+              <span>Planner</span>
             </button>
-
             <button
               onClick={() => setActiveTab('queue')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                 activeTab === 'queue'
-                  ? 'bg-white text-slate-900 shadow-xs font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <Activity className="w-3.5 h-3.5 text-rose-500" />
-              <span>3. Follow-Ups</span>
+              <HeartHandshake className="w-3.5 h-3.5 text-rose-600" />
+              <span>Queue</span>
               {stalledCount > 0 && (
-                <span className="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
+                <span className="ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] bg-rose-100 text-rose-800 font-bold">
                   {stalledCount}
                 </span>
               )}
             </button>
+            <button
+              onClick={() => setActiveTab('audit')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'audit'
+                  ? 'bg-white text-slate-900 shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Audit</span>
+            </button>
           </nav>
 
-          {/* Edit Mode & Reset Scenario Buttons */}
-          <div className="flex items-center gap-1.5 justify-end">
+          {/* Actions */}
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
               onClick={() => setIsEditMode((prev) => !prev)}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer border ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
                 isEditMode
-                  ? 'bg-amber-500 text-slate-950 border-amber-600 shadow-xs ring-2 ring-amber-400/40'
-                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                  ? 'bg-amber-50 text-amber-900 border-amber-300 font-bold'
+                  : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
               }`}
-              title="Toggle interactive scenario editing"
             >
-              <Edit3 className="w-3.5 h-3.5" />
-              <span>{isEditMode ? 'Editing Active' : 'Edit Scenario'}</span>
+              <Edit3 className="w-3 h-3 text-amber-700" />
+              <span>Scenario</span>
             </button>
-
             <button
-              onClick={() => {
-                if (window.confirm('Reset all values back to official NHM Cachar benchmark defaults?')) {
-                  resetToDefaults()
-                }
-              }}
-              className="p-1.5 rounded-xl text-xs text-slate-500 hover:text-slate-800 bg-white border border-slate-200 hover:bg-slate-50 transition-all cursor-pointer shadow-2xs"
-              title="Reset all values to official NHM Cachar defaults"
+              onClick={resetToDefaults}
+              title="Reset all parameters to baseline state"
+              className="p-1.5 rounded-xl bg-slate-50 text-slate-500 hover:text-slate-800 border border-slate-200 transition-all cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -132,22 +191,20 @@ export const Navbar = ({
         </div>
       </div>
 
-      {/* Persistent helper ribbon when Edit Mode is active */}
+      {/* Operator banner when Edit Mode is active */}
       {isEditMode && (
         <div className="bg-amber-50 border-t border-b border-amber-200 px-4 py-1.5 text-[11px] text-amber-900 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
-            <span className="font-semibold">Interactive Scenario Edit Mode:</span>
+            <Edit3 className="w-3.5 h-3.5 text-amber-700" />
             <span>
-              You can now edit block population, flood factors, clinic capacities, medicine stocks, and district calls.
-              All models recalculate live!
+              <strong>Scenario Testing Mode:</strong> District estimates, block factors, and facility capacities are unlocked.
             </span>
           </div>
           <button
-            onClick={resetToDefaults}
-            className="text-[10px] font-bold text-amber-800 underline hover:text-amber-950 cursor-pointer"
+            onClick={() => setIsEditMode(false)}
+            className="font-semibold text-amber-900 hover:text-amber-700 underline cursor-pointer"
           >
-            Reset to Benchmark
+            Exit Mode
           </button>
         </div>
       )}

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import type { Block, Facility } from '../engine/types'
 import { TRAVEL_TIME_MATRIX } from '../engine/cacharData'
+import { useScenarioData } from '../engine/scenarioDataContext'
 import { solveCampAllocation } from '../engine/solver'
 import { Navigation, CheckCircle2, ChevronDown, ChevronUp, Truck, Edit3, Sliders, MapPin } from 'lucide-react'
 
@@ -44,6 +45,8 @@ export const DMHPCampPlanner = ({
       1.0
     )
   }, [blocks, facilities, numVans, includeFloodWeight])
+
+  const { drugMetrics, drugRecommendations } = useScenarioData()
 
   const activeFacilities = facilities.filter((f) => result.activeFacilityIds.includes(f.id))
   const baselineFacilities = facilities.filter((f) => result.baselineActiveFacilityIds.includes(f.id))
@@ -570,6 +573,64 @@ export const DMHPCampPlanner = ({
           </div>
         )}
       </section>
+
+      {/* Section 2: Drug Burn-Rate & Inter-block Redistribution (Coauthor engine) */}
+      <section className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
+        <h3 className="text-base font-bold text-slate-900 mb-1">Medicine Stock Projections &amp; Inter-block Transfers</h3>
+        <p className="text-xs text-slate-500 mb-4">Daily tablet burn-rate modeled from block distress demand. Alert under 15 days cover; auto-suggests transfers from surplus blocks with &gt;30 days cover.</p>
+
+        {drugRecommendations.length > 0 && (
+          <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wider mb-2">Recommended Inter-block Transfers ({drugRecommendations.length})</h4>
+            <ul className="space-y-2">
+              {drugRecommendations.map((r) => (
+                <li key={r.id} className="text-xs text-slate-700 flex flex-wrap items-center gap-2">
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${r.urgency === 'Immediate' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}`}>{r.urgency}</span>
+                  <span><strong>{r.drugName.toUpperCase()}</strong> {r.unitsToTransfer} tabs</span>
+                  <span>from <em>{r.fromFacilityName}</em></span>
+                  <span>→</span>
+                  <span>to <em>{r.toFacilityName}</em></span>
+                  <span className="text-slate-500">({r.donorRemainingDays}d left → {r.recipientNewDays}d cover)</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="overflow-x-auto rounded-xl border border-slate-200/80">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+              <tr>
+                <th className="px-3 py-2.5">Facility</th>
+                <th className="px-3 py-2.5">Drug</th>
+                <th className="px-3 py-2.5">Stock (tabs)</th>
+                <th className="px-3 py-2.5">Daily Burn</th>
+                <th className="px-3 py-2.5">Days Cover</th>
+                <th className="px-3 py-2.5">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {drugMetrics.map((m) => (
+                <tr key={`${m.facilityId}-${m.drugName}`} className="hover:bg-slate-50">
+                  <td className="px-3 py-2 font-semibold text-slate-800">{m.facilityName} <span className="text-slate-400 font-normal">({m.blockName})</span></td>
+                  <td className="px-3 py-2 capitalize">{m.drugName}</td>
+                  <td className="px-3 py-2 font-mono">{m.currentStock.toLocaleString()}</td>
+                  <td className="px-3 py-2 font-mono">{m.dailyBurnRate}/day</td>
+                  <td className="px-3 py-2 font-mono font-bold">{m.daysOfCover}d</td>
+                  <td className="px-3 py-2">
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      m.status === 'Critical' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
+                      m.status === 'Low Stock' ? 'bg-amber-50 text-amber-800 border border-amber-200' :
+                      'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                    }`}>{m.status}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
     </div>
   )
 }

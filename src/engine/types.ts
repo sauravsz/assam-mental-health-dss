@@ -62,7 +62,60 @@ export interface ReferralRecord {
   daysStalled: number
   assignedFacility: string
   consentRecorded: boolean
-  status: 'Stalled' | 'Follow-up Initiated' | 'ASHA Dispatched' | 'Resolved' | 'Defaulted'
+  status: 'Stalled' | 'Follow-up Initiated' | 'ASHA Dispatched' | 'Facility Visit Confirmed' | 'Refused' | 'Resolved' | 'Defaulted'
   followupAttempts: number
   lastContactNote?: string
+}
+
+export type UserRole = 'State Director' | 'District Officer' | 'Counsellor'
+
+export interface AuditLogEntry {
+  id: number
+  timestamp: string
+  userRole: UserRole
+  districtContext: string
+  action: string
+  details: string
+  outcome: 'PERMITTED' | 'ACCESS_DENIED' | 'TAMPER_DETECTED'
+  previousHash: string
+  hash: string
+}
+
+export interface DrugBurnMetrics {
+  facilityId: number
+  facilityName: string
+  blockName: string
+  drugName: 'haloperidol' | 'fluoxetine' | 'valproate'
+  currentStock: number
+  dailyBurnRate: number
+  daysOfCover: number
+  status: 'Adequate' | 'Low Stock' | 'Critical'
+}
+
+export interface DrugTransferRecommendation {
+  id: string
+  drugName: 'haloperidol' | 'fluoxetine' | 'valproate'
+  fromFacilityName: string
+  toFacilityName: string
+  unitsToTransfer: number
+  donorRemainingDays: number
+  recipientNewDays: number
+  urgency: 'Immediate' | 'Standard'
+}
+
+export interface CsvUploadResult {
+  success: boolean
+  totalRowsProcessed: number
+  acceptedRows: number
+  rejectedRows: number
+  hashedFieldsCount: number
+  insertedDistrictSummary: { district: string; callCount: number }[]
+  errors: string[]
+}
+
+
+export interface FacilityDrugStock {
+  haloperidol: number
+  fluoxetine: number
+  valproate: number
 }

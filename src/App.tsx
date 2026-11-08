@@ -4,10 +4,11 @@ import { NaturalLanguageBar } from './components/NaturalLanguageBar'
 import { StatePolicyView } from './components/StatePolicyView'
 import { DMHPCampPlanner } from './components/DMHPCampPlanner'
 import { RetentionQueue } from './components/RetentionQueue'
+import { AuditLogView } from './components/AuditLogView'
 import { useScenarioData } from './engine/scenarioDataContext'
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'state' | 'planner' | 'queue'>('planner')
+  const [activeTab, setActiveTab] = useState<'state' | 'planner' | 'queue' | 'audit'>('planner')
   const [numVans, setNumVans] = useState<number>(2)
 
   const {
@@ -90,6 +91,12 @@ export function App() {
             setRecords={setReferrals}
             isEditMode={isEditMode}
           />
+        )}
+
+        {activeTab === 'audit' && (
+          <div className="animate-fade-in">
+            <AuditLogView />
+          </div>
         )}
       </main>
 

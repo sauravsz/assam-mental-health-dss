@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react'
-import type { Block, Facility, DistrictDistress, ReferralRecord } from './types'
+import { useState, useEffect, useCallback } from 'react'
+import type { Block, Facility, DistrictDistress, ReferralRecord, UserRole, AuditLogEntry, FacilityDrugStock } from './types'
 import { CACHAR_BLOCKS, CACHAR_FACILITIES } from './cacharData'
 import { computePoissonTail } from './stateSurveillance'
 import { generateSyntheticStalledReferrals } from './referralData'
+import { INITIAL_AUDIT_LOGS, appendAuditLog, verifyAuditChain, simulateTamper } from './auditLogger'
+import { processTeleManasCsv } from './csvIngest'
+import { computeDrugBurnMetrics, DEFAULT_FACILITY_STOCKS } from './drugPlanner'
 
 export interface RawDistrictData {
   id: string
@@ -57,6 +60,10 @@ const STORAGE_KEYS = {
   RAW_DISTRICTS: 'amh_dss_districts_v1',
   REFERRALS: 'amh_dss_referrals_v1',
   IS_EDIT_MODE: 'amh_dss_is_edit_mode_v1',
+  USER_ROLE: 'amh_dss_role_v1',
+  AUDIT_LOG: 'amh_dss_audit_log_v1',
+  SELECTED_DISTRICT: 'amh_dss_selected_district_v1',
+  DRUG_STOCKS: 'amh_dss_drug_stocks_v1',
 }
 
 export function useScenarioData() {
@@ -69,7 +76,46 @@ export function useScenarioData() {
     }
   })
 
-  const [blocks, setBlocks] = useState<Block[]>(() => {
+  
+  const [userRole, setUserRoleState] = useState<UserRole>(() => {
+    try { return (localStorage.getItem(STORAGE_KEYS.USER_ROLE) as UserRole) || 'State Director' } catch { return 'State Director' }
+  })
+  const [selectedDistrictFilter, setSelectedDistrictFilter] = useState<string>(() => {
+    try { return localStorage.getItem(STORAGE_KEYS.SELECTED_DISTRICT) || 'All Districts' } catch { return 'All Districts' }
+  })
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(() => {
+    try { const s = localStorage.getItem(STORAGE_KEYS.AUDIT_LOG); return s ? JSON.parse(s) : INITIAL_AUDIT_LOGS } catch { return INITIAL_AUDIT_LOGS }
+  })
+  const [customDrugStocks] = useState<Record<number, FacilityDrugStock>>(() => { try { const s = localStorage.getItem(STORAGE_KEYS.DRUG_STOCKS); return s ? JSON.parse(s) : DEFAULT_FACILITY_STOCKS } catch { return DEFAULT_FACILITY_STOCKS } })
+  const [isChainValid, setIsChainValid] = useState(true)
+  const [chainBreakReason, setChainBreakReason] = useState<string | undefined>()
+
+  useEffect(() => {
+    const save = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
+    save(STORAGE_KEYS.USER_ROLE, userRole)
+  }, [userRole])
+  useEffect(() => { try { localStorage.setItem(STORAGE_KEYS.SELECTED_DISTRICT, selectedDistrictFilter) } catch {} }, [selectedDistrictFilter])
+  useEffect(() => { try { localStorage.setItem(STORAGE_KEYS.AUDIT_LOG, JSON.stringify(auditLogs)) } catch {} }, [auditLogs])
+  useEffect(() => { try { localStorage.setItem(STORAGE_KEYS.DRUG_STOCKS, JSON.stringify(customDrugStocks)) } catch {} }, [customDrugStocks])
+  useEffect(() => {
+    verifyAuditChain(auditLogs).then((res) => { setIsChainValid(res.isValid); setChainBreakReason(res.reason) })
+  }, [auditLogs])
+
+  const logAction = useCallback(async (action: string, details: string) => {
+    // Use functional update to guarantee chain integrity even with rapid successive calls
+    setAuditLogs((prev) => {
+      // fire-and-forget hash append; chain verification runs after state settles
+      appendAuditLog(prev, userRole, selectedDistrictFilter, action, details).then((next) => setAuditLogs(next))
+      return prev
+    })
+  }, [userRole, selectedDistrictFilter])
+
+  const setUserRole = useCallback((role: UserRole) => {
+    setUserRoleState(role)
+    setAuditLogs((prev) => prev)
+  }, [])
+
+const [blocks, setBlocks] = useState<Block[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.BLOCKS)
       return saved ? JSON.parse(saved) : CACHAR_BLOCKS
@@ -196,10 +242,38 @@ export function useScenarioData() {
     )
   }
 
-  const computedDistricts = computeDistrictDistressList(rawDistricts)
+    const { metrics: drugMetrics, recommendations: drugRecommendations } = computeDrugBurnMetrics(blocks, facilities, customDrugStocks)
+
+  const simulateTamperAction = useCallback(() => {
+    setAuditLogs((prev) => simulateTamper(prev))
+  }, [])
+
+  const ingestCsv = useCallback(async (csvText: string) => {
+    const res = await processTeleManasCsv(csvText)
+    if (res.success) {
+      const entry = await appendAuditLog(auditLogs, userRole, selectedDistrictFilter, 'CSV_DATA_INGEST', `Ingested ${res.acceptedRows} records, hashed ${res.hashedFieldsCount} caller IDs`)
+      setAuditLogs(entry)
+    }
+    return res
+  }, [auditLogs, userRole, selectedDistrictFilter])
+
+const computedDistricts = computeDistrictDistressList(rawDistricts)
 
   return {
     isEditMode,
+    userRole,
+    setUserRole,
+    selectedDistrictFilter,
+    setSelectedDistrictFilter,
+    auditLogs,
+    isChainValid,
+    chainBreakReason,
+    customDrugStocks,
+    drugMetrics,
+    drugRecommendations,
+    logAction,
+    simulateTamper: simulateTamperAction,
+    ingestCsv,
     setIsEditMode,
     blocks,
     facilities,

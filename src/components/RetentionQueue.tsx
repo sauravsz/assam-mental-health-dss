@@ -24,7 +24,6 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
   const [newFacility, setNewFacility] = useState<string>('Katigorah CHC')
   const [newDays, setNewDays] = useState<number>(18)
 
-  // Filter records
   const filteredRecords = useMemo(() => {
     return records.filter((r) => {
       if (selectedDistrict !== 'All' && r.district !== selectedDistrict) return false
@@ -440,27 +439,37 @@ export const RetentionQueue = ({ records, setRecords, isEditMode }: RetentionQue
                 >
                   <span className="flex items-center gap-2">
                     <Phone className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Spoke on phone — scheduled for mobile van camp</span>
+                    <span>Callback completed — scheduled (referral stays open)</span>
                   </span>
                 </button>
 
                 <button
                   onClick={() => handleUpdateStatus('ASHA Dispatched')}
-                  className="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-blue-50 hover:border-blue-300 text-xs flex items-center justify-between font-medium text-slate-800 transition-all cursor-pointer"
+                  className="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 text-xs flex items-center justify-between font-medium text-slate-800 transition-all cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
                     <Home className="w-3.5 h-3.5 text-indigo-600" />
-                    <span>Phone unreachable — asked village ASHA to visit home</span>
+                    <span>Referred to ASHA for home visit (referral stays open)</span>
                   </span>
                 </button>
 
                 <button
-                  onClick={() => handleUpdateStatus('Resolved')}
+                  onClick={() => handleUpdateStatus('Facility Visit Confirmed')}
                   className="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-emerald-50 hover:border-emerald-300 text-xs flex items-center justify-between font-medium text-slate-800 transition-all cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Patient confirmed they visited the doctor</span>
+                    <span>Facility visit confirmed (closes as attended)</span>
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => handleUpdateStatus('Refused')}
+                  className="w-full text-left p-3 rounded-xl border border-slate-200 hover:bg-rose-50 hover:border-rose-300 text-xs flex items-center justify-between font-medium text-slate-800 transition-all cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-rose-600" />
+                    <span>Patient refused further contact (closed, not attended)</span>
                   </span>
                 </button>
               </div>
