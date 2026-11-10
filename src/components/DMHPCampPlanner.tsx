@@ -46,34 +46,31 @@ export const DMHPCampPlanner = ({
     )
   }, [blocks, facilities, numVans, includeFloodWeight])
 
-  const { drugMetrics, drugRecommendations } = useScenarioData()
-
   const activeFacilities = facilities.filter((f) => result.activeFacilityIds.includes(f.id))
   const baselineFacilities = facilities.filter((f) => result.baselineActiveFacilityIds.includes(f.id))
 
   const { selectedDistrictFilter: plannerScope } = useScenarioData()
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-5 max-w-5xl mx-auto">
       {plannerScope !== 'All Districts' && plannerScope !== 'Cachar' && (
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900">
-          Scope note: the van-siting optimizer is modeled on <strong>Cachar District</strong> (8 blocks, 1.17M population). District selector is set to <strong>{plannerScope}</strong> — open State surveillance or Queue for that district's live data.
+          Scope note: The spatial van-siting optimizer is modeled for <strong>Cachar District</strong> (8 rural blocks, 1.17M population). District selector is currently set to <strong>{plannerScope}</strong>.
         </div>
       )}
+
       {/* ── SECTION 1: PLANNING BOARD & FLEET PARAMETERS ── */}
-      <section className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5 sm:p-6 ">
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-          <div className="max-w-2xl">
-            <span className="text-[12px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-              Module 2 · Mobile Van Siting Optimizer
-            </span>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#1c1c1c] tracking-tight mt-2.5">
-              Where should the mobile clinic vans go this month?
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5f5f5d] leading-relaxed mt-1.5">
-              In Cachar District (1.16M population across 8 rural blocks), the health department has only{' '}
-              <strong className="text-[#1c1c1c] font-semibold">{numVans} mobile mental health vans</strong>.
-              Our linear programming solver places them where rural villagers travel the least distance.
+      <section className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <h1 className="text-xl font-bold text-[#1c1c1c] tracking-tight">
+                Mobile Van Camp Siting Optimizer
+              </h1>
+            </div>
+            <p className="text-xs text-[#5f5f5d] mt-1">
+              Capacitated p-Median Two-Phase Primal Simplex Transportation LP for Cachar District (8 Blocks).
             </p>
           </div>
 
@@ -81,35 +78,35 @@ export const DMHPCampPlanner = ({
             {isEditMode && (
               <button
                 onClick={() => setShowBlockEditor(!showBlockEditor)}
-                className="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-semibold px-3 py-2 rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                className="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-semibold px-3 py-1.5 rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <Sliders className="w-3.5 h-3.5 text-amber-800" />
-                <span>{showBlockEditor ? 'Hide Manual Sliders' : 'Manual Sliders (8 Blocks)'}</span>
+                <span>{showBlockEditor ? 'Hide Sliders' : 'Block & Facility Sliders'}</span>
               </button>
             )}
           </div>
         </div>
 
         {/* Quick Fleet & Flood Toggles */}
-        <div className="mt-5 pt-5 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="mt-4 pt-4 border-t border-[#eceae4] grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-semibold text-[#1c1c1c] block mb-1.5">
-              Available Mobile Vans ({numVans} Vans):
+              Available Mobile Van Fleet ({numVans} Units):
             </label>
             <div className="grid grid-cols-3 gap-2">
               {[1, 2, 3].map((val) => (
                 <button
                   key={val}
                   onClick={() => setNumVans(val)}
-                  className={`py-2 px-3 text-xs font-semibold rounded-xl border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                  className={`py-1.5 px-3 text-xs font-semibold rounded-xl border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                     numVans === val
-                      ? 'bg-[#1c1c1c] text-[#fcfbf8] border-slate-900 '
+                      ? 'bg-[#1c1c1c] text-[#fcfbf8] border-slate-900'
                       : 'bg-[#f7f4ed] text-[#1c1c1c] border-[#eceae4] hover:bg-[rgba(28,28,28,0.04)]'
                   }`}
                 >
                   <Truck className="w-3.5 h-3.5" />
                   <span>{val} {val === 1 ? 'Van' : 'Vans'}</span>
-                  {val === 2 && <span className="text-[9px] text-emerald-400 font-normal">(Optimal)</span>}
+                  {val === 2 && <span className="text-[10px] text-emerald-400 font-normal">(Optimal)</span>}
                 </button>
               ))}
             </div>
@@ -119,7 +116,7 @@ export const DMHPCampPlanner = ({
             <label className="text-xs font-semibold text-[#1c1c1c] block mb-1.5">
               Monsoon Disaster Factor:
             </label>
-            <div className="bg-[#f7f4ed] p-2.5 rounded-xl border border-[#eceae4]">
+            <div className="bg-[#f7f4ed] p-2 rounded-xl border border-[#eceae4]">
               <label className="flex items-center gap-2.5 cursor-pointer">
                 <input
                   type="checkbox"
@@ -128,8 +125,8 @@ export const DMHPCampPlanner = ({
                   className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
                 />
                 <div className="text-xs text-[#1c1c1c]">
-                  <span className="font-semibold block">Prioritize riverine flood catchments</span>
-                  <span className="text-[12px] text-[#5f5f5d]">Heavily weights flood-affected blocks (Katigorah &amp; Sonai)</span>
+                  <span className="font-semibold block">Prioritize flood-affected catchments</span>
+                  <span className="text-[11px] text-[#5f5f5d]">Weights flood multipliers in Katigorah and Sonai</span>
                 </div>
               </label>
             </div>
@@ -302,10 +299,10 @@ export const DMHPCampPlanner = ({
 
           <div className="bg-blue-50/60 border border-blue-200/80 rounded-xl p-4">
             <span className="text-xs font-semibold text-blue-800 block mb-1">
-              Net Impact on Villagers
+              Net Impact on Rural Travel
             </span>
             <div className="text-2xl font-bold text-blue-700 font-mono">
-              -{result.travelTimeReductionPct}% Faster
+              {result.travelTimeReductionPct}% Faster
             </div>
             <p className="text-xs text-blue-700 mt-1">
               Saves <strong className="font-semibold">~{Math.max(0, Math.round(result.baselineMeanTravelTime - result.meanTravelTime))} minutes</strong> of travel per rural patient
@@ -580,64 +577,6 @@ export const DMHPCampPlanner = ({
           </div>
         )}
       </section>
-
-      {/* Section 2: Drug Burn-Rate & Inter-block Redistribution (Coauthor engine) */}
-      <section className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5 sm:p-6 ">
-        <h3 className="text-base font-bold text-[#1c1c1c] mb-1">Medicine Stock Projections &amp; Inter-block Transfers</h3>
-        <p className="text-xs text-[#5f5f5d] mb-4">Daily tablet burn-rate modeled from block distress demand. Alert under 15 days cover; auto-suggests transfers from surplus blocks with &gt;30 days cover.</p>
-
-        {drugRecommendations.length > 0 && (
-          <div className="mb-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
-            <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wider mb-2">Recommended Inter-block Transfers ({drugRecommendations.length})</h4>
-            <ul className="space-y-2">
-              {drugRecommendations.map((r) => (
-                <li key={r.id} className="text-xs text-[#1c1c1c] flex flex-wrap items-center gap-2">
-                  <span className={`px-2 py-0.5 rounded-full text-[12px] font-bold ${r.urgency === 'Immediate' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}`}>{r.urgency}</span>
-                  <span><strong>{r.drugName.toUpperCase()}</strong> {r.unitsToTransfer} tabs</span>
-                  <span>from <em>{r.fromFacilityName}</em></span>
-                  <span>→</span>
-                  <span>to <em>{r.toFacilityName}</em></span>
-                  <span className="text-[#5f5f5d]">({r.donorRemainingDays}d left → {r.recipientNewDays}d cover)</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <div className="overflow-x-auto rounded-xl border border-[#eceae4]">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-[#f7f4ed] border-b border-[#eceae4] text-[#5f5f5d] font-semibold uppercase tracking-wider text-[12px]">
-              <tr>
-                <th className="px-3 py-2.5">Facility</th>
-                <th className="px-3 py-2.5">Drug</th>
-                <th className="px-3 py-2.5">Stock (tabs)</th>
-                <th className="px-3 py-2.5">Daily Burn</th>
-                <th className="px-3 py-2.5">Days Cover</th>
-                <th className="px-3 py-2.5">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {drugMetrics.map((m) => (
-                <tr key={`${m.facilityId}-${m.drugName}`} className="hover:bg-[#f7f4ed]">
-                  <td className="px-3 py-2 font-semibold text-[#1c1c1c]">{m.facilityName} <span className="text-[#5f5f5d] font-normal">({m.blockName})</span></td>
-                  <td className="px-3 py-2 capitalize">{m.drugName}</td>
-                  <td className="px-3 py-2 font-mono">{m.currentStock.toLocaleString()}</td>
-                  <td className="px-3 py-2 font-mono">{m.dailyBurnRate}/day</td>
-                  <td className="px-3 py-2 font-mono font-bold">{m.daysOfCover}d</td>
-                  <td className="px-3 py-2">
-                    <span className={`px-2 py-0.5 rounded-full text-[12px] font-bold ${
-                      m.status === 'Critical' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
-                      m.status === 'Low Stock' ? 'bg-amber-50 text-amber-800 border border-amber-200' :
-                      'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                    }`}>{m.status}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
     </div>
   )
 }

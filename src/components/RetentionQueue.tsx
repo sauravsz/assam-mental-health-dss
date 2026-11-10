@@ -25,6 +25,8 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
 
   const [selectedDiagnosis] = useState<string>('All')
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const itemsPerPage = 10
   const [showTechnicalDetails, setShowTechnicalDetails] = useState<boolean>(false)
   const [activeRecordForAction, setActiveRecordForAction] = useState<ReferralRecord | null>(null)
   const [actionNotes, setActionNotes] = useState<string>('')
@@ -109,49 +111,48 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
 
   const counts = useMemo(() => {
     return {
-      total: records.length,
-      stalled: records.filter((r) => r.status === 'Stalled').length,
-      inFollowup: records.filter((r) => r.status === 'Follow-up Initiated').length,
-      ashaDispatched: records.filter((r) => r.status === 'ASHA Dispatched').length,
-      resolved: records.filter((r) => r.status === 'Resolved').length,
+      total: scopedRecords.length,
+      stalled: scopedRecords.filter((r) => r.status === 'Stalled').length,
+      inFollowup: scopedRecords.filter((r) => r.status === 'Follow-up Initiated').length,
+      ashaDispatched: scopedRecords.filter((r) => r.status === 'ASHA Dispatched').length,
+      resolved: scopedRecords.filter((r) => r.status === 'Resolved' || r.status === 'Facility Visit Confirmed').length,
+      refused: scopedRecords.filter((r) => r.status === 'Refused').length,
     }
-  }, [records])
+  }, [scopedRecords])
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Friendly Context Hero */}
-      <div className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5 sm:p-6 ">
-        <div className="max-w-2xl">
-          <span className="text-[12px] font-bold uppercase tracking-wider text-rose-700 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-100">
-            Step 3 · Caring Follow-Up
-          </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#1c1c1c] tracking-tight mt-2.5">
-            Who asked for help, but hasn't visited a clinic yet?
-          </h2>
-          <p className="text-sm text-[#5f5f5d] leading-relaxed mt-2">
-            When callers are advised to see a psychiatric doctor, many never show up because of fear, stigma, or lack of transport.
-            If 14 days pass with no clinic record, this queue alerts a certified counsellor to call them back with their permission.
+    <div className="space-y-5 max-w-5xl mx-auto">
+      {/* Clean Institutional Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#eceae4] pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+            <h1 className="text-xl font-bold text-[#1c1c1c] tracking-tight">
+              Closed-Loop Care Retention Queue
+            </h1>
+          </div>
+          <p className="text-xs text-[#5f5f5d] mt-1">
+            Proactive counsellor outreach for stalled helpline referrals (&gt;14 days without clinic visit) under MHCA 2017 &amp; DPDP 2023.
           </p>
         </div>
 
-        {/* Privacy Invariant Banner */}
-        <div className="mt-4 p-3 bg-emerald-50/70 border border-emerald-200/60 rounded-xl text-xs text-emerald-900 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>
-              <strong className="font-semibold text-emerald-950">Strict Privacy Guarantee:</strong> 100% of people listed here agreed to follow-up contact during their helpline call. No robot calls or automated messages are ever sent.
-            </span>
-          </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Statutory Consent Verified
+          </span>
           {isEditMode && (
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="bg-emerald-600 hover:bg-emerald-700 text-[#fcfbf8] font-semibold px-2.5 py-1 rounded-lg text-xs flex items-center gap-1.5 shrink-0 transition-all cursor-pointer"
+              className="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-semibold px-2.5 py-1 rounded-lg text-xs flex items-center gap-1 cursor-pointer"
             >
-              <PlusCircle className="w-3.5 h-3.5" />
+              <PlusCircle className="w-3.5 h-3.5 text-amber-700" />
               <span>{showAddForm ? 'Cancel Add' : '+ Add Test Case'}</span>
             </button>
           )}
         </div>
+      </div>
+
+      <div className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5">
 
         {/* Add Referral Case Form (When in Edit Mode) */}
         {isEditMode && showAddForm && (
@@ -309,7 +310,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredRecords.slice(0, 10).map((r) => (
+              {filteredRecords.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((r) => (
                 <tr key={r.id} className="hover:bg-[#f7f4ed]/80 transition-colors">
                   <td className="py-3 px-3 font-mono font-bold text-[#1c1c1c] whitespace-nowrap">
                     {r.id}
@@ -333,12 +334,14 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
                   <td className="py-3 px-3 text-center">
                     <span
                       className={`text-[12px] font-semibold px-2 py-0.5 rounded-full ${
-                        r.status === 'Resolved'
+                        r.status === 'Resolved' || r.status === 'Facility Visit Confirmed'
                           ? 'bg-emerald-100 text-emerald-800'
                           : r.status === 'ASHA Dispatched'
                           ? 'bg-blue-100 text-blue-800'
                           : r.status === 'Follow-up Initiated'
                           ? 'bg-amber-100 text-amber-800'
+                          : r.status === 'Refused'
+                          ? 'bg-slate-100 text-slate-700'
                           : 'bg-rose-100 text-rose-800'
                       }`}
                     >
@@ -348,7 +351,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
                   <td className="py-3 px-3 text-right whitespace-nowrap">
                     <button
                       onClick={() => setActiveRecordForAction(r)}
-                      className="bg-[#1c1c1c] hover:bg-slate-800 text-[#fcfbf8] px-3 py-1.5 rounded-xl text-xs font-semibold transition-all  cursor-pointer inline-flex items-center gap-1.5"
+                      className="bg-[#1c1c1c] hover:bg-slate-800 text-[#fcfbf8] px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5"
                     >
                       <Phone className="w-3 h-3" />
                       <span>Check In</span>
@@ -358,6 +361,34 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
               ))}
             </tbody>
           </table>
+
+          {/* Pagination Controls */}
+          <div className="flex items-center justify-between p-3 border-t border-[#eceae4] text-xs text-[#5f5f5d]">
+            <span>
+              Showing {Math.min(filteredRecords.length, (currentPage - 1) * itemsPerPage + 1)}–{Math.min(filteredRecords.length, currentPage * itemsPerPage)} of {filteredRecords.length} cases
+            </span>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage <= 1}
+                className="px-2.5 py-1 rounded border border-[#eceae4] hover:bg-[rgba(28,28,28,0.04)] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              >
+                Previous
+              </button>
+              <span className="font-mono px-2">
+                Page {currentPage} of {Math.max(1, Math.ceil(filteredRecords.length / itemsPerPage))}
+              </span>
+              <button
+                type="button"
+                onClick={() => setCurrentPage((p) => Math.min(Math.ceil(filteredRecords.length / itemsPerPage), p + 1))}
+                disabled={currentPage >= Math.ceil(filteredRecords.length / itemsPerPage)}
+                className="px-2.5 py-1 rounded border border-[#eceae4] hover:bg-[rgba(28,28,28,0.04)] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
+          </div>
           </div>
         ) : null}
         </div>

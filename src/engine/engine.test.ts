@@ -1,8 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { computePoissonTail } from './stateSurveillance'
 import { solveCampAllocation } from './solver'
-import { verifyAuditChain, appendAuditLog, simulateTamper, GENESIS_HASH } from './auditLogger'
-import type { AuditLogEntry } from './types'
+import { verifyAuditChain, appendAuditLog, simulateTamper, INITIAL_AUDIT_LOGS } from './auditLogger'
 import { CACHAR_BLOCKS, CACHAR_FACILITIES, TRAVEL_TIME_MATRIX } from './cacharData'
 
 describe('Poisson tail', () => {
@@ -43,38 +42,24 @@ describe('Simplex solver', () => {
 })
 
 describe('Audit chain', () => {
-  const base: AuditLogEntry[] = [{
-    id: 1,
-    timestamp: '2026-11-08 09:15:02',
-    userRole: 'State Director' as const,
-    districtContext: 'All Districts',
-    action: 'SYSTEM_INITIALIZATION',
-    details: 'init',
-    outcome: 'PERMITTED' as const,
-    previousHash: GENESIS_HASH,
-    hash: '8f9a2b1c4d3e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a',
-  }]
-  // The seeded genesis hash is illustrative; verify the chain machinery with fresh entries instead.
+  it('genesis audit log verifies with genuine SHA-256', async () => {
+    const v = await verifyAuditChain(INITIAL_AUDIT_LOGS)
+    expect(v.isValid).toBe(true)
+  })
+
   it('fresh chain of appends verifies', async () => {
-    let logs = [...base]
+    let logs = [...INITIAL_AUDIT_LOGS]
     logs = await appendAuditLog(logs, 'District Officer', 'Cachar', 'ROLE_SWITCH', 'switched')
     logs = await appendAuditLog(logs, 'Counsellor', 'Cachar', 'REFERRAL_OUTCOME', 'case REF-1 callback')
     const v = await verifyAuditChain(logs)
-    // Genesis entry uses an illustrative hash so full-chain verification fails at index 0;
-    // entries from index 1 onward chain correctly. We assert that property.
-    const suffix = logs.slice(2)
-    // verify suffix linkage manually on previousHash chain
-    for (let i = 1; i < suffix.length; i++) {
-      expect(suffix[i].previousHash).toBe(suffix[i - 1].hash)
-    }
-    expect(v.isValid).toBe(false) // genesis is illustrative, not cryptographic
-    expect(v.brokenIndex).toBe(0)
+    expect(v.isValid).toBe(true)
+    expect(logs.length).toBe(3)
   })
-  it('simulateTamper mutates a past entry', () => {
-    let logs = [...base]
-    const tampered = simulateTamper(logs.concat([
-      { ...base[0], id: 2, previousHash: base[0].hash, action: 'SECOND' },
-    ]))
-    expect(tampered[1].details).toContain('TAMPERED')
+
+  it('simulateTamper mutates an entry and breaks verification', async () => {
+    const tampered = simulateTamper(INITIAL_AUDIT_LOGS)
+    expect(tampered[0].details).toContain('TAMPERED')
+    const v = await verifyAuditChain(tampered)
+    expect(v.isValid).toBe(false)
   })
 })

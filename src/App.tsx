@@ -57,7 +57,7 @@ export function App() {
   return (
     <div className="min-h-screen bg-[#f7f4ed] text-[#1c1c1c] flex flex-col font-sans">
       <Navbar
-        activeTab={activeTab as 'state' | 'planner' | 'queue' | 'audit'}
+        activeTab={activeTab}
         setActiveTab={(v) => go(v as AppView)}
         stalledCount={stalledCount}
         isEditMode={isEditMode}

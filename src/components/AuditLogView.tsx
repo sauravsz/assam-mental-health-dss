@@ -41,35 +41,41 @@ export const AuditLogView = () => {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Section 1: Governance */}
-      <section className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5 sm:p-6 ">
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+    <div className="space-y-5 max-w-5xl mx-auto">
+      {/* Section 1: Governance & Header */}
+      <section className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <span className="text-[12px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100">
-              Module 4 · Security, Audit &amp; Cryptographic Chain
-            </span>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#1c1c1c] tracking-tight mt-2.5">
-              Cryptographic Audit Log &amp; SHA-256 Chain
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5f5f5d] leading-relaxed mt-1.5 max-w-2xl">
-              Every system request, role switch, and data alteration is appended to a SHA-256 hash-chained immutable audit log.
-              Under the <strong>DPDP Act 2023</strong> and <strong>MHCA 2017 §23</strong>, caller identities are pseudonymized before storage.
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+              <h1 className="text-xl font-bold text-[#1c1c1c] tracking-tight">
+                Cryptographic Audit Log &amp; SHA-256 Hash Chain
+              </h1>
+            </div>
+            <p className="text-xs text-[#5f5f5d] mt-1">
+              Tamper-evident append-only ledger enforcing <strong>DPDP Act 2023</strong> and <strong>MHCA 2017 §23</strong> with salted SHA-256 caller pseudonymization.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => simulateTamper()}
-              className="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-semibold px-3 py-2 rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
-              title="Deliberately tamper with an existing log record to test SHA-256 chain verification"
-            >
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
-              <span>Simulate DB Tampering</span>
-            </button>
+            {userRole === 'State Director' ? (
+              <button
+                onClick={() => simulateTamper()}
+                className="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-semibold px-3 py-1.5 rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Deliberately tamper with an existing log record to test SHA-256 chain verification"
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
+                <span>Simulate DB Tampering</span>
+              </button>
+            ) : (
+              <span className="text-[11px] font-semibold text-[#5f5f5d] bg-[rgba(28,28,28,0.04)] px-2.5 py-1 rounded-lg border border-[#eceae4]">
+                Scope: {userRole} (Read-Only)
+              </span>
+            )}
             <button
               onClick={resetToDefaults}
-              className="bg-[rgba(28,28,28,0.04)] hover:bg-slate-200 text-[#1c1c1c] border border-slate-300 font-semibold px-3 py-2 rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+              className="bg-[rgba(28,28,28,0.04)] hover:bg-slate-200 text-[#1c1c1c] border border-[#eceae4] font-semibold px-3 py-1.5 rounded-xl text-xs transition-all flex items-center gap-1.5 cursor-pointer"
+              title="Reset state memory to genesis parameters"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>Reset State</span>

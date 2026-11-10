@@ -8,9 +8,13 @@ export const OverviewView = ({ onNavigate }: { onNavigate: (v: 'state' | 'planne
     ? districts
     : districts.filter((d) => d.name === selectedDistrictFilter)
 
+  const scopedReferrals = selectedDistrictFilter === 'All Districts'
+    ? referrals
+    : referrals.filter((r) => r.district === selectedDistrictFilter)
+
   const surgeDistricts = scoped.filter((d) => d.isSurge)
   const totalCalls = scoped.reduce((a, d) => a + d.callsLast30Days, 0)
-  const stalled = referrals.filter((r) => r.status === 'Stalled').length
+  const stalled = scopedReferrals.filter((r) => r.status === 'Stalled').length
   const criticalDrugs = drugMetrics.filter((m) => m.status === 'Critical')
 
   return (

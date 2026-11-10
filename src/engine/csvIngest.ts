@@ -3,8 +3,9 @@ import type { CsvUploadResult } from './types'
 async function sha256Salted(value: string): Promise<string> {
   const encoder = new TextEncoder()
   const data = encoder.encode('amh-dss-salt-2026-' + value)
-  if (typeof window !== 'undefined' && window.crypto?.subtle) {
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  const subtle = typeof globalThis !== 'undefined' && globalThis.crypto?.subtle
+  if (subtle) {
+    const hashBuffer = await subtle.digest('SHA-256', data)
     const hashArray = Array.from(new Uint8Array(hashBuffer))
     return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
   }
@@ -16,7 +17,7 @@ export async function processTeleManasCsv(csvText: string): Promise<CsvUploadRes
   if (lines.length < 2) {
     return { success: false, totalRowsProcessed: 0, acceptedRows: 0, rejectedRows: 0, hashedFieldsCount: 0, insertedDistrictSummary: [], errors: ['CSV missing header or rows'] }
   }
-  const headers = lines[0].split(',').map((h) => h.trim().toLowerCase())
+  const headers = lines[0].split(',').map((h) => h.trim().toLowerCase().replace(/^["']|["']$/g, ''))
   const districtIdx = headers.findIndex((h) => h.includes('district'))
   const phoneIdx = headers.findIndex((h) => h.includes('phone') || h.includes('caller'))
 
@@ -29,7 +30,7 @@ export async function processTeleManasCsv(csvText: string): Promise<CsvUploadRes
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim()
     if (!line) continue
-    const cols = line.split(',').map((c) => c.trim())
+    const cols = line.split(',').map((c) => c.trim().replace(/^["']|["']$/g, ''))
     if (cols.length < 2) { rejectedRows++; errors.push(`Row ${i+1}: insufficient columns`); continue }
     if (districtIdx >= 0 && !cols[districtIdx]) { rejectedRows++; errors.push(`Row ${i+1}: missing district`); continue }
     // Pseudonymize caller ID/phone

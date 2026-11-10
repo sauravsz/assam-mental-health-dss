@@ -187,11 +187,15 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
     setFacilities(CACHAR_FACILITIES)
     setRawDistricts(INITIAL_RAW_DISTRICTS)
     setReferrals(generateSyntheticStalledReferrals(434))
+    setAuditLogs(INITIAL_AUDIT_LOGS)
+    setCustomDrugStocks(DEFAULT_FACILITY_STOCKS)
     try {
       localStorage.removeItem(STORAGE_KEYS.BLOCKS)
       localStorage.removeItem(STORAGE_KEYS.FACILITIES)
       localStorage.removeItem(STORAGE_KEYS.RAW_DISTRICTS)
       localStorage.removeItem(STORAGE_KEYS.REFERRALS)
+      localStorage.removeItem(STORAGE_KEYS.AUDIT_LOG)
+      localStorage.removeItem(STORAGE_KEYS.DRUG_STOCKS)
     } catch {}
   }
 
@@ -260,6 +264,16 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
   const ingestCsv = useCallback(async (csvText: string) => {
     const res = await processTeleManasCsv(csvText)
     if (res.success) {
+      if (res.insertedDistrictSummary.length > 0) {
+        setRawDistricts((prev) =>
+          prev.map((d) => {
+            const match = res.insertedDistrictSummary.find(
+              (s) => s.district.toLowerCase() === d.name.toLowerCase()
+            )
+            return match ? { ...d, callsLast30Days: match.callCount } : d
+          })
+        )
+      }
       const entry = await appendAuditLog(auditLogs, userRole, selectedDistrictFilter, 'CSV_DATA_INGEST', `Ingested ${res.acceptedRows} records, hashed ${res.hashedFieldsCount} caller IDs`)
       setAuditLogs(entry)
     }

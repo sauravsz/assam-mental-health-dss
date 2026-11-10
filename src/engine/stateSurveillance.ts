@@ -1,7 +1,14 @@
 import type { DistrictDistress } from './types'
 
 export function computePoissonTail(y: number, lambda: number): { pValue: number; formatted: string; zScore: number } {
-  if (y <= 0) return { pValue: 1.0, formatted: '1.0000', zScore: 0 }
+  if (lambda <= 0) {
+    return {
+      pValue: y > 0 ? 0.0 : 1.0,
+      formatted: y > 0 ? '<0.0001' : '1.0000',
+      zScore: y > 0 ? 9.99 : 0,
+    }
+  }
+  if (y <= 0) return { pValue: 1.0, formatted: '1.0000', zScore: Math.round(((0 - lambda) / Math.sqrt(lambda)) * 100) / 100 }
   const zScore = Math.round(((y - lambda) / Math.sqrt(lambda)) * 100) / 100
 
   if (lambda > 100) {

@@ -59,19 +59,24 @@ export function computeDrugBurnMetrics(
 
     // Donor with most days of cover
     const donor = surplus.sort((a, b) => b.daysOfCover - a.daysOfCover)[0]
+    let runningDonorStock = donor.currentStock
 
     for (const recipient of critical) {
+      const currentDonorDays = runningDonorStock / donor.dailyBurnRate
+      const donorAvailable = Math.floor(Math.max(0, currentDonorDays - 30) * donor.dailyBurnRate)
+      if (donorAvailable < 50) break
+
       const needTablets = Math.ceil((30 - recipient.daysOfCover) * recipient.dailyBurnRate)
-      const donorAvailable = Math.floor((donor.daysOfCover - 30) * donor.dailyBurnRate)
-      if (donorAvailable < 50) continue
       const transfer = Math.min(needTablets, donorAvailable)
+      runningDonorStock -= transfer
+
       recommendations.push({
         id: `TR-${drug}-${donor.facilityId}-${recipient.facilityId}`,
         drugName: drug,
         fromFacilityName: donor.facilityName,
         toFacilityName: recipient.facilityName,
         unitsToTransfer: transfer,
-        donorRemainingDays: Math.round(((donor.currentStock - transfer) / donor.dailyBurnRate) * 10) / 10,
+        donorRemainingDays: Math.round((runningDonorStock / donor.dailyBurnRate) * 10) / 10,
         recipientNewDays: Math.round(((recipient.currentStock + transfer) / recipient.dailyBurnRate) * 10) / 10,
         urgency: recipient.daysOfCover < 7 ? 'Immediate' : 'Standard',
       })

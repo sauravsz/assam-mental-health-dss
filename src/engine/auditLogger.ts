@@ -3,8 +3,9 @@ import type { AuditLogEntry, UserRole } from './types'
 async function sha256Hex(text: string): Promise<string> {
   const encoder = new TextEncoder()
   const data = encoder.encode(text)
-  if (typeof window !== 'undefined' && window.crypto?.subtle) {
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  const subtle = typeof globalThis !== 'undefined' && globalThis.crypto?.subtle
+  if (subtle) {
+    const hashBuffer = await subtle.digest('SHA-256', data)
     const hashArray = Array.from(new Uint8Array(hashBuffer))
     return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
   }
@@ -29,7 +30,7 @@ export const INITIAL_AUDIT_LOGS: AuditLogEntry[] = [
     details: 'DSS System Boot, initialized Poisson anomaly model & Simplex optimizer',
     outcome: 'PERMITTED',
     previousHash: GENESIS_HASH,
-    hash: '8f9a2b1c4d3e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a',
+    hash: 'c1055f1808600ae5788767db1beb2edebe2fc23c4d876bed0cb8386e90a8ec9d',
   },
 ]
 
@@ -83,8 +84,9 @@ export async function verifyAuditChain(
 }
 
 export function simulateTamper(logs: AuditLogEntry[]): AuditLogEntry[] {
-  if (logs.length < 2) return logs
+  if (logs.length === 0) return logs
   const tampered = [...logs]
-  tampered[1] = { ...tampered[1], details: 'TAMPERED: Altered call count record without authorization' }
+  const targetIdx = logs.length > 1 ? 1 : 0
+  tampered[targetIdx] = { ...tampered[targetIdx], details: 'TAMPERED: Altered record without cryptographic re-signing' }
   return tampered
 }

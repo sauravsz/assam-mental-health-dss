@@ -18,7 +18,8 @@ Operational Decision Support System for Government of Assam — National Health 
 - **Frontend Design:** Clean Expo design system, mobile-optimized segmented control, hairline borders, plain-English human framing, expandable mathematical drawers.
 
 ## Current State & Next Steps
-- Status: Production-grade mathematical foundation verified, local builds passing (347ms), test suite passing, deployed to Vercel edge, repository synchronized with GitHub (`main` at `32f14f6`).
+- Status: Full DSS declutter overhaul complete. SHA-256 genuine genesis hash verified (`c1055f18...`), WebCrypto universalized across browser and test environments (10/10 Vitest passing in 140ms), production bundle compiled cleanly (448ms). 6-tab unified navigation live with pagination (Retention Queue), multi-facility surplus rebalancing fix, and compact command bar.
 - Next Actions:
-  1. Review the 8-page Student & Faculty Guide before presenting to the MBA advisor.
-  2. Final submission of the 11-page USPR proposal PDF to the NHM Assam challenge portal before 10 Nov 2026.
+  1. Commit and push overhauled DSS codebase to GitHub (`origin main`).
+  2. Review the 8-page Student & Faculty Guide before presenting to the MBA advisor.
+  3. Final submission of the 11-page USPR proposal PDF to the NHM Assam portal (deadline: 25 November 2026).

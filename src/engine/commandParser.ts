@@ -15,7 +15,7 @@ export function parseNaturalLanguageCommand(
     rawDistricts: RawDistrictData[]
     setNumVans?: (n: number) => void
     setIncludeFloodWeight?: (b: boolean) => void
-    setActiveTab: (tab: 'state' | 'planner' | 'queue') => void
+    setActiveTab: (tab: 'overview' | 'state' | 'planner' | 'pharmacy' | 'queue' | 'audit' | 'method') => void
     updateBlock: (blockId: number, field: keyof Block, value: number) => void
     updateFacilityCapacity: (facId: number, capacity: number) => void
     updateMedicineStock: (
@@ -43,17 +43,33 @@ export function parseNaturalLanguageCommand(
   }
 
   // 2. Navigation commands
+  if (q.includes('overview') || q.includes('home') || q.includes('executive') || q.includes('dashboard')) {
+    context.setActiveTab('overview')
+    return { success: true, feedback: 'Navigated to Executive Overview.' }
+  }
   if (q.includes('tab 1') || q.includes('call trend') || q.includes('state view') || q.includes('surveillance') || q.includes('spike detector')) {
     context.setActiveTab('state')
-    return { success: true, feedback: 'Navigated to Tab 1: State Call Trends & Poisson Surveillance.' }
+    return { success: true, feedback: 'Navigated to State Call Trends & Poisson Surveillance.' }
   }
   if (q.includes('tab 2') || q.includes('van route') || q.includes('camp planner') || q.includes('map') || q.includes('optimizer') || q.includes('siting')) {
     context.setActiveTab('planner')
-    return { success: true, feedback: 'Navigated to Tab 2: DMHP Mobile Van Camp Planner & Map.' }
+    return { success: true, feedback: 'Navigated to DMHP Mobile Van Camp Planner & Map.' }
+  }
+  if (q.includes('pharmacy') || q.includes('drug') || q.includes('medicine') || q.includes('stock cover') || q.includes('tablet')) {
+    context.setActiveTab('pharmacy')
+    return { success: true, feedback: 'Navigated to Pharmacy & Drug Burn-Rate Logistics.' }
   }
   if (q.includes('tab 3') || q.includes('follow-up') || q.includes('follow up') || q.includes('queue') || q.includes('retention') || q.includes('counsellor')) {
     context.setActiveTab('queue')
-    return { success: true, feedback: 'Navigated to Tab 3: Closed-Loop Care Retention Queue.' }
+    return { success: true, feedback: 'Navigated to Closed-Loop Care Retention Queue.' }
+  }
+  if (q.includes('audit') || q.includes('hash chain') || q.includes('security') || q.includes('ingest') || q.includes('csv')) {
+    context.setActiveTab('audit')
+    return { success: true, feedback: 'Navigated to Audit Log & CSV Pseudonymization.' }
+  }
+  if (q.includes('method') || q.includes('formula') || q.includes('equation') || q.includes('math')) {
+    context.setActiveTab('method')
+    return { success: true, feedback: 'Navigated to Mathematical Method & Statutory Specifications.' }
   }
 
   // 3. Van budget adjustments (e.g., "set vans to 3", "we have 1 van", "3 vans")
@@ -123,7 +139,7 @@ export function parseNaturalLanguageCommand(
   for (const fac of context.facilities) {
     const firstName = fac.name.split(' ')[0].toLowerCase()
     if (q.includes(firstName) && (q.includes('cap') || q.includes('intake') || q.includes('beds') || q.includes('patients'))) {
-      const numMatch = q.match(/(\d+)/)
+      const numMatch = q.match(/(?:cap|capacity|intake|beds|patients)\s*(?:to|=)?\s*(\d+)/) || q.match(/(\d+)\s*(?:cap|capacity|intake|beds|patients)/) || q.match(/(\d+)/)
       if (numMatch) {
         const cap = parseInt(numMatch[1])
         context.updateFacilityCapacity(fac.id, cap)
@@ -176,7 +192,7 @@ export function parseNaturalLanguageCommand(
           feedback: `Toggled flood inundation status for ${dist.name}.`,
         }
       }
-      const numMatch = q.match(/(\d+)/)
+      const numMatch = q.match(/(?:calls|count)\s*(?:to|=)?\s*(\d+)/) || q.match(/(\d+)\s*(?:calls|count)/) || q.match(/(\d+)/)
       if (numMatch) {
         const calls = parseInt(numMatch[1])
         context.updateDistrictCalls(dist.id, calls)

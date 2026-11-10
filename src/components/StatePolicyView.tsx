@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { DistrictDistress } from '../engine/types'
-import { PhoneCall, AlertCircle, Waves, ChevronDown, ChevronUp, CheckCircle2, Edit3 } from 'lucide-react'
+import { Waves, ChevronDown, ChevronUp, Edit3 } from 'lucide-react'
 import { useScenarioData } from '../engine/scenarioDataContext'
 
 interface StatePolicyViewProps {
@@ -31,83 +31,44 @@ export const StatePolicyView = ({
   })
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Friendly Hero Banner */}
-      <div className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5 sm:p-6 ">
-        <div className="max-w-2xl">
-          <span className="text-[12px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
-            Step 1 · Understanding The Need
-          </span>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#1c1c1c] tracking-tight mt-2.5">
-            What is happening across Assam right now?
-          </h2>
-          <p className="text-sm text-[#5f5f5d] leading-relaxed mt-2">
-            Every month, thousands of citizens call the 24/7 Tele-MANAS helpline (14416).
-            While telephone support helps initially, <strong className="text-[#1c1c1c] font-semibold">over 94% of people who need to see a doctor in person never reach a clinic</strong> due to stigma, lack of money for bus fares, and long distances.
+    <div className="space-y-5 max-w-5xl mx-auto">
+      {/* Clean Institutional Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#eceae4] pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+            <h1 className="text-xl font-bold text-[#1c1c1c] tracking-tight">
+              Statewide Distress Surveillance &amp; Spike Detection
+            </h1>
+          </div>
+          <p className="text-xs text-[#5f5f5d] mt-1">
+            Exact discrete cumulative Poisson tail hypothesis testing (α = 0.01) with ASDMA flood crisis multipliers.
           </p>
         </div>
 
-        {/* 3 Simple Care Funnel Steps */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-6 pt-6 border-t border-slate-100">
-          <div className="bg-[#f7f4ed] border border-[#eceae4]/60 rounded-xl p-4">
-            <div className="flex items-center justify-between text-[#5f5f5d] mb-1">
-              <span className="text-xs font-semibold text-[#1c1c1c]">1. Citizens Call In</span>
-              <PhoneCall className="w-4 h-4 text-blue-600" />
-            </div>
-            <div className="text-2xl font-bold text-[#1c1c1c]">10,000</div>
-            <p className="text-xs text-[#5f5f5d] mt-1">Called the helpline this month</p>
-          </div>
-
-          <div className="bg-[#f7f4ed] border border-[#eceae4]/60 rounded-xl p-4">
-            <div className="flex items-center justify-between text-[#5f5f5d] mb-1">
-              <span className="text-xs font-semibold text-[#1c1c1c]">2. Advised to See a Doctor</span>
-              <AlertCircle className="w-4 h-4 text-amber-500" />
-            </div>
-            <div className="text-2xl font-bold text-amber-600">1,449</div>
-            <p className="text-xs text-[#5f5f5d] mt-1">Struggling with severe distress</p>
-          </div>
-
-          <div className="bg-rose-50/60 border border-rose-200/60 rounded-xl p-4">
-            <div className="flex items-center justify-between text-rose-700 mb-1">
-              <span className="text-xs font-semibold text-rose-900">3. Actually Saw a Doctor</span>
-              <CheckCircle2 className="w-4 h-4 text-rose-500" />
-            </div>
-            <div className="text-2xl font-bold text-rose-600">579</div>
-            <p className="text-xs text-rose-600 font-medium mt-1">870 people disappeared</p>
-          </div>
-        </div>
-
-        {/* Plain-English Insight Note */}
-        <div className="mt-4 p-3.5 bg-blue-50/70 border border-blue-200/60 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
-          <div className="w-5 h-5 rounded-full bg-blue-600 text-[#fcfbf8] flex items-center justify-center shrink-0 text-[12px] font-bold mt-0.5">
-            !
-          </div>
-          <div className="leading-relaxed">
-            <strong className="font-semibold text-blue-950">Why this matters:</strong> 870 vulnerable people were told they need clinical psychiatric care, but slipped away after hanging up the phone.
-            Our system solves this by sending <strong className="font-semibold text-blue-950">mobile clinic vans into rural villages</strong> (Tab 2) and having <strong className="font-semibold text-blue-950">human counsellors call them back</strong> (Tab 3).
-          </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[11px] font-semibold text-[#5f5f5d] bg-[rgba(28,28,28,0.04)] px-2.5 py-1 rounded-lg border border-[#eceae4]">
+            Threshold: Z ≥ 2.50 · p &lt; 0.01
+          </span>
+          {isEditMode && (
+            <span className="text-[11px] bg-amber-50 text-amber-800 font-semibold px-2 py-1 rounded-lg border border-amber-200 flex items-center gap-1">
+              <Edit3 className="w-3 h-3 text-amber-700" /> Live Editor
+            </span>
+          )}
         </div>
       </div>
 
-      {/* The Spike Detector */}
-      <div className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5 sm:p-6 ">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+      {/* The Spike Detector Surface */}
+      <div className="bg-[#f7f4ed] border border-[#eceae4] rounded-2xl p-5">
+        <div className="flex items-center justify-between gap-2 mb-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-              <h3 className="text-base font-bold text-[#1c1c1c] tracking-tight">
-                Spike Detector: Where are calls jumping above normal?
-              </h3>
-            </div>
+            <h2 className="text-sm font-bold text-[#1c1c1c] tracking-tight">
+              Active Outlier &amp; Surge Alerts ({surgeDistricts.length} Districts)
+            </h2>
             <p className="text-xs text-[#5f5f5d] mt-0.5">
-              Normally an area receives 2–3 calls per week. When a river floods or crops fail, calls surge. We alert health teams to visit early.
+              Districts with statistically significant call surges requiring prioritised mobile camp deployment.
             </p>
           </div>
-          {isEditMode && (
-            <span className="text-[12px] bg-amber-50 text-amber-800 font-semibold px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1.5">
-              <Edit3 className="w-3.5 h-3.5" /> Live Call Editor Active
-            </span>
-          )}
         </div>
 
         {/* Priority Highlight Cards for Surging Districts */}
@@ -233,7 +194,7 @@ export const StatePolicyView = ({
                   onChange={(e) => setSelectedZone(e.target.value)}
                   className="bg-[#f7f4ed] border border-slate-300 rounded-lg px-2.5 py-1 text-xs text-[#1c1c1c] font-medium"
                 >
-                  <option value="All">All 35 Districts</option>
+                  <option value="All">All 15 Representative Districts</option>
                   <option value="Barak Valley">Barak Valley</option>
                   <option value="Brahmaputra Valley">Brahmaputra Valley</option>
                   <option value="Hill Districts">Hill Districts</option>
@@ -284,7 +245,7 @@ export const StatePolicyView = ({
                                 : 'bg-[rgba(28,28,28,0.04)] text-[#5f5f5d]'
                             }`}
                           >
-                            +{d.zScore.toFixed(2)}
+                            {d.zScore > 0 ? '+' : ''}{d.zScore.toFixed(2)}
                           </span>
                         </td>
                         <td className="py-2 px-3 text-center font-mono text-[12px] font-semibold text-[#1c1c1c]">
