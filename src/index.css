@@ -1,25 +1,64 @@
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-paper: var(--paper);
+  --color-card: var(--card-bg);
+  --color-container: var(--container-bg);
+  --color-charcoal: var(--charcoal);
+  --color-muted: var(--muted);
+  --color-hairline: var(--hairline);
+}
+
 /* ============================================================
-   AMH-DSS Design Tokens — warm-cream, opacity-derived neutrals
-   (adapted from the Lovable-inspired system: keep layout rules,
-   spacing, type principles; brand + licensed typeface replaced)
+   AMH-DSS Design Tokens — Android Material 3 (Material You)
+   Dynamic Tonal Palette: Crisp Light & Deep Slate Dark
    ============================================================ */
 
 :root {
   color-scheme: light;
 
-  /* --- Base (from source design, verbatim) --- */
-  --paper: #f7f4ed;
-  --charcoal: #1c1c1c;
-  --offwhite: #fcfbf8;
-  --muted: #5f5f5d;
-  --hairline: #eceae4;
-  --hairline-strong: rgba(28, 28, 28, 0.4);
+  /* --- Android M3 Expressive Light Theme --- */
+  --md-sys-color-background: #f8f9fa;
+  --md-sys-color-surface: #ffffff;
+  --md-sys-color-surface-container-low: #f1f3f6;
+  --md-sys-color-surface-container: #ebedf2;
+  --md-sys-color-surface-container-high: #e4e7ed;
+  --md-sys-color-surface-container-highest: #dde0e7;
+  --md-sys-color-on-surface: #191c1e;
+  --md-sys-color-on-surface-variant: #43474e;
+  --md-sys-color-outline: #73777f;
+  --md-sys-color-outline-variant: #e1e3eb;
+  --md-sys-color-primary: #00639b;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #d1e4ff;
+  --md-sys-color-on-primary-container: #001d36;
+  --md-sys-color-secondary-container: #d7e3f8;
+  --md-sys-color-on-secondary-container: #101c2b;
 
-  /* --- Type scale (dashboard-rescaled; hard floor 12px) --- */
-  --font-sans: "Figtree", "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Tonal Aliases */
+  --paper: #f8f9fa;
+  --card-bg: #ffffff;
+  --charcoal: #191c1e;
+  --offwhite: #ffffff;
+  --muted: #535a63;
+  --hairline: #e1e3eb;
+  --hairline-strong: rgba(25, 28, 30, 0.25);
+  --container-bg: #f1f3f6;
+  --hover-tint: rgba(0, 99, 155, 0.05);
+
+  /* Material 3 Status Alert Tokens */
+  --flag-critical: #ba1a1a;
+  --flag-critical-bg: #ffdad6;
+  --flag-warn: #7e5700;
+  --flag-warn-bg: #ffdea8;
+  --flag-ok: #006e1c;
+  --flag-ok-bg: #d4f8c4;
+  --flag-info: #00639b;
+  --flag-info-bg: #d1e4ff;
+
+  /* Type Scale */
+  --font-sans: "Figtree", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
   --t-display: 32px;
   --t-display-lh: 1.10;
@@ -31,39 +70,67 @@
   --t-body-lh: 1.50;
   --t-caption: 12px;
 
-  /* --- Radius (kept verbatim) --- */
+  /* Radius (M3 Standard) */
   --r-micro: 4px;
-  --r-standard: 6px;
-  --r-compact: 8px;
-  --r-card: 12px;
-  --r-container: 16px;
+  --r-standard: 8px;
+  --r-compact: 12px;
+  --r-card: 16px;
+  --r-container: 20px;
   --r-pill: 9999px;
 
-  /* --- Spacing (8px base, kept) --- */
-  --s-1: 8px;
-  --s-2: 10px;
-  --s-3: 12px;
-  --s-4: 16px;
-  --s-5: 24px;
-  --s-6: 32px;
-  --s-7: 40px;
+  /* Elevation */
+  --btn-inset: rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px inset;
+  --focus-glow: rgba(0, 99, 155, 0.25) 0px 0px 0px 3px;
+  --ring: #00639b;
+}
 
-  /* --- Semantic status scale (deliberate deviation; desaturated, warm-key) --- */
-  --flag-critical: #b3261e;
-  --flag-critical-bg: rgba(179, 38, 30, 0.08);
-  --flag-warn: #8a5a00;
-  --flag-warn-bg: rgba(138, 90, 0, 0.10);
-  --flag-ok: #1e6b34;
-  --flag-ok-bg: rgba(30, 107, 52, 0.08);
-  --flag-info: #34548a;
-  --flag-info-bg: rgba(52, 84, 138, 0.08);
+.dark {
+  color-scheme: dark;
 
-  /* --- Depth (bordered-not-shadowed) --- */
-  --btn-inset: rgba(255, 255, 255, 0.2) 0px 0.5px 0px 0px inset,
-    rgba(0, 0, 0, 0.2) 0px 0px 0px 0.5px inset,
-    rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
-  --focus-glow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  --ring: rgba(59, 130, 246, 0.5);
+  /* --- Android M3 Expressive Dark Theme --- */
+  --md-sys-color-background: #101317;
+  --md-sys-color-surface: #16191e;
+  --md-sys-color-surface-container-low: #1c2026;
+  --md-sys-color-surface-container: #22262d;
+  --md-sys-color-surface-container-high: #2a2e36;
+  --md-sys-color-surface-container-highest: #333841;
+  --md-sys-color-on-surface: #e1e2e8;
+  --md-sys-color-on-surface-variant: #c3c6cf;
+  --md-sys-color-outline: #8d9199;
+  --md-sys-color-outline-variant: #282d36;
+  --md-sys-color-primary: #9bcaff;
+  --md-sys-color-on-primary: #003355;
+  --md-sys-color-primary-container: #004b76;
+  --md-sys-color-on-primary-container: #d1e4ff;
+  --md-sys-color-secondary-container: #3b4858;
+  --md-sys-color-on-secondary-container: #d7e3f8;
+
+  /* Tonal Aliases */
+  --paper: #101317;
+  --card-bg: #16191e;
+  --charcoal: #e1e2e8;
+  --offwhite: #16191e;
+  --muted: #949ba5;
+  --hairline: #282d36;
+  --hairline-strong: rgba(225, 226, 232, 0.25);
+  --container-bg: #1c2026;
+  --hover-tint: rgba(155, 202, 255, 0.08);
+
+  /* M3 Dark Status Tokens */
+  --flag-critical: #ffb4ab;
+  --flag-critical-bg: rgba(186, 26, 26, 0.28);
+  --flag-warn: #ffba2e;
+  --flag-warn-bg: rgba(126, 87, 0, 0.28);
+  --flag-ok: #77da6a;
+  --flag-ok-bg: rgba(0, 110, 28, 0.28);
+  --flag-info: #9bcaff;
+  --flag-info-bg: rgba(0, 99, 155, 0.28);
+
+  --btn-inset: rgba(255, 255, 255, 0.08) 0px 1px 0px 0px inset,
+    rgba(0, 0, 0, 0.4) 0px 0px 0px 1px inset;
+  --focus-glow: rgba(155, 202, 255, 0.25) 0px 0px 0px 3px;
+  --ring: #9bcaff;
 }
 
 body {
@@ -76,47 +143,48 @@ body {
   line-height: var(--t-body-lh);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 h1 {
   font-size: var(--t-page);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.6px;
+  color: var(--charcoal);
 }
 h2 {
   font-size: var(--t-section);
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.3px;
+  color: var(--charcoal);
 }
 
-/* Figures everywhere: tabular numerals for data */
 .tnum {
   font-variant-numeric: tabular-nums;
 }
 
-/* --- Shared component primitives --- */
-
 .card {
-  background-color: var(--paper);
+  background-color: var(--card-bg);
   border: 1px solid var(--hairline);
   border-radius: var(--r-card);
-  /* deliberately no box-shadow */
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-primary {
-  background-color: var(--charcoal);
-  color: var(--offwhite);
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
   padding: 8px 16px;
   border-radius: var(--r-standard);
   box-shadow: var(--btn-inset);
-  font-weight: 400;
+  font-weight: 600;
   border: none;
   cursor: pointer;
+  transition: opacity 0.15s ease;
 }
 .btn-primary:active {
-  opacity: 0.8;
+  opacity: 0.85;
 }
 .btn-primary:focus-visible {
   box-shadow: var(--btn-inset), var(--focus-glow);
@@ -129,19 +197,21 @@ h2 {
   border-radius: var(--r-standard);
   border: 1px solid var(--hairline-strong);
   cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.btn-ghost:hover {
+  background-color: var(--hover-tint);
 }
 .btn-ghost:active {
   opacity: 0.8;
 }
-.btn-ghost:focus-visible {
-  box-shadow: var(--focus-glow);
-}
 
 input, select, textarea {
-  background-color: var(--paper);
+  background-color: var(--card-bg);
   color: var(--charcoal);
   border: 1px solid var(--hairline);
   border-radius: var(--r-standard);
+  transition: border-color 0.15s ease, background-color 0.2s ease;
 }
 input:focus, select:focus, textarea:focus {
   outline: none;
@@ -165,25 +235,25 @@ input:focus, select:focus, textarea:focus {
 .flag-critical {
   color: var(--flag-critical);
   background: var(--flag-critical-bg);
-  border-color: rgba(179, 38, 30, 0.25);
+  border-color: rgba(186, 26, 26, 0.25);
 }
 .flag-warn {
   color: var(--flag-warn);
   background: var(--flag-warn-bg);
-  border-color: rgba(138, 90, 0, 0.25);
+  border-color: rgba(126, 87, 0, 0.25);
 }
 .flag-ok {
   color: var(--flag-ok);
   background: var(--flag-ok-bg);
-  border-color: rgba(30, 107, 52, 0.25);
+  border-color: rgba(0, 110, 28, 0.25);
 }
 .flag-info {
   color: var(--flag-info);
   background: var(--flag-info-bg);
-  border-color: rgba(52, 84, 138, 0.25);
+  border-color: rgba(0, 99, 155, 0.25);
 }
 
-/* Subtle warm scrollbar */
+/* Material 3 Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -192,17 +262,9 @@ input:focus, select:focus, textarea:focus {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(28, 28, 28, 0.18);
+  background: var(--hairline-strong);
   border-radius: var(--r-pill);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(28, 28, 28, 0.3);
-}
-
-/* Density variants */
-.density-comfort {
-  --pad-card: 24px;
-}
-.density-compact {
-  --pad-card: 16px;
+  background: var(--muted);
 }

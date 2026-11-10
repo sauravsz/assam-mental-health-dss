@@ -64,6 +64,7 @@ const STORAGE_KEYS = {
   AUDIT_LOG: 'amh_dss_audit_log_v1',
   SELECTED_DISTRICT: 'amh_dss_selected_district_v1',
   DRUG_STOCKS: 'amh_dss_drug_stocks_v1',
+  THEME: 'amh_dss_theme_v1',
 }
 
 function useScenarioDataInner() {
@@ -89,6 +90,37 @@ function useScenarioDataInner() {
   const [customDrugStocks, setCustomDrugStocks] = useState<Record<number, FacilityDrugStock>>(() => { try { const s = localStorage.getItem(STORAGE_KEYS.DRUG_STOCKS); return s ? JSON.parse(s) : DEFAULT_FACILITY_STOCKS } catch { return DEFAULT_FACILITY_STOCKS } })
   const [isChainValid, setIsChainValid] = useState(true)
   const [chainBreakReason, setChainBreakReason] = useState<string | undefined>()
+
+  const [theme, setThemeState] = useState<'light' | 'dark'>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.THEME)
+      if (saved === 'light' || saved === 'dark') return saved
+      if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark'
+      }
+      return 'light'
+    } catch {
+      return 'light'
+    }
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'dark') {
+      root.classList.add('dark')
+      root.style.colorScheme = 'dark'
+    } else {
+      root.classList.remove('dark')
+      root.style.colorScheme = 'light'
+    }
+    try {
+      localStorage.setItem(STORAGE_KEYS.THEME, theme)
+    } catch {}
+  }, [theme])
+
+  const toggleTheme = useCallback(() => {
+    setThemeState((prev) => (prev === 'light' ? 'dark' : 'light'))
+  }, [])
 
   useEffect(() => {
     const save = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch {} }
@@ -310,6 +342,9 @@ const computedDistricts = computeDistrictDistressList(rawDistricts)
     updateDistrictCalls,
     toggleDistrictFlood,
     resetToDefaults,
+    theme,
+    toggleTheme,
+    setTheme: setThemeState,
   }
 }
 

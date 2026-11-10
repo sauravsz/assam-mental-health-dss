@@ -68,6 +68,7 @@ export interface ReferralRecord {
 }
 
 export type UserRole = 'State Director' | 'District Officer' | 'Counsellor'
+export type AppTheme = 'light' | 'dark'
 
 export interface AuditLogEntry {
   id: number

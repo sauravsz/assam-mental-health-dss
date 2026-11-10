@@ -55,7 +55,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f4ed] text-[#1c1c1c] flex flex-col font-sans">
+    <div className="min-h-screen bg-paper text-charcoal flex flex-col font-sans transition-colors duration-200">
       <Navbar
         activeTab={activeTab}
         setActiveTab={(v) => go(v as AppView)}
@@ -132,19 +132,19 @@ export function App() {
         )}
       </main>
 
-      <footer className="bg-[#f7f4ed] border-t border-[#eceae4] text-[#5f5f5d] py-8 px-4 text-xs mt-12">
+      <footer className="bg-paper border-t border-hairline text-muted py-8 px-4 text-xs mt-12 transition-colors duration-200">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
-            <p className="font-semibold text-[#1c1c1c]">
+            <p className="font-semibold text-charcoal">
               Assam Mental Health Care Navigator · Operational Prototype v1.0
             </p>
-            <p className="text-[12px] text-[#5f5f5d] mt-0.5">
+            <p className="text-[12px] text-muted mt-0.5">
               Government of Assam · National Health Mission (NHM) · Health &amp; Family Welfare Department
             </p>
           </div>
-          <div className="text-[12px] text-[#5f5f5d] flex flex-col sm:items-end gap-0.5">
+          <div className="text-[12px] text-muted flex flex-col sm:items-end gap-0.5">
             <span>Decision Support System · Capacitated p-Median Optimization &amp; Anomaly Surveillance</span>
-            <span className="text-[#5f5f5d] font-medium">Assam University, Silchar</span>
+            <span className="text-muted font-medium">Assam University, Silchar</span>
           </div>
         </div>
       </footer>
