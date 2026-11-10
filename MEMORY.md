@@ -1,7 +1,7 @@
 # Assam Mental Health Decision Support System (AMH-DSS) — Project Memory
 
 ## Overview
-Operational Decision Support System for Government of Assam — National Health Mission (NHM) & Health & Family Welfare Department challenge: "Earlier Identification & Service Planning Support for Mental Health Needs" (NESFIC 2026, closes 10 Nov 2026).
+Operational Decision Support System for Government of Assam — National Health Mission (NHM) & Health & Family Welfare Department challenge: "Earlier Identification & Service Planning Support for Mental Health Needs" (NESFIC 2026, closes 25 Nov 2026).
 
 ## Key URLs & Deliverables
 - **Live Vercel Application:** https://mentalhealthdss.vercel.app/
@@ -15,11 +15,15 @@ Operational Decision Support System for Government of Assam — National Health 
 - **Engine 2 (Planning):** Capacitated $p$-Median Facility Location problem with an exact client-side Two-Phase Primal Simplex Transportation LP solver ($\min \sum d_i c_{ij} x_{ij} + M \sum u_i$). Eliminates greedy index bias and guarantees global optimality in $<25\text{ ms}$. Replicates exact 31.0% travel-time reduction in Cachar District (35.3 min vs 51.2 min baseline).
 - **Engine 3 (Retention):** Closed-loop care tracking for stalled referrals ($>14$ days) with verified statutory consent and human counsellors (zero robocalls). Modeled as an Absorbing Markov Chain ($N = (I - Q)^{-1}$) with verified 3.2% absorption recovery probability.
 - **Compliance:** MHCA 2017 §23, DPDP Act 2023, salted SHA-256 pseudonymization. Enforces Primary ($n < 10$) and Secondary (Complementary) cell suppression to algebraically prevent subtraction leaks.
-- **Frontend Design:** Android Material 3 (Material You / Android 14/15/16) tonal color system with high-density multi-column operational canvas (`max-w-[1400px]`). Features 4-stage absorbing Markov retention funnel, interactive Cachar catchment vector map with travel-time delta cards, linear days-of-cover bullet bars with lateral rebalance vectors, and Poisson surge threshold meters. Persistent Sun/Moon toggle with zero-FOUC inline bootstrap.
+- **Frontend Design:** Android Material 3 (Material You / Android 14/15/16) tonal color system with high-density multi-column operational canvas (`max-w-[1400px]`). Features 4-stage absorbing Markov retention funnel, interactive Cachar catchment vector map with travel-time delta cards, linear days-of-cover bullet bars with lateral rebalance vectors, and Poisson surge threshold meters.
+- **Evaluator Walkthrough & Governance Tools:**
+  1. *Evaluator Guided Tour:* 4-phase jury walkthrough (`EvaluatorTour.tsx`) demonstrating Surveillance Poisson spikes, Two-Phase Simplex LP siting, Markov care retention, and SHA-256 cryptographic chain tamper verification with 10s auto-play.
+  2. *Macro Disaster Presets:* 4 one-click stress-test scenarios (`scenarioPresets.ts`): *Post-Monsoon Baseline*, *Barak Valley Flood Shock (Z=3.65)*, *Brahmaputra Riverine Crisis (Z=2.92)*, and *Festival Anxiety Surge (Z=3.84)*.
+  3. *Executive Decision Memo:* Print-optimized official Government of Assam Health & Family Welfare Department Decision Memo (`ExecutiveDecisionMemo.tsx`) with `@media print` A4 letterhead styles.
 
 ## Current State & Next Steps
-- Status: Multi-column operational canvas redesign & Android Material 3 Dynamic Light/Dark Mode complete. Pushed to GitHub `main` at `6e1b174`. 10/10 Vitest tests pass in 105ms, production bundle compiled cleanly in 360ms. Wasted whitespace eliminated and crammed elements uncramped via responsive 60/40 cockpit splits across all 5 views.
+- Status: Production build passed and pushed to GitHub `main` at `cd48c5d`. 13/13 Vitest tests pass in 163ms, Vite production bundle compiled in 456ms. Live at `mentalhealthdss.vercel.app`.
 - Next Actions:
-  1. Review live deployment on Vercel (`mentalhealthdss.vercel.app`).
-  2. Review the 8-page Student & Faculty Guide before presenting to the MBA advisor.
-  3. Final submission of the 11-page USPR proposal PDF to the NHM Assam portal (deadline: 25 November 2026).
+  1. Verify live deployment on Vercel (`mentalhealthdss.vercel.app`) once Vercel Edge build settles.
+  2. Cross-check Proposal PDF figures with the MBA faculty advisor before portal upload.
+  3. Final submission to the NHM Assam portal (closes 25 November 2026).
