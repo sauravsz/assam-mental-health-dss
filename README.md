@@ -9,7 +9,7 @@
 
 ## Deliverables & Quick Links
 
-- **Live Operational Prototype:** [https://mentalhealthdss.vercel.app/](https://mentalhealthdss.vercel.app/)
+- **Live Operational Prototype:** [https://mhdss.vercel.app/](https://mhdss.vercel.app/)
 - **GitHub Repository:** [https://github.com/sauravsz/assam-mental-health-dss](https://github.com/sauravsz/assam-mental-health-dss)
 - **Official Problem Statement:** [NESFIC-D-29 Portal](https://startup.assam.gov.in/nesfic26/problem-statements/nesfic-d-29)
 - **Solution Proposal Document:** 11-page formal proposal compiled from `main.typ` in the 12-section USPR standard (`Assam NHM Mental Health Decision Support — USPR Solution Proposal.pdf`)

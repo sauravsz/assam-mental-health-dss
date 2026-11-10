@@ -15,9 +15,14 @@ import { useScenarioData } from './engine/scenarioDataContext'
 export type AppView = 'overview' | 'state' | 'planner' | 'pharmacy' | 'queue' | 'audit' | 'method'
 
 function viewFromUrl(): AppView {
-  const v = new URLSearchParams(window.location.search).get('view')
-  const ok: AppView[] = ['overview', 'state', 'planner', 'pharmacy', 'queue', 'audit', 'method']
-  return ok.includes(v as AppView) ? (v as AppView) : 'overview'
+  if (typeof window === 'undefined') return 'overview'
+  try {
+    const v = new URLSearchParams(window.location.search).get('view')
+    const ok: AppView[] = ['overview', 'state', 'planner', 'pharmacy', 'queue', 'audit', 'method']
+    return ok.includes(v as AppView) ? (v as AppView) : 'overview'
+  } catch {
+    return 'overview'
+  }
 }
 
 export function App() {
@@ -48,9 +53,13 @@ export function App() {
 
   const go = (v: AppView) => {
     setActiveTab(v)
-    const url = new URL(window.location.href)
-    url.searchParams.set('view', v)
-    window.history.replaceState(null, '', url)
+    if (typeof window !== 'undefined') {
+      try {
+        const url = new URL(window.location.href)
+        url.searchParams.set('view', v)
+        window.history.replaceState(null, '', url)
+      } catch {}
+    }
   }
 
   const handleReset = () => {

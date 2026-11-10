@@ -1,8 +1,7 @@
 import type { Block, FacilityDrugStock, UserRole } from './types'
-import type { RawDistrictData } from './scenarioDataContext'
 import { CACHAR_BLOCKS } from './cacharData'
 import { DEFAULT_FACILITY_STOCKS } from './drugPlanner'
-import { INITIAL_RAW_DISTRICTS } from './scenarioDataContext'
+import { INITIAL_RAW_DISTRICTS, type RawDistrictData } from './districtData'
 
 export type ScenarioPresetId = 'baseline' | 'barak_flood' | 'brahmaputra_crisis' | 'festival_surge'
 

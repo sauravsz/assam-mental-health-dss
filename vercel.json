@@ -1,5 +1,5 @@
 {
-  "buildCommand": "bun run build",
+  "buildCommand": "tsc -b && vite build",
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [

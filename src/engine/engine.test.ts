@@ -4,6 +4,10 @@ import { solveCampAllocation } from './solver'
 import { verifyAuditChain, appendAuditLog, simulateTamper, INITIAL_AUDIT_LOGS } from './auditLogger'
 import { CACHAR_BLOCKS, CACHAR_FACILITIES, TRAVEL_TIME_MATRIX } from './cacharData'
 import { SCENARIO_PRESETS } from './scenarioPresets'
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { ScenarioProvider } from './scenarioDataContext'
+import App from '../App'
 
 describe('Poisson tail', () => {
   it('tiny observed returns p=1', () => {
@@ -95,5 +99,14 @@ describe('Scenario Presets', () => {
     expect(kamrup?.callsLast30Days).toBe(620)
     const { zScore } = computePoissonTail(kamrup!.callsLast30Days, kamrup!.poissonExpected)
     expect(zScore).toBeGreaterThan(3.0)
+  })
+})
+
+describe('Application UI Mounting', () => {
+  it('renders complete App tree inside ScenarioProvider without throwing', () => {
+    const el = React.createElement(ScenarioProvider, null, React.createElement(App, null))
+    const html = renderToString(el)
+    expect(html).toContain('Assam Mental Health DSS')
+    expect(html.length).toBeGreaterThan(1000)
   })
 })

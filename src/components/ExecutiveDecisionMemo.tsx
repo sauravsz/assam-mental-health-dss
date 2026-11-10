@@ -45,7 +45,9 @@ export const ExecutiveDecisionMemo = ({ isOpen, onClose, numVans = 2 }: Executiv
   const latestHash = auditLogs[auditLogs.length - 1]?.hash || 'PENDING'
 
   const handlePrint = () => {
-    window.print()
+    if (typeof window !== 'undefined') {
+      window.print()
+    }
   }
 
   return (

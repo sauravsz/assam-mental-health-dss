@@ -4,7 +4,7 @@
 Operational Decision Support System for Government of Assam — National Health Mission (NHM) & Health & Family Welfare Department challenge: "Earlier Identification & Service Planning Support for Mental Health Needs" (NESFIC 2026, closes 25 Nov 2026).
 
 ## Key URLs & Deliverables
-- **Live Vercel Application:** https://mentalhealthdss.vercel.app/
+- **Live Vercel Application:** https://mhdss.vercel.app/
 - **GitHub Repository:** https://github.com/sauravsz/assam-mental-health-dss
 - **Proposal Document:** `/Users/sz/Filen/F — 1. Projects/Mental Health Decision Support System/Assam NHM Mental Health Decision Support — USPR Solution Proposal.pdf` (11 pages, compiled from `main.typ` in USPR 12-section standard)
 - **Student & Faculty Guide:** `/Users/sz/Filen/F — 1. Projects/Mental Health Decision Support System/Assam NHM Mental Health DSS — Student & Faculty Master Guide.pdf` (8 pages, mathematical foundations & viva defense script)
@@ -22,8 +22,8 @@ Operational Decision Support System for Government of Assam — National Health 
   3. *Executive Decision Memo:* Print-optimized official Government of Assam Health & Family Welfare Department Decision Memo (`ExecutiveDecisionMemo.tsx`) with `@media print` A4 letterhead styles.
 
 ## Current State & Next Steps
-- Status: Production build passed and pushed to GitHub `main` at `cd48c5d`. 13/13 Vitest tests pass in 163ms, Vite production bundle compiled in 456ms. Live at `mentalhealthdss.vercel.app`.
+- Status: Production build passed and pushed to GitHub `main`. 14/14 Vitest tests pass in 290ms, Vite production bundle compiled in 1.2s. Live at `mhdss.vercel.app`.
 - Next Actions:
-  1. Verify live deployment on Vercel (`mentalhealthdss.vercel.app`) once Vercel Edge build settles.
+  1. Verify live deployment on Vercel (`mhdss.vercel.app`) once Vercel Edge build settles.
   2. Cross-check Proposal PDF figures with the MBA faculty advisor before portal upload.
   3. Final submission to the NHM Assam portal (closes 25 November 2026).
