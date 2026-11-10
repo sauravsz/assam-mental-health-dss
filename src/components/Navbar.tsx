@@ -1,4 +1,4 @@
-import { Activity, ShieldCheck, MapPin, HeartHandshake, Edit3, RotateCcw, Lock, LayoutDashboard, Pill, BookOpen, Sun, Moon } from 'lucide-react'
+import { Activity, ShieldCheck, MapPin, HeartHandshake, Edit3, RotateCcw, Lock, LayoutDashboard, Pill, BookOpen, Sun, Moon, Compass, FileText } from 'lucide-react'
 import { useScenarioData } from '../engine/scenarioDataContext'
 
 interface NavbarProps {
@@ -8,6 +8,8 @@ interface NavbarProps {
   isEditMode: boolean
   setIsEditMode: (val: boolean | ((prev: boolean) => boolean)) => void
   resetToDefaults: () => void
+  onOpenTour?: () => void
+  onOpenMemo?: () => void
 }
 
 export const Navbar = ({
@@ -17,6 +19,8 @@ export const Navbar = ({
   isEditMode,
   setIsEditMode,
   resetToDefaults,
+  onOpenTour,
+  onOpenMemo,
 }: NavbarProps) => {
   const {
     userRole,
@@ -239,6 +243,28 @@ export const Navbar = ({
 
           {/* Scenario & Reset Controls */}
           <div className="flex items-center gap-1.5 shrink-0">
+            {onOpenTour && (
+              <button
+                onClick={onOpenTour}
+                className="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60 transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
+                title="Launch guided interactive tour for evaluators and jury"
+              >
+                <Compass className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span className="hidden lg:inline">Tour</span>
+              </button>
+            )}
+
+            {onOpenMemo && (
+              <button
+                onClick={onOpenMemo}
+                className="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-card hover:bg-container text-charcoal border border-hairline transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
+                title="Generate printable Government Decision Memo"
+              >
+                <FileText className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
+                <span className="hidden lg:inline">Memo</span>
+              </button>
+            )}
+
             <button
               onClick={() => setIsEditMode((prev) => !prev)}
               className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 cursor-pointer ${

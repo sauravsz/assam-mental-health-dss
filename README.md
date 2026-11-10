@@ -68,7 +68,9 @@ Overview (default) · Surveillance · Deployment · Pharmacy · Retention · Aud
 
 - **RBAC (3 roles):** *State Director* (all districts, Audit + CSV upload, no case rows), *District Officer* (own district, no case rows, no Audit tab), *Counsellor* (own district case rows + 4 outcome buttons only). Role + district filter live in `Navbar.tsx` and drive every view. `RetentionQueue` enforces: non-Counsellor sees aggregates only.
 - **CSV ingestion (State Director only):** `src/engine/csvIngest.ts` — row validation, rejection of malformed rows, salted SHA-256 pseudonymization of caller IDs/phone numbers before storage. Raw identifiers never retained.
-- **Chat-style NL commands:** `NaturalLanguageBar.tsx` + `commandParser.ts` — e.g. *"Add 1 van"*, *"Set Katigorah calls to 420"*, *"Deploy to Cachar"* — instant state recomputation.
+- **Chat-style NL commands & Macro Scenarios:** `NaturalLanguageBar.tsx` + `scenarioPresets.ts` — 4 one-click disaster scenarios (*Post-Monsoon Baseline*, *Barak Valley Flood Shock Z=3.65*, *Brahmaputra Crisis Z=2.92*, *Festival Surge Z=3.84*) alongside freeform NLP commands.
+- **Evaluator Guided Walkthrough:** `EvaluatorTour.tsx` — 4-phase jury tour stepping through Surveillance Poisson alerts, Two-Phase Simplex LP siting, Markov care retention, and SHA-256 tamper verification.
+- **Official NHM Decision Memo:** `ExecutiveDecisionMemo.tsx` — print-optimized formal decision memo format (`@media print`) rendering authorized van deployments, lateral drug transfers, and DPDP attestation for state health leadership.
 
 ---
 

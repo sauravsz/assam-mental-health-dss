@@ -8,6 +8,8 @@ import { AuditLogView } from './components/AuditLogView'
 import { OverviewView } from './components/OverviewView'
 import { PharmacyView } from './components/PharmacyView'
 import { MethodView } from './components/MethodView'
+import { EvaluatorTour } from './components/EvaluatorTour'
+import { ExecutiveDecisionMemo } from './components/ExecutiveDecisionMemo'
 import { useScenarioData } from './engine/scenarioDataContext'
 
 export type AppView = 'overview' | 'state' | 'planner' | 'pharmacy' | 'queue' | 'audit' | 'method'
@@ -21,6 +23,8 @@ function viewFromUrl(): AppView {
 export function App() {
   const [activeTab, setActiveTab] = useState<AppView>(viewFromUrl)
   const [numVans, setNumVans] = useState<number>(2)
+  const [isTourOpen, setIsTourOpen] = useState<boolean>(false)
+  const [isMemoOpen, setIsMemoOpen] = useState<boolean>(false)
 
   const {
     isEditMode,
@@ -63,6 +67,8 @@ export function App() {
         isEditMode={isEditMode}
         setIsEditMode={setIsEditMode}
         resetToDefaults={handleReset}
+        onOpenTour={() => setIsTourOpen((prev) => !prev)}
+        onOpenMemo={() => setIsMemoOpen(true)}
       />
 
       <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 w-full flex-1">
@@ -79,6 +85,8 @@ export function App() {
           toggleDistrictFlood={toggleDistrictFlood}
           resetToDefaults={handleReset}
           setNumVans={setNumVans}
+          onOpenTour={() => setIsTourOpen(true)}
+          onOpenMemo={() => setIsMemoOpen(true)}
         />
 
         {/* Section Surfaces */}
@@ -132,7 +140,22 @@ export function App() {
         )}
       </main>
 
-      <footer className="bg-paper border-t border-hairline text-muted py-8 px-4 sm:px-6 text-xs mt-12 transition-colors duration-200">
+      {/* Evaluator Guided Tour Modal / Bar */}
+      <EvaluatorTour
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        onNavigate={go}
+        setNumVans={setNumVans}
+      />
+
+      {/* Official Government Decision Memo Modal & Print View */}
+      <ExecutiveDecisionMemo
+        isOpen={isMemoOpen}
+        onClose={() => setIsMemoOpen(false)}
+        numVans={numVans}
+      />
+
+      <footer className="bg-paper border-t border-hairline text-muted py-8 px-4 sm:px-6 text-xs mt-12 transition-colors duration-200 print:hidden">
         <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
             <p className="font-semibold text-charcoal">

@@ -3,6 +3,7 @@ import { computePoissonTail } from './stateSurveillance'
 import { solveCampAllocation } from './solver'
 import { verifyAuditChain, appendAuditLog, simulateTamper, INITIAL_AUDIT_LOGS } from './auditLogger'
 import { CACHAR_BLOCKS, CACHAR_FACILITIES, TRAVEL_TIME_MATRIX } from './cacharData'
+import { SCENARIO_PRESETS } from './scenarioPresets'
 
 describe('Poisson tail', () => {
   it('tiny observed returns p=1', () => {
@@ -61,5 +62,38 @@ describe('Audit chain', () => {
     expect(tampered[0].details).toContain('TAMPERED')
     const v = await verifyAuditChain(tampered)
     expect(v.isValid).toBe(false)
+  })
+})
+
+describe('Scenario Presets', () => {
+  it('all four canonical presets exist with complete fields', () => {
+    const presets = Object.keys(SCENARIO_PRESETS)
+    expect(presets).toContain('baseline')
+    expect(presets).toContain('barak_flood')
+    expect(presets).toContain('brahmaputra_crisis')
+    expect(presets).toContain('festival_surge')
+  })
+
+  it('barak_flood preset triggers significant Poisson surge in Cachar', () => {
+    const floodPreset = SCENARIO_PRESETS.barak_flood
+    const cachar = floodPreset.districts.find((d) => d.name === 'Cachar')
+    expect(cachar).toBeDefined()
+    expect(cachar?.floodCrisis).toBe(true)
+    expect(cachar?.callsLast30Days).toBe(680)
+
+    const katigorah = floodPreset.blocks.find((b) => b.name === 'Katigorah')
+    expect(katigorah?.floodFactor).toBe(2.5)
+
+    const { zScore, pValue } = computePoissonTail(cachar!.callsLast30Days, cachar!.poissonExpected)
+    expect(zScore).toBeGreaterThan(2.5)
+    expect(pValue).toBeLessThan(0.01)
+  })
+
+  it('festival_surge preset models urban anxiety spike in Kamrup Metro', () => {
+    const festPreset = SCENARIO_PRESETS.festival_surge
+    const kamrup = festPreset.districts.find((d) => d.name === 'Kamrup Metropolitan')
+    expect(kamrup?.callsLast30Days).toBe(620)
+    const { zScore } = computePoissonTail(kamrup!.callsLast30Days, kamrup!.poissonExpected)
+    expect(zScore).toBeGreaterThan(3.0)
   })
 })

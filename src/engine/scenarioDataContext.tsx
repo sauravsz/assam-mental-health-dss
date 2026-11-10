@@ -6,6 +6,7 @@ import { generateSyntheticStalledReferrals } from './referralData'
 import { INITIAL_AUDIT_LOGS, appendAuditLog, verifyAuditChain, simulateTamper } from './auditLogger'
 import { processTeleManasCsv } from './csvIngest'
 import { computeDrugBurnMetrics, DEFAULT_FACILITY_STOCKS } from './drugPlanner'
+import { SCENARIO_PRESETS, type ScenarioPresetId } from './scenarioPresets'
 
 export interface RawDistrictData {
   id: string
@@ -88,6 +89,7 @@ function useScenarioDataInner() {
     try { const s = localStorage.getItem(STORAGE_KEYS.AUDIT_LOG); return s ? JSON.parse(s) : INITIAL_AUDIT_LOGS } catch { return INITIAL_AUDIT_LOGS }
   })
   const [customDrugStocks, setCustomDrugStocks] = useState<Record<number, FacilityDrugStock>>(() => { try { const s = localStorage.getItem(STORAGE_KEYS.DRUG_STOCKS); return s ? JSON.parse(s) : DEFAULT_FACILITY_STOCKS } catch { return DEFAULT_FACILITY_STOCKS } })
+  const [activePresetId, setActivePresetId] = useState<ScenarioPresetId | 'custom'>('baseline')
   const [isChainValid, setIsChainValid] = useState(true)
   const [chainBreakReason, setChainBreakReason] = useState<string | undefined>()
 
@@ -215,6 +217,7 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
   }, [isEditMode])
 
   const resetToDefaults = () => {
+    setActivePresetId('baseline')
     setBlocks(CACHAR_BLOCKS)
     setFacilities(CACHAR_FACILITIES)
     setRawDistricts(INITIAL_RAW_DISTRICTS)
@@ -231,8 +234,44 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
     } catch {}
   }
 
+  const applyPresetScenario = useCallback(
+    (presetId: ScenarioPresetId) => {
+      const preset = SCENARIO_PRESETS[presetId]
+      if (!preset) return undefined
+
+      setActivePresetId(presetId)
+      setRawDistricts(preset.districts)
+      setBlocks(preset.blocks)
+      setCustomDrugStocks(preset.drugStocks)
+
+      const deriveStatus = (units: number): 'Adequate' | 'Low Stock' | 'Critical' =>
+        units > 1000 ? 'Adequate' : units > 300 ? 'Low Stock' : 'Critical'
+
+      setFacilities((prev) =>
+        prev.map((f) => {
+          const stocks = preset.drugStocks[f.id]
+          if (!stocks) return f
+          return {
+            ...f,
+            medicineStock: {
+              haloperidol: deriveStatus(stocks.haloperidol),
+              fluoxetine: deriveStatus(stocks.fluoxetine),
+              valproate: deriveStatus(stocks.valproate),
+            },
+          }
+        })
+      )
+
+      setUserRoleState(preset.targetRole)
+      logAction('SCENARIO_PRESET_LOAD', `Loaded scenario preset: ${preset.name} (${preset.badge})`)
+      return preset.targetTab
+    },
+    [logAction]
+  )
+
   // Update a single block parameter
   const updateBlock = (blockId: number, field: keyof Block, value: number) => {
+    setActivePresetId('custom')
     setBlocks((prev) =>
       prev.map((b) => (b.id === blockId ? { ...b, [field]: value } : b))
     )
@@ -240,6 +279,7 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
 
   // Update a clinic capacity or medicine stock
   const updateFacilityCapacity = (facId: number, capacity: number) => {
+    setActivePresetId('custom')
     setFacilities((prev) =>
       prev.map((f) => (f.id === facId ? { ...f, capacity: Math.max(10, capacity) } : f))
     )
@@ -250,6 +290,7 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
     med: 'haloperidol' | 'fluoxetine' | 'valproate',
     status: 'Adequate' | 'Low Stock' | 'Critical'
   ) => {
+    setActivePresetId('custom')
     setFacilities((prev) =>
       prev.map((f) =>
         f.id === facId
@@ -276,12 +317,14 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
 
   // Update a district call count or flood state
   const updateDistrictCalls = (districtId: string, calls: number) => {
+    setActivePresetId('custom')
     setRawDistricts((prev) =>
       prev.map((d) => (d.id === districtId ? { ...d, callsLast30Days: Math.max(0, calls) } : d))
     )
   }
 
   const toggleDistrictFlood = (districtId: string) => {
+    setActivePresetId('custom')
     setRawDistricts((prev) =>
       prev.map((d) => (d.id === districtId ? { ...d, floodCrisis: !d.floodCrisis } : d))
     )
@@ -342,6 +385,8 @@ const computedDistricts = computeDistrictDistressList(rawDistricts)
     updateDistrictCalls,
     toggleDistrictFlood,
     resetToDefaults,
+    activePresetId,
+    applyPresetScenario,
     theme,
     toggleTheme,
     setTheme: setThemeState,

@@ -268,3 +268,27 @@ input:focus, select:focus, textarea:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
 }
+
+/* ============================================================
+   Print Media Styles: Official Government Decision Memo
+   ============================================================ */
+@media print {
+  @page {
+    margin: 12mm 15mm;
+    size: A4 portrait;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  header,
+  main,
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+}
