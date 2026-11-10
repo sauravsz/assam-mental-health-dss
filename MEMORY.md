@@ -15,11 +15,11 @@ Operational Decision Support System for Government of Assam — National Health 
 - **Engine 2 (Planning):** Capacitated $p$-Median Facility Location problem with an exact client-side Two-Phase Primal Simplex Transportation LP solver ($\min \sum d_i c_{ij} x_{ij} + M \sum u_i$). Eliminates greedy index bias and guarantees global optimality in $<25\text{ ms}$. Replicates exact 31.0% travel-time reduction in Cachar District (35.3 min vs 51.2 min baseline).
 - **Engine 3 (Retention):** Closed-loop care tracking for stalled referrals ($>14$ days) with verified statutory consent and human counsellors (zero robocalls). Modeled as an Absorbing Markov Chain ($N = (I - Q)^{-1}$) with verified 3.2% absorption recovery probability.
 - **Compliance:** MHCA 2017 §23, DPDP Act 2023, salted SHA-256 pseudonymization. Enforces Primary ($n < 10$) and Secondary (Complementary) cell suppression to algebraically prevent subtraction leaks.
-- **Frontend Design:** Clean Expo design system, mobile-optimized segmented control, hairline borders, plain-English human framing, expandable mathematical drawers.
+- **Frontend Design:** Android Material 3 (Material You / Android 14/15/16) tonal color system. Replaced warm-cream parchment palette with crisp Light Mode (`#F8F9FA` background, `#FFFFFF` cards, `#00639B` primary) and deep slate Dark Mode (`#101317` background, `#16191E` cards, `#9BCAFF` primary). Persistent Sun/Moon toggle in navigation bar with system preference detection and zero-FOUC inline bootstrap.
 
 ## Current State & Next Steps
-- Status: Full DSS declutter overhaul complete. SHA-256 genuine genesis hash verified (`c1055f18...`), WebCrypto universalized across browser and test environments (10/10 Vitest passing in 140ms), production bundle compiled cleanly (448ms). 6-tab unified navigation live with pagination (Retention Queue), multi-facility surplus rebalancing fix, and compact command bar.
+- Status: Full DSS declutter overhaul and Android Material 3 Dynamic Light/Dark Mode complete. Pushed to GitHub `main` at `128a230`. SHA-256 genuine genesis hash verified (`c1055f18...`), WebCrypto universalized across browser and test environments (10/10 Vitest passing in 142ms), production bundle compiled cleanly (344ms).
 - Next Actions:
-  1. Commit and push overhauled DSS codebase to GitHub (`origin main`).
+  1. Review live deployment on Vercel (`mentalhealthdss.vercel.app`).
   2. Review the 8-page Student & Faculty Guide before presenting to the MBA advisor.
   3. Final submission of the 11-page USPR proposal PDF to the NHM Assam portal (deadline: 25 November 2026).

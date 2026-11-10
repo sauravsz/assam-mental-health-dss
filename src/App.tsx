@@ -65,7 +65,7 @@ export function App() {
         resetToDefaults={handleReset}
       />
 
-      <main className="max-w-6xl mx-auto px-4 py-6 w-full flex-1">
+      <main className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 w-full flex-1">
         {/* Natural Language AI Command Bar */}
         <NaturalLanguageBar
           blocks={blocks}
@@ -132,8 +132,8 @@ export function App() {
         )}
       </main>
 
-      <footer className="bg-paper border-t border-hairline text-muted py-8 px-4 text-xs mt-12 transition-colors duration-200">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <footer className="bg-paper border-t border-hairline text-muted py-8 px-4 sm:px-6 text-xs mt-12 transition-colors duration-200">
+        <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
             <p className="font-semibold text-charcoal">
               Assam Mental Health Care Navigator · Operational Prototype v1.0

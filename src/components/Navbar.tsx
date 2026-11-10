@@ -33,90 +33,92 @@ export const Navbar = ({
   return (
     <header className="bg-paper/95 backdrop-blur-md border-b border-hairline sticky top-0 z-50">
       {/* Top Quiet Institutional Strip */}
-      <div className="bg-container border-b border-hairline px-4 py-1 text-[12px] text-muted flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="font-medium text-charcoal">Government of Assam · National Health Mission (NHM)</span>
-        </div>
-        <div className="flex flex-wrap items-center gap-3 text-muted">
-          <span className="flex items-center gap-1 text-[12px]">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>MHCA 2017 &amp; DPDP 2023 Compliant</span>
-          </span>
-          <span className="hidden sm:inline text-hairline">|</span>
-
-          {/* RBAC Role selector */}
-          <div className="flex items-center gap-1.5">
-            <Lock className="w-3 h-3 text-muted" />
-            <span className="text-[12px] font-semibold uppercase tracking-wider text-muted">Role:</span>
-            <select
-              value={userRole}
-              onChange={(e) => {
-                const newRole = e.target.value as typeof userRole
-                setUserRole(newRole)
-                logAction('ROLE_SWITCH', `Switched user role context to ${newRole}`)
-              }}
-              className="bg-card border border-hairline rounded px-1.5 py-0.5 text-[12px] font-semibold text-charcoal focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
-            >
-              <option value="State Director">State Director</option>
-              <option value="District Officer">District Officer</option>
-              <option value="Counsellor">Counsellor</option>
-            </select>
+      <div className="bg-container border-b border-hairline py-1 text-[12px] text-muted">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="font-medium text-charcoal">Government of Assam · National Health Mission (NHM)</span>
           </div>
+          <div className="flex flex-wrap items-center gap-3 text-muted">
+            <span className="flex items-center gap-1 text-[12px]">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>MHCA 2017 &amp; DPDP 2023 Compliant</span>
+            </span>
+            <span className="hidden sm:inline text-hairline">|</span>
 
-          <span className="hidden sm:inline text-hairline">|</span>
+            {/* RBAC Role selector */}
+            <div className="flex items-center gap-1.5">
+              <Lock className="w-3 h-3 text-muted" />
+              <span className="text-[12px] font-semibold uppercase tracking-wider text-muted">Role:</span>
+              <select
+                value={userRole}
+                onChange={(e) => {
+                  const newRole = e.target.value as typeof userRole
+                  setUserRole(newRole)
+                  logAction('ROLE_SWITCH', `Switched user role context to ${newRole}`)
+                }}
+                className="bg-card border border-hairline rounded px-1.5 py-0.5 text-[12px] font-semibold text-charcoal focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+              >
+                <option value="State Director">State Director</option>
+                <option value="District Officer">District Officer</option>
+                <option value="Counsellor">Counsellor</option>
+              </select>
+            </div>
 
-          {/* District filter */}
-          <div className="flex items-center gap-1.5">
-            <MapPin className="w-3 h-3 text-muted" />
-            <select
-              value={selectedDistrictFilter}
-              onChange={(e) => setSelectedDistrictFilter(e.target.value)}
-              className="bg-card border border-hairline rounded px-1.5 py-0.5 text-[12px] font-semibold text-charcoal focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+            <span className="hidden sm:inline text-hairline">|</span>
+
+            {/* District filter */}
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-3 h-3 text-muted" />
+              <select
+                value={selectedDistrictFilter}
+                onChange={(e) => setSelectedDistrictFilter(e.target.value)}
+                className="bg-card border border-hairline rounded px-1.5 py-0.5 text-[12px] font-semibold text-charcoal focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+              >
+                <option value="All Districts">All Districts</option>
+                {districts.map((d) => (
+                  <option key={d.id} value={d.name}>
+                    {d.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <span className="hidden sm:inline text-hairline">|</span>
+
+            {/* SHA-256 chain status */}
+            <span className={`flex items-center gap-1 text-[12px] font-mono font-semibold ${isChainValid ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}>
+              <span className={`w-2 h-2 rounded-full ${isChainValid ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
+              SHA-256 {isChainValid ? 'OK' : 'BROKEN'}
+            </span>
+
+            <span className="hidden sm:inline text-hairline">|</span>
+
+            {/* Android Material 3 Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode (Android M3)`}
+              className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-card hover:bg-hairline text-charcoal border border-hairline transition-colors cursor-pointer text-[12px] font-medium"
             >
-              <option value="All Districts">All Districts</option>
-              {districts.map((d) => (
-                <option key={d.id} value={d.name}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="hidden sm:inline">Light</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-blue-600" />
+                  <span className="hidden sm:inline">Dark</span>
+                </>
+              )}
+            </button>
           </div>
-
-          <span className="hidden sm:inline text-hairline">|</span>
-
-          {/* SHA-256 chain status */}
-          <span className={`flex items-center gap-1 text-[12px] font-mono font-semibold ${isChainValid ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}>
-            <span className={`w-2 h-2 rounded-full ${isChainValid ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
-            SHA-256 {isChainValid ? 'OK' : 'BROKEN'}
-          </span>
-
-          <span className="hidden sm:inline text-hairline">|</span>
-
-          {/* Android Material 3 Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode (Android M3)`}
-            className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-card hover:bg-hairline text-charcoal border border-hairline transition-colors cursor-pointer text-[12px] font-medium"
-          >
-            {theme === 'dark' ? (
-              <>
-                <Sun className="w-3.5 h-3.5 text-amber-400" />
-                <span className="hidden sm:inline">Light</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-3.5 h-3.5 text-blue-600" />
-                <span className="hidden sm:inline">Dark</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
 
       {/* Main Bar */}
-      <div className="max-w-6xl mx-auto px-4 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <button
           onClick={() => setActiveTab('overview')}
           className="flex items-center gap-3 text-left cursor-pointer group focus:outline-none"
@@ -262,19 +264,21 @@ export const Navbar = ({
 
       {/* Operator banner when Edit Mode is active */}
       {isEditMode && (
-        <div className="bg-amber-50 dark:bg-amber-950/60 border-t border-b border-amber-200 dark:border-amber-800/80 px-4 py-1.5 text-[12px] text-amber-900 dark:text-amber-200 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Edit3 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-            <span>
-              <strong>Scenario Simulation Mode Active:</strong> District estimates, block parameters, and facility capacities are unlocked.
-            </span>
+        <div className="bg-amber-50 dark:bg-amber-950/60 border-t border-b border-amber-200 dark:border-amber-800/80 py-1.5 text-[12px] text-amber-900 dark:text-amber-200">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Edit3 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              <span>
+                <strong>Scenario Simulation Mode Active:</strong> District estimates, block parameters, and facility capacities are unlocked.
+              </span>
+            </div>
+            <button
+              onClick={() => setIsEditMode(false)}
+              className="font-semibold text-amber-900 dark:text-amber-300 hover:underline cursor-pointer"
+            >
+              Exit Simulation
+            </button>
           </div>
-          <button
-            onClick={() => setIsEditMode(false)}
-            className="font-semibold text-amber-900 dark:text-amber-300 hover:underline cursor-pointer"
-          >
-            Exit Simulation
-          </button>
         </div>
       )}
     </header>
