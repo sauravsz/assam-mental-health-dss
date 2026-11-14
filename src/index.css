@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 @import "tailwindcss";
 
+/* Tailwind v4 defaults `dark:` to the OS `prefers-color-scheme`, which does not
+   follow the in-app toggle. Bind it to the .dark class the theme state sets, so
+   a light-mode user on a dark OS never gets dark: text on light surfaces. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-paper: var(--paper);
   --color-card: var(--card-bg);
@@ -276,6 +281,46 @@ input:focus, select:focus, textarea:focus {
   @page {
     margin: 12mm 15mm;
     size: A4 portrait;
+  }
+
+  /* The memo is always black on white paper, never the on-screen theme.
+     :root.dark outranks the .dark token block (0,1,1 vs 0,1,0) so dark mode
+     cannot leak --charcoal / --card-bg into the printed directive. */
+  :root,
+  :root.dark {
+    --paper: #ffffff;
+    --card-bg: #ffffff;
+    --offwhite: #ffffff;
+    --container-bg: #f3f4f6;
+    --charcoal: #000000;
+    --muted: #4b5563;
+    --hairline: #d1d5db;
+    --hairline-strong: #9ca3af;
+    --flag-critical: #ba1a1a;
+    --flag-critical-bg: #ffdad6;
+    --flag-warn: #7e5700;
+    --flag-warn-bg: #ffdf9e;
+    --flag-ok: #006e1c;
+    --flag-ok-bg: #c0f0bd;
+    --flag-info: #00639b;
+    --flag-info-bg: #d1e4ff;
+    color-scheme: light;
+
+    /* `dark:` utilities compile to :where(.dark, .dark *), so a dark-mode user
+       still carries them on paper. Repoint the dark palette at its light-end
+       shades so status chips stay legible when printed. */
+    --color-rose-300: oklch(45.5% 0.188 13.697);      /* rose-800 */
+    --color-rose-400: oklch(45.5% 0.188 13.697);      /* rose-800 */
+    --color-emerald-300: oklch(43.2% 0.095 166.913);  /* emerald-800 */
+    --color-emerald-400: oklch(43.2% 0.095 166.913);  /* emerald-800 */
+    --color-blue-300: oklch(42.4% 0.199 265.638);     /* blue-800 */
+    --color-rose-950: oklch(94.1% 0.03 12.58);        /* rose-100 */
+    --color-emerald-950: oklch(95% 0.052 163.051);    /* emerald-100 */
+    --color-blue-950: oklch(93.2% 0.032 255.585);     /* blue-100 */
+
+    /* Accent text that misses AA on white even in light mode. */
+    --color-amber-600: oklch(47.3% 0.137 46.201);     /* amber-800 */
+    --color-teal-600: oklch(43.7% 0.078 188.216);     /* teal-800 */
   }
 
   body {
