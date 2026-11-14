@@ -119,10 +119,10 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
   return (
     <div className="space-y-6 w-full">
       {/* Clean Institutional Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-hairline pb-4">
+      <div className="hero p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+          <span className="eyebrow">Care retention</span>
+          <div className="flex items-center gap-2 mt-1">
             <h1 className="text-2xl font-bold text-charcoal tracking-tight">
               Closed-Loop Care Retention Queue
             </h1>
@@ -153,14 +153,14 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-hairline pb-2.5">
           <div>
             <h2 className="text-sm font-bold text-charcoal tracking-tight flex items-center gap-2">
-              <HeartHandshake className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+              <span className="icon-chip sm" style={{ ['--accent' as string]: 'var(--brand-rose)' }}><HeartHandshake className="w-4 h-4" /></span>
               Stochastic Attrition Funnel: Why the Retention Queue Exists
             </h2>
             <p className="text-xs text-muted mt-0.5">
               Absorbing Markov chain model (B = N &middot; R) proves a 96.8% systemic care attrition rate without proactive outreach.
             </p>
           </div>
-          <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/80 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-900">
+          <span className="text-xs font-mono font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/80 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-900">
             3.2% Baseline Absorption
           </span>
         </div>
@@ -182,7 +182,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
           <div className="bg-container p-3 rounded-xl border border-hairline relative">
             <div className="flex justify-between items-center text-xs">
               <span className="font-semibold text-charcoal">2. Tier-2 Triage</span>
-              <span className="font-mono text-amber-600 dark:text-amber-400 text-[11px]">24.0%</span>
+              <span className="font-mono text-amber-700 dark:text-amber-400 text-[11px]">24.0%</span>
             </div>
             <div className="text-lg font-bold font-mono text-charcoal mt-1">2,400</div>
             <div className="w-full bg-paper rounded-full h-1.5 mt-2 overflow-hidden border border-hairline">
@@ -194,7 +194,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
           <div className="bg-container p-3 rounded-xl border border-hairline relative">
             <div className="flex justify-between items-center text-xs">
               <span className="font-semibold text-charcoal">3. Clinic Referral</span>
-              <span className="font-mono text-rose-600 dark:text-rose-400 text-[11px]">8.5%</span>
+              <span className="font-mono text-rose-700 dark:text-rose-400 text-[11px]">8.5%</span>
             </div>
             <div className="text-lg font-bold font-mono text-charcoal mt-1">850</div>
             <div className="w-full bg-paper rounded-full h-1.5 mt-2 overflow-hidden border border-hairline">
@@ -219,35 +219,35 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
 
       {/* 3 Operational Metric Ribbon */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        <div className="card p-4 flex items-center justify-between">
+        <div className="card kpi kpi-rose p-4 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-muted">Waiting for Counsellor Check-In</span>
-            <div className="text-2xl font-bold text-rose-600 dark:text-rose-400 font-mono mt-1">{counts.stalled}</div>
+            <div className="kpi-value accent mt-1.5">{counts.stalled}</div>
             <p className="text-[11px] text-muted mt-0.5">Stalled &gt;14 days without clinic visit</p>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-rose-100 dark:bg-rose-950 flex items-center justify-center text-rose-700 dark:text-rose-300">
+          <div className="icon-chip">
             <AlertCircle className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="card p-4 flex items-center justify-between">
+        <div className="card kpi kpi-blue p-4 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-muted">Outreach Active in Field</span>
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 font-mono mt-1">{counts.inFollowup + counts.ashaDispatched}</div>
+            <div className="kpi-value accent mt-1.5">{counts.inFollowup + counts.ashaDispatched}</div>
             <p className="text-[11px] text-muted mt-0.5">Callback or ASHA village worker visit</p>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-950 flex items-center justify-center text-blue-700 dark:text-blue-300">
+          <div className="icon-chip">
             <Phone className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="card p-4 flex items-center justify-between">
+        <div className="card kpi kpi-green p-4 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-muted">Care Resumed / Confirmed</span>
-            <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-400 font-mono mt-1">{counts.resolved}</div>
+            <div className="kpi-value accent mt-1.5">{counts.resolved}</div>
             <p className="text-[11px] text-muted mt-0.5">Attended clinic or mobile camp</p>
           </div>
-          <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-700 dark:text-emerald-300">
+          <div className="icon-chip">
             <CheckCircle2 className="w-4 h-4" />
           </div>
         </div>
@@ -385,7 +385,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
                       <span className="text-[11px] text-muted">{r.language} &middot; {r.ageBand}</span>
                     </td>
                     <td className="py-3 px-3 text-center">
-                      <span className="font-mono font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60 px-2 py-0.5 rounded-full text-[11px]">
+                      <span className="font-mono font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60 px-2 py-0.5 rounded-full text-[11px]">
                         {r.daysStalled} days ago
                       </span>
                     </td>
@@ -528,7 +528,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Days Since Referral:</span>
-                <span className="font-mono text-rose-600 dark:text-rose-400 font-bold">{activeRecordForAction.daysStalled} days</span>
+                <span className="font-mono text-rose-700 dark:text-rose-400 font-bold">{activeRecordForAction.daysStalled} days</span>
               </div>
             </div>
 
@@ -581,7 +581,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
                   className="w-full text-left p-3 rounded-xl border border-hairline hover:bg-container text-xs flex items-center justify-between font-medium text-charcoal transition-all cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400" />
                     <span>Patient refused further contact (closed, not attended)</span>
                   </span>
                 </button>

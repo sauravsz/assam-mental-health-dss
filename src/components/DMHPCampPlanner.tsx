@@ -54,10 +54,10 @@ export const DMHPCampPlanner = ({
   return (
     <div className="space-y-6 w-full">
       {/* Header Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-hairline pb-4">
+      <div className="hero p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <span className="eyebrow">Outreach planning</span>
+          <div className="flex items-center gap-2 mt-1">
             <h1 className="text-2xl font-bold text-charcoal tracking-tight">
               Mobile Health Camp &amp; Van Siting Optimizer
             </h1>
@@ -100,7 +100,7 @@ export const DMHPCampPlanner = ({
           <div className="flex items-center justify-between border-b border-hairline pb-3">
             <div>
               <h2 className="text-base font-bold text-charcoal tracking-tight flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <span className="icon-chip sm" style={{ ['--accent' as string]: 'var(--brand-2)' }}><MapPin className="w-4 h-4" /></span>
                 Cachar District Catchment Vector Map
               </h2>
               <p className="text-xs text-muted mt-0.5">
@@ -109,7 +109,7 @@ export const DMHPCampPlanner = ({
             </div>
             <div className="flex items-center gap-3 text-xs">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                 <span className="text-charcoal font-medium">Stationed Camp</span>
               </span>
               <span className="flex items-center gap-1.5">
@@ -169,9 +169,9 @@ export const DMHPCampPlanner = ({
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center"
                 >
                   <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center shadow-lg transition-all ${
+                    className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
                       isActive
-                        ? 'bg-emerald-500 text-slate-950 font-bold border-2 border-white ring-4 ring-emerald-400/30 animate-pulse'
+                        ? 'bg-emerald-500 text-slate-950 font-bold border-2 border-white'
                         : 'bg-slate-800 text-slate-400 border border-slate-700'
                     }`}
                   >
@@ -204,7 +204,7 @@ export const DMHPCampPlanner = ({
           {/* Fleet Controls Card */}
           <div className="card p-5 space-y-4">
             <h2 className="text-base font-bold text-charcoal tracking-tight flex items-center gap-2 border-b border-hairline pb-2.5">
-              <Truck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span className="icon-chip sm" style={{ ['--accent' as string]: 'var(--brand-1)' }}><Truck className="w-4 h-4" /></span>
               Deployment Constraints &amp; Weather
             </h2>
 
@@ -358,7 +358,7 @@ export const DMHPCampPlanner = ({
           <div className="flex items-center justify-between border-b border-amber-200/60 dark:border-amber-800/60 pb-2">
             <div>
               <h3 className="text-sm font-bold text-amber-950 dark:text-amber-200 flex items-center gap-2">
-                <Edit3 className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+                <span className="icon-chip sm" style={{ ['--accent' as string]: 'var(--brand-amber)' }}><Edit3 className="w-4 h-4" /></span>
                 Live Scenario Editor: Cachar 8 Blocks &amp; 6 Clinic Hubs
               </h3>
               <p className="text-xs text-amber-800 dark:text-amber-300">

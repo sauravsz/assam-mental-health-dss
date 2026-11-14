@@ -109,7 +109,7 @@ export const ExecutiveDecisionMemo = ({ isOpen, onClose, numVans = 2 }: Executiv
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 print:grid-cols-4">
           <div className="p-3 rounded-xl bg-container border border-hairline">
             <span className="text-[10px] font-bold uppercase tracking-wider text-muted">Active Surges</span>
-            <p className="text-xl font-black text-rose-600 mt-0.5">{surgingDistricts.length} Districts</p>
+            <p className="text-xl font-black text-rose-700 mt-0.5">{surgingDistricts.length} Districts</p>
             <span className="text-[10px] text-muted">Poisson Z ≥ 2.5 (p &lt; 0.01)</span>
           </div>
           <div className="p-3 rounded-xl bg-container border border-hairline">
@@ -124,7 +124,7 @@ export const ExecutiveDecisionMemo = ({ isOpen, onClose, numVans = 2 }: Executiv
           </div>
           <div className="p-3 rounded-xl bg-container border border-hairline">
             <span className="text-[10px] font-bold uppercase tracking-wider text-muted">Stalled Follow-ups</span>
-            <p className="text-xl font-black text-amber-600 mt-0.5">{stalledCount} Cases</p>
+            <p className="text-xl font-black text-amber-700 mt-0.5">{stalledCount} Cases</p>
             <span className="text-[10px] text-muted">Absorbing Markov &gt;14d</span>
           </div>
         </div>
@@ -132,7 +132,7 @@ export const ExecutiveDecisionMemo = ({ isOpen, onClose, numVans = 2 }: Executiv
         {/* Section 1: Surveillance Alert Breakdown */}
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 border-b border-hairline pb-1">
-            <Activity className="w-4 h-4 text-rose-600" />
+            <Activity className="w-4 h-4 text-rose-700" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-charcoal">
               1. Statewide Distress Surveillance &amp; Poisson Surge Alerts
             </h3>
@@ -271,7 +271,7 @@ export const ExecutiveDecisionMemo = ({ isOpen, onClose, numVans = 2 }: Executiv
         {/* Section 4: Care Retention Mandate */}
         <div className="space-y-2">
           <div className="flex items-center gap-1.5 border-b border-hairline pb-1">
-            <HeartHandshake className="w-4 h-4 text-rose-600" />
+            <HeartHandshake className="w-4 h-4 text-rose-700" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-charcoal">
               4. Referral Retention &amp; Clinical Follow-Up Directive
             </h3>
@@ -287,7 +287,7 @@ export const ExecutiveDecisionMemo = ({ isOpen, onClose, numVans = 2 }: Executiv
         <div className="p-4 rounded-xl bg-container border border-hairline space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <ShieldCheck className={`w-5 h-5 ${isChainValid ? 'text-emerald-600' : 'text-rose-600'}`} />
+              <ShieldCheck className={`w-5 h-5 ${isChainValid ? 'text-emerald-600' : 'text-rose-700'}`} />
               <span className="text-xs font-bold uppercase tracking-wider text-charcoal">
                 Cryptographic Attestation &amp; Statutory Certification
               </span>

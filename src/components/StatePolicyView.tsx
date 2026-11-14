@@ -44,10 +44,10 @@ export const StatePolicyView = ({
   return (
     <div className="space-y-6 w-full">
       {/* Clean Institutional Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-hairline pb-4">
+      <div className="hero p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+          <span className="eyebrow">Surveillance engine</span>
+          <div className="flex items-center gap-2 mt-1">
             <h1 className="text-2xl font-bold text-charcoal tracking-tight">
               Statewide Distress Surveillance &amp; Spike Detection
             </h1>
@@ -76,14 +76,14 @@ export const StatePolicyView = ({
           <div className="flex items-center justify-between border-b border-hairline pb-3">
             <div>
               <h2 className="text-base font-bold text-charcoal tracking-tight flex items-center gap-2">
-                <Activity className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                <span className="icon-chip sm" style={{ ['--accent' as string]: 'var(--brand-rose)' }}><Activity className="w-4 h-4" /></span>
                 Active Outlier Alerts ({surgeDistricts.length} Districts)
               </h2>
               <p className="text-xs text-muted mt-0.5">
                 Statistically anomalous call volumes requiring emergency mobile health camp deployment.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/80 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-900">
+            <span className="text-xs font-mono font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/80 px-2 py-0.5 rounded border border-rose-200 dark:border-rose-900">
               Spike Threshold Exceeded
             </span>
           </div>
@@ -123,7 +123,7 @@ export const StatePolicyView = ({
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/80 px-2 py-0.5 rounded-full font-mono block">
+                        <span className="text-xs font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/80 px-2 py-0.5 rounded-full font-mono block">
                           +{surgePct}%
                         </span>
                         <span className="text-[10px] text-muted font-mono mt-0.5 block">
@@ -238,7 +238,7 @@ export const StatePolicyView = ({
           {/* Anomaly Significance Scale */}
           <div className="card p-5 space-y-3">
             <h2 className="text-base font-bold text-charcoal tracking-tight flex items-center gap-2 border-b border-hairline pb-2.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span className="icon-chip sm" style={{ ['--accent' as string]: 'var(--brand-2)' }}><ShieldCheck className="w-4 h-4" /></span>
               Hypothesis Testing Significance Scale
             </h2>
             <div className="text-xs text-muted space-y-2">
@@ -248,7 +248,7 @@ export const StatePolicyView = ({
               </div>
               <div className="flex items-center justify-between p-2 rounded-lg bg-container border border-hairline">
                 <span className="font-semibold text-charcoal">Elevated Caution (p &lt; 0.05)</span>
-                <span className="font-mono text-amber-600 dark:text-amber-400 font-bold">Z &ge; 1.96</span>
+                <span className="font-mono text-amber-700 dark:text-amber-400 font-bold">Z &ge; 1.96</span>
               </div>
               <div className="flex items-center justify-between p-2 rounded-lg bg-rose-50/70 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900">
                 <span className="font-semibold text-rose-900 dark:text-rose-200">Statutory Spike Alert (p &lt; 0.01)</span>

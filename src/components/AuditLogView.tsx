@@ -43,11 +43,11 @@ export const AuditLogView = () => {
   return (
     <div className="space-y-5 max-w-5xl mx-auto">
       {/* Section 1: Governance & Header */}
-      <section className="card p-5">
+      <section className="hero p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+            <span className="eyebrow">Governance and integrity</span>
+            <div className="flex items-center gap-2 mt-1">
               <h1 className="text-xl font-bold text-charcoal tracking-tight">
                 Cryptographic Audit Log &amp; SHA-256 Hash Chain
               </h1>

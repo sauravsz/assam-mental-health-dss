@@ -1,9 +1,11 @@
-import { Activity, ShieldCheck, MapPin, HeartHandshake, Edit3, RotateCcw, Lock, LayoutDashboard, Pill, BookOpen, Sun, Moon, Compass, FileText } from 'lucide-react'
+import { Activity, ShieldCheck, MapPin, HeartHandshake, Edit3, RotateCcw, Lock, LayoutDashboard, Pill, BookOpen, Compass, FileText, Sun, Moon } from 'lucide-react'
 import { useScenarioData } from '../engine/scenarioDataContext'
 
+type Tab = 'overview' | 'state' | 'planner' | 'pharmacy' | 'queue' | 'audit' | 'method'
+
 interface NavbarProps {
-  activeTab: 'overview' | 'state' | 'planner' | 'pharmacy' | 'queue' | 'audit' | 'method'
-  setActiveTab: (tab: 'overview' | 'state' | 'planner' | 'pharmacy' | 'queue' | 'audit' | 'method') => void
+  activeTab: Tab
+  setActiveTab: (tab: Tab) => void
   stalledCount: number
   isEditMode: boolean
   setIsEditMode: (val: boolean | ((prev: boolean) => boolean)) => void
@@ -11,6 +13,16 @@ interface NavbarProps {
   onOpenTour?: () => void
   onOpenMemo?: () => void
 }
+
+const TABS: { id: Tab; label: string; icon: typeof Activity; title?: string }[] = [
+  { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+  { id: 'state', label: 'Surveillance', icon: Activity },
+  { id: 'planner', label: 'Van Siting', icon: MapPin },
+  { id: 'pharmacy', label: 'Pharmacy', icon: Pill },
+  { id: 'queue', label: 'Retention', icon: HeartHandshake },
+  { id: 'audit', label: 'Audit', icon: ShieldCheck },
+  { id: 'method', label: 'Method', icon: BookOpen, title: 'Methodology, Math Formulas & Statutory Standards' },
+]
 
 export const Navbar = ({
   activeTab,
@@ -35,25 +47,27 @@ export const Navbar = ({
   } = useScenarioData()
 
   return (
-    <header className="bg-paper/95 backdrop-blur-md border-b border-hairline sticky top-0 z-50">
-      {/* Top Quiet Institutional Strip */}
-      <div className="bg-container border-b border-hairline py-1 text-[12px] text-muted">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-2">
+    <header className="app-header">
+      {/* Utility strip: jurisdiction, access context, integrity */}
+      <div className="util-strip">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-1.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="font-medium text-charcoal">Government of Assam · National Health Mission (NHM)</span>
+            <span className="inline-flex w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="font-semibold text-charcoal">Government of Assam</span>
+            <span className="hidden sm:inline">· National Health Mission</span>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-muted">
-            <span className="flex items-center gap-1 text-[12px]">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>MHCA 2017 &amp; DPDP 2023 Compliant</span>
-            </span>
-            <span className="hidden sm:inline text-hairline">|</span>
 
-            {/* RBAC Role selector */}
-            <div className="flex items-center gap-1.5">
+          <div className="chips flex flex-wrap items-center gap-2">
+            <span className="hidden md:block">
+              <span className="util-chip">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                MHCA 2017 &amp; DPDP 2023
+              </span>
+            </span>
+
+            <label className="util-chip" title="Role-based access control">
               <Lock className="w-3 h-3 text-muted" />
-              <span className="text-[12px] font-semibold uppercase tracking-wider text-muted">Role:</span>
+              <span className="text-muted font-semibold">Role</span>
               <select
                 value={userRole}
                 onChange={(e) => {
@@ -61,24 +75,16 @@ export const Navbar = ({
                   setUserRole(newRole)
                   logAction('ROLE_SWITCH', `Switched user role context to ${newRole}`)
                 }}
-                className="bg-card border border-hairline rounded px-1.5 py-0.5 text-[12px] font-semibold text-charcoal focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
               >
                 <option value="State Director">State Director</option>
                 <option value="District Officer">District Officer</option>
                 <option value="Counsellor">Counsellor</option>
               </select>
-            </div>
+            </label>
 
-            <span className="hidden sm:inline text-hairline">|</span>
-
-            {/* District filter */}
-            <div className="flex items-center gap-1.5">
+            <label className="util-chip" title="District scope">
               <MapPin className="w-3 h-3 text-muted" />
-              <select
-                value={selectedDistrictFilter}
-                onChange={(e) => setSelectedDistrictFilter(e.target.value)}
-                className="bg-card border border-hairline rounded px-1.5 py-0.5 text-[12px] font-semibold text-charcoal focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
-              >
+              <select value={selectedDistrictFilter} onChange={(e) => setSelectedDistrictFilter(e.target.value)}>
                 <option value="All Districts">All Districts</option>
                 {districts.map((d) => (
                   <option key={d.id} value={d.name}>
@@ -86,222 +92,99 @@ export const Navbar = ({
                   </option>
                 ))}
               </select>
-            </div>
+            </label>
 
-            <span className="hidden sm:inline text-hairline">|</span>
-
-            {/* SHA-256 chain status */}
-            <span className={`flex items-center gap-1 text-[12px] font-mono font-semibold ${isChainValid ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}>
+            <span
+              className={`util-chip font-mono ${isChainValid ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}
+              title="Tamper-evident audit chain status"
+            >
               <span className={`w-2 h-2 rounded-full ${isChainValid ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
               SHA-256 {isChainValid ? 'OK' : 'BROKEN'}
             </span>
 
-            <span className="hidden sm:inline text-hairline">|</span>
-
-            {/* Android Material 3 Theme Toggle */}
             <button
               onClick={toggleTheme}
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode (Android M3)`}
-              className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-card hover:bg-hairline text-charcoal border border-hairline transition-colors cursor-pointer text-[12px] font-medium"
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              className="util-chip"
             >
-              {theme === 'dark' ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="hidden sm:inline">Light</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-blue-600" />
-                  <span className="hidden sm:inline">Dark</span>
-                </>
-              )}
+              {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-500" /> : <Moon className="w-3.5 h-3.5 text-blue-600" />}
+              <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Bar */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      {/* Main bar: brand, navigation, actions */}
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center gap-x-4 gap-y-2.5">
         <button
           onClick={() => setActiveTab('overview')}
-          className="flex items-center gap-3 text-left cursor-pointer group focus:outline-none"
+          className="order-1 flex items-center gap-3 text-left group"
           title="Return to Executive Overview"
         >
-          <div className="w-8 h-8 rounded-lg bg-charcoal text-paper flex items-center justify-center shrink-0">
-            <HeartHandshake className="w-4 h-4 text-blue-500 dark:text-blue-400" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-base font-bold text-charcoal tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                Assam Mental Health DSS
-              </span>
-              <span className="text-[11px] font-semibold px-2 py-0.2 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60">
-                NHM Tele-MANAS
-              </span>
-            </div>
-            <p className="text-[11px] text-muted">
-              Decision Support for Earlier Identification &amp; Care Planning
-            </p>
-          </div>
+          <span className="brand-mark">
+            <HeartHandshake className="w-5 h-5" />
+          </span>
+          <span className="leading-tight">
+            <span className="block text-[15px] font-extrabold tracking-tight text-charcoal whitespace-nowrap"><span className="sm:hidden">Assam MH-DSS</span><span className="hidden sm:inline">Assam Mental Health DSS</span></span>
+            <span className="hidden 2xl:block text-[11.5px] text-muted whitespace-nowrap">Tele-MANAS decision support · earlier identification &amp; care planning</span>
+          </span>
         </button>
 
-        {/* Right side controls */}
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Navigation Tabs */}
-          <nav className="flex flex-wrap items-center gap-1 bg-container p-1 rounded-xl border border-hairline text-xs">
+        <nav className="nav-tabs order-3 w-full lg:w-auto lg:order-2 lg:mx-auto" aria-label="Primary">
+          {TABS.map(({ id, label, icon: Icon, title }) => (
             <button
-              onClick={() => setActiveTab('overview')}
-              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'overview'
-                  ? 'bg-card text-charcoal font-bold shadow-2xs'
-                  : 'text-muted hover:text-charcoal'
-              }`}
+              key={id}
+              onClick={() => setActiveTab(id)}
+              aria-current={activeTab === id ? 'page' : undefined}
+              className="nav-tab"
+              title={title}
             >
-              <LayoutDashboard className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />
-              <span>Overview</span>
+              <Icon className="w-4 h-4" />
+              <span>{label}</span>
+              {id === 'queue' && stalledCount > 0 && <span className="nav-badge">{stalledCount}</span>}
             </button>
+          ))}
+        </nav>
 
-            <button
-              onClick={() => setActiveTab('state')}
-              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'state'
-                  ? 'bg-card text-charcoal font-bold shadow-2xs'
-                  : 'text-muted hover:text-charcoal'
-              }`}
-            >
-              <Activity className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Surveillance</span>
+        <div className="order-2 lg:order-3 ml-auto flex items-center gap-1.5 shrink-0">
+          {onOpenTour && (
+            <button onClick={onOpenTour} className="btn-tint" title="Launch guided interactive tour for evaluators and jury">
+              <Compass className="w-4 h-4" />
+              <span className="hidden 2xl:inline">Tour</span>
             </button>
-
-            <button
-              onClick={() => setActiveTab('planner')}
-              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'planner'
-                  ? 'bg-card text-charcoal font-bold shadow-2xs'
-                  : 'text-muted hover:text-charcoal'
-              }`}
-            >
-              <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>Van Siting</span>
+          )}
+          {onOpenMemo && (
+            <button onClick={onOpenMemo} className="btn-soft" title="Generate printable Government Decision Memo">
+              <FileText className="w-4 h-4 text-muted" />
+              <span className="hidden 2xl:inline">Memo</span>
             </button>
-
-            <button
-              onClick={() => setActiveTab('pharmacy')}
-              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'pharmacy'
-                  ? 'bg-card text-charcoal font-bold shadow-2xs'
-                  : 'text-muted hover:text-charcoal'
-              }`}
-            >
-              <Pill className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-              <span>Pharmacy</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('queue')}
-              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'queue'
-                  ? 'bg-card text-charcoal font-bold shadow-2xs'
-                  : 'text-muted hover:text-charcoal'
-              }`}
-            >
-              <HeartHandshake className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-              <span>Retention</span>
-              {stalledCount > 0 && (
-                <span className="ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] bg-rose-100 dark:bg-rose-950/80 text-rose-800 dark:text-rose-300 font-bold">
-                  {stalledCount}
-                </span>
-              )}
-            </button>
-
-            <button
-              onClick={() => setActiveTab('audit')}
-              className={`px-2.5 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'audit'
-                  ? 'bg-card text-charcoal font-bold shadow-2xs'
-                  : 'text-muted hover:text-charcoal'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-              <span>Audit</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('method')}
-              className={`px-2 py-1.5 rounded-lg font-semibold transition-all flex items-center gap-1 cursor-pointer ${
-                activeTab === 'method'
-                  ? 'bg-card text-charcoal font-bold shadow-2xs'
-                  : 'text-muted hover:text-charcoal'
-              }`}
-              title="Methodology, Math Formulas & Statutory Standards"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-              <span className="hidden sm:inline">Method</span>
-            </button>
-          </nav>
-
-          {/* Scenario & Reset Controls */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            {onOpenTour && (
-              <button
-                onClick={onOpenTour}
-                className="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/60 transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
-                title="Launch guided interactive tour for evaluators and jury"
-              >
-                <Compass className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                <span className="hidden lg:inline">Tour</span>
-              </button>
-            )}
-
-            {onOpenMemo && (
-              <button
-                onClick={onOpenMemo}
-                className="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-card hover:bg-container text-charcoal border border-hairline transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
-                title="Generate printable Government Decision Memo"
-              >
-                <FileText className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
-                <span className="hidden lg:inline">Memo</span>
-              </button>
-            )}
-
-            <button
-              onClick={() => setIsEditMode((prev) => !prev)}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
-                isEditMode
-                  ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-700 font-bold'
-                  : 'bg-card text-charcoal border-hairline hover:bg-container'
-              }`}
-              title="Toggle scenario parameter editing mode"
-            >
-              <Edit3 className="w-3 h-3 text-amber-700 dark:text-amber-400" />
-              <span className="hidden sm:inline">Scenario</span>
-            </button>
-            <button
-              onClick={resetToDefaults}
-              title="Reset all parameters to benchmark baseline"
-              className="p-1.5 rounded-xl bg-card text-muted hover:text-charcoal border border-hairline transition-all cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          )}
+          <button
+            onClick={() => setIsEditMode((prev) => !prev)}
+            className={`btn-soft ${isEditMode ? 'on' : ''}`}
+            title="Toggle scenario parameter editing mode"
+          >
+            <Edit3 className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+            <span className="hidden xl:inline">Scenario</span>
+          </button>
+          <button onClick={resetToDefaults} title="Reset all parameters to benchmark baseline" aria-label="Reset" className="btn-icon">
+            <RotateCcw className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
       {/* Operator banner when Edit Mode is active */}
       {isEditMode && (
-        <div className="bg-amber-50 dark:bg-amber-950/60 border-t border-b border-amber-200 dark:border-amber-800/80 py-1.5 text-[12px] text-amber-900 dark:text-amber-200">
-          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center justify-between">
+        <div className="bg-amber-50 dark:bg-amber-950/60 border-t border-amber-200 dark:border-amber-800/80 py-2 text-[12px] text-amber-900 dark:text-amber-200">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Edit3 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+              <Edit3 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400 shrink-0" />
               <span>
                 <strong>Scenario Simulation Mode Active:</strong> District estimates, block parameters, and facility capacities are unlocked.
               </span>
             </div>
-            <button
-              onClick={() => setIsEditMode(false)}
-              className="font-semibold text-amber-900 dark:text-amber-300 hover:underline cursor-pointer"
-            >
+            <button onClick={() => setIsEditMode(false)} className="font-bold text-amber-900 dark:text-amber-300 hover:underline whitespace-nowrap">
               Exit Simulation
             </button>
           </div>

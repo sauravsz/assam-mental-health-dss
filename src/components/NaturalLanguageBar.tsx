@@ -191,7 +191,7 @@ export const NaturalLanguageBar = ({
           onClick={() => handleApplyScenario('baseline')}
           className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${
             activePresetId === 'baseline'
-              ? 'bg-blue-600 dark:bg-blue-500 text-white border-blue-600 dark:border-blue-500 shadow-2xs'
+              ? 'bg-blue-600 dark:bg-blue-600 text-white border-blue-600 dark:border-blue-600 shadow-2xs'
               : 'bg-container hover:bg-hairline text-charcoal border-hairline'
           }`}
         >
@@ -209,7 +209,7 @@ export const NaturalLanguageBar = ({
           }`}
           title="Katigorah 2.5x flood shock, Cachar Z=3.65, Fluoxetine shortage"
         >
-          <Waves className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+          <Waves className="w-3 h-3 text-rose-700 dark:text-rose-400" />
           <span>Barak Valley Flood (Z=3.65)</span>
         </button>
 
@@ -237,7 +237,7 @@ export const NaturalLanguageBar = ({
           }`}
           title="Kamrup Metro (Z=3.84) & Dibrugarh urban anxiety surge"
         >
-          <Flame className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+          <Flame className="w-3 h-3 text-amber-700 dark:text-amber-400" />
           <span>Festival Surge (Z=3.84)</span>
         </button>
       </div>
@@ -255,7 +255,7 @@ export const NaturalLanguageBar = ({
             {result.success ? (
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             ) : (
-              <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0" />
             )}
             <span>
               <strong>{result.success ? 'Scenario Adjusted:' : 'Notice:'}</strong> {result.feedback}

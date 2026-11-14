@@ -17,10 +17,10 @@ export const PharmacyView = () => {
   return (
     <div className="space-y-6 w-full">
       {/* View Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-hairline pb-4">
+      <div className="hero p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+          <span className="eyebrow">Supply chain</span>
+          <div className="flex items-center gap-2 mt-1">
             <h1 className="text-2xl font-bold tracking-tight text-charcoal">
               Essential Psychiatric Pharmacy &amp; Lateral Rebalancing
             </h1>
@@ -40,38 +40,38 @@ export const PharmacyView = () => {
 
       {/* 3-Card Balanced Telemetry Ribbon */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        <div className="card p-4 flex items-center justify-between">
+        <div className="card kpi kpi-green p-4 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-muted">Adequate Stock (&gt;30d)</span>
-            <div className="text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400 mt-1">
+            <div className="kpi-value accent mt-1.5">
               {safe.length} <span className="text-xs font-normal text-muted">lines</span>
             </div>
           </div>
-          <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-700 dark:text-emerald-300">
+          <div className="icon-chip">
             <CheckCircle2 className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="card p-4 flex items-center justify-between">
+        <div className="card kpi kpi-amber p-4 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-muted">Low Stock Warning (15–30d)</span>
-            <div className="text-2xl font-bold font-mono text-amber-600 dark:text-amber-400 mt-1">
+            <div className="kpi-value accent mt-1.5">
               {low.length} <span className="text-xs font-normal text-muted">lines</span>
             </div>
           </div>
-          <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-700 dark:text-amber-300">
+          <div className="icon-chip">
             <AlertTriangle className="w-4 h-4" />
           </div>
         </div>
 
-        <div className="card p-4 flex items-center justify-between">
+        <div className="card kpi kpi-rose p-4 flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-muted">Critical Stockout Risk (&lt;15d)</span>
-            <div className="text-2xl font-bold font-mono text-rose-600 dark:text-rose-400 mt-1">
+            <div className="kpi-value accent mt-1.5">
               {critical.length} <span className="text-xs font-normal text-muted">lines</span>
             </div>
           </div>
-          <div className="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-950 flex items-center justify-center text-rose-700 dark:text-rose-300">
+          <div className="icon-chip">
             <Pill className="w-4 h-4" />
           </div>
         </div>
@@ -84,7 +84,7 @@ export const PharmacyView = () => {
           <div className="flex items-center justify-between border-b border-hairline pb-3">
             <div>
               <h2 className="text-base font-bold text-charcoal tracking-tight flex items-center gap-2">
-                <Pill className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                <span className="icon-chip sm" style={{ ['--accent' as string]: 'var(--brand-2)' }}><Pill className="w-4 h-4" /></span>
                 Clinic Stock Cover &amp; Daily Burn Rate
               </h2>
               <p className="text-xs text-muted mt-0.5">
@@ -170,7 +170,7 @@ export const PharmacyView = () => {
           <div className="flex items-center justify-between border-b border-hairline pb-3">
             <div>
               <h2 className="text-base font-bold text-charcoal tracking-tight flex items-center gap-2">
-                <RefreshCw className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                <span className="icon-chip sm" style={{ ['--accent' as string]: 'var(--brand-2)' }}><RefreshCw className="w-4 h-4" /></span>
                 Lateral Rebalancing Queue
               </h2>
               <p className="text-xs text-muted mt-0.5">
