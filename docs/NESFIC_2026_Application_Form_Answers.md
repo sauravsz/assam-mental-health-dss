@@ -37,7 +37,7 @@ Current Workflow vs. What We Built:
 We have developed the Assam Mental Health Decision Support System (AMH-DSS), an operational, production-ready decision platform accessible live at https://mhdss.vercel.app/. The system delivers three algorithmic engines governed by a cryptographic audit ledger:
 
 1. Surveillance Engine (Exact Poisson Anomaly Detection):
-Computes exact discrete cumulative Poisson tail probabilities P(Y >= y | lambda) across Assam's 35 districts with continuity-corrected Gaussian residual Z-scores. Integrates ASDMA seasonal flood hazard multipliers (1.5x–2.5x). Flags statistically anomalous distress spikes (Z >= 2.50, p below 0.01) to mobilize early outreach before crises escalate.
+Computes exact discrete cumulative Poisson tail probabilities P(Y at least y given lambda) across Assam's 35 districts with continuity-corrected Gaussian residual Z-scores. Integrates ASDMA seasonal flood hazard multipliers (1.5x–2.5x). Flags statistically anomalous distress spikes (Z at least 2.50, p below 0.01) to mobilize early outreach before crises escalate.
 
 2. Planning Engine (Two-Phase Simplex Camp Optimizer):
 Solves the Capacitated p-Median Facility Location problem using an exact client-side Two-Phase Primal Simplex Linear Program. Given available mobile vans (P) and candidate clinics, it minimizes demand-weighted travel time while respecting facility intake capacities. In Cachar District (8 rural blocks, 1.17M population), it solves globally in under 25 ms, dropping average patient travel time from 51.2 minutes (headquarters baseline) to 35.3 minutes (a 31.0% reduction).
@@ -98,7 +98,7 @@ We built AMH-DSS as a client-side, local-first web architecture that eliminates 
 - Math & Crypto Engines: Custom client-side Two-Phase Primal Simplex LP solver in TypeScript, exact discrete Poisson tail algorithm, and native WebCrypto API for SHA-256 cryptographic hashing.
 
 2. Core Analytical Engines:
-- Surveillance: P(Y >= y | lambda) discrete Poisson evaluation with continuity-corrected Gaussian residual Z-scores and ASDMA flood crisis multipliers.
+- Surveillance: P(Y at least y given lambda) discrete Poisson evaluation with continuity-corrected Gaussian residual Z-scores and ASDMA flood crisis multipliers.
 - Logistics Solver: Global optimization of min sum d_i c_ij x_ij + M sum u_i executing in under 25 ms directly in the browser thread.
 - Retention Engine: Fundamental absorbing Markov matrix N = (I - Q)^-1 tracking state absorption probabilities.
 - Deterministic NLP Command Bar: Client-side command parser interpreting natural language instructions (e.g., 'Set vans to 3', 'Floods hit Katigorah').
