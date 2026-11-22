@@ -9,7 +9,7 @@
 
 ## 1. PROBLEM UNDERSTANDING & USER WORKFLOW
 
-*Word Count:* **250 / 500 words**
+*Word Count:* **251 / 500 words**
 
 ```text
 The National Health Mission (NHM) Assam operates the 24/7 Tele-MANAS helpline (14416). While call inflow is active across 35 districts, mental health administration suffers from three operational breakdowns that our system directly addresses:
@@ -24,26 +24,26 @@ Target Users & Beneficiaries:
 
 Current Workflow vs. What We Built:
 - In the current workflow, call logs sit in static spreadsheets with zero attendance tracking, while mobile vans follow unoptimized intuitive routes.
-- In our operational system, inbound calls undergo spatio-temporal Poisson surveillance to detect distress surges (Z > 2.5), an exact Two-Phase Simplex LP optimizer calculates the best van sites to minimize travel time, and a closed-loop retention queue automatically flags stalled referrals (>14 days) for counsellor check-ins under Section 23 of the Mental Healthcare Act 2017.
+- In our operational system, inbound calls undergo spatio-temporal Poisson surveillance to detect distress surges (Z exceeding 2.5), an exact Two-Phase Simplex LP optimizer calculates the best van sites to minimize travel time, and a closed-loop retention queue automatically flags stalled referrals (over 14 days) for counsellor check-ins under Section 23 of the Mental Healthcare Act 2017.
 ```
 
 ---
 
 ## 2. PROPOSED SOLUTION & KEY FEATURES
 
-*Word Count:* **273 / 500 words**
+*Word Count:* **275 / 500 words**
 
 ```text
 We have developed the Assam Mental Health Decision Support System (AMH-DSS), an operational, production-ready decision platform accessible live at https://mhdss.vercel.app/. The system delivers three algorithmic engines governed by a cryptographic audit ledger:
 
 1. Surveillance Engine (Exact Poisson Anomaly Detection):
-Computes exact discrete cumulative Poisson tail probabilities P(Y >= y | lambda) across Assam's 35 districts with continuity-corrected Gaussian residual Z-scores. Integrates ASDMA seasonal flood hazard multipliers (1.5x–2.5x). Flags statistically anomalous distress spikes (Z >= 2.50, p < 0.01) to mobilize early outreach before crises escalate.
+Computes exact discrete cumulative Poisson tail probabilities P(Y >= y | lambda) across Assam's 35 districts with continuity-corrected Gaussian residual Z-scores. Integrates ASDMA seasonal flood hazard multipliers (1.5x–2.5x). Flags statistically anomalous distress spikes (Z >= 2.50, p below 0.01) to mobilize early outreach before crises escalate.
 
 2. Planning Engine (Two-Phase Simplex Camp Optimizer):
-Solves the Capacitated p-Median Facility Location problem using an exact client-side Two-Phase Primal Simplex Linear Program. Given available mobile vans (P) and candidate clinics, it minimizes demand-weighted travel time while respecting facility intake capacities. In Cachar District (8 rural blocks, 1.17M population), it solves globally in <25 ms, dropping average patient travel time from 51.2 minutes (headquarters baseline) to 35.3 minutes (a 31.0% reduction).
+Solves the Capacitated p-Median Facility Location problem using an exact client-side Two-Phase Primal Simplex Linear Program. Given available mobile vans (P) and candidate clinics, it minimizes demand-weighted travel time while respecting facility intake capacities. In Cachar District (8 rural blocks, 1.17M population), it solves globally in under 25 ms, dropping average patient travel time from 51.2 minutes (headquarters baseline) to 35.3 minutes (a 31.0% reduction).
 
 3. Retention Engine (Absorbing Markov Care Queue):
-Models the patient trajectory as an Absorbing Markov Chain across 4 transient states and 2 absorbing states. Automatically detects callers stalled >14 days without confirmed clinic attendance and populates a prioritized worklist for human counsellors under strict statutory consent (zero automated robocalls).
+Models the patient trajectory as an Absorbing Markov Chain across 4 transient states and 2 absorbing states. Automatically detects callers stalled over 14 days without confirmed clinic attendance and populates a prioritized worklist for human counsellors under strict statutory consent (zero automated robocalls).
 
 4. Key Governance & Operational Features:
 - Interactive Assam Choropleth Map: SVG geospatial topology color-coded by Poisson Z-scores.
@@ -56,23 +56,23 @@ Models the patient trajectory as an Absorbing Markov Chain across 4 transient st
 
 ## 3. DESCRIBE USER JOURNEY, WIREFRAMES, PROTOTYPE & PROOF OF WORK
 
-*Word Count:* **266 / 500 words**
+*Word Count:* **269 / 500 words**
 
 ```text
 We have built and deployed a fully functional operational prototype at https://mhdss.vercel.app/. The system provides three dedicated, role-based user journeys:
 
 1. State Director Journey (Macro Monitoring):
 - Inspects the interactive SVG Assam Choropleth Map displaying real-time Poisson Z-score anomalies across all 15 monitored districts.
-- Evaluates the 4-stage Absorbing Markov retention funnel (10,000 helpline callers -> 2,400 specialist triage -> 850 clinic referrals -> 320 verified recovery), exposing the 96.8% attrition drop-off.
+- Evaluates the 4-stage Absorbing Markov retention funnel (10,000 helpline callers  to  2,400 specialist triage  to  850 clinic referrals  to  320 verified recovery), exposing the 96.8% attrition drop-off.
 - Injects 1-click disaster stress scenarios (e.g. Barak Valley Flood Shock, Z=3.65).
 
 2. District Nodal Officer Journey (Tactical Planning):
-- Adjusts van budget (P=2) and runs the client-side Two-Phase Simplex LP solver in <25 ms.
+- Adjusts van budget (P=2) and runs the client-side Two-Phase Simplex LP solver in under 25 ms.
 - Audits the Cachar catchment vector map connecting 8 blocks to optimal facility hubs, verifying the 31.0% travel time cut.
-- Reviews pharmacy bullet bars and dispatches bilateral stock rebalancing to clinics facing <15 days cover.
+- Reviews pharmacy bullet bars and dispatches bilateral stock rebalancing to clinics facing under 15 days cover.
 
 3. Tele-MANAS Counsellor Journey (Closed-Loop Retention):
-- Accesses the prioritized worklist of patients stalled >14 days (with non-consenting rows withheld under DPDP Act 2023).
+- Accesses the prioritized worklist of patients stalled over 14 days (with non-consenting rows withheld under DPDP Act 2023).
 - Opens the 5-Stage Patient Journey Modal showing elapsed days, mhGAP code, and statutory consent verification.
 - Logs structured call outcomes (Callback Scheduled, ASHA Dispatched, Facility Visit Confirmed, Refused) which update system counters in real time.
 
@@ -87,7 +87,7 @@ Proof of Work & Artifacts Provided:
 
 ## 4. TECHNOLOGY & SOLUTION ARCHITECTURE
 
-*Word Count:* **267 / 500 words**
+*Word Count:* **268 / 500 words**
 
 ```text
 We built AMH-DSS as a client-side, local-first web architecture that eliminates server round-trip latency and prevents sensitive patient data from ever touching external cloud backends:
@@ -99,14 +99,14 @@ We built AMH-DSS as a client-side, local-first web architecture that eliminates 
 
 2. Core Analytical Engines:
 - Surveillance: P(Y >= y | lambda) discrete Poisson evaluation with continuity-corrected Gaussian residual Z-scores and ASDMA flood crisis multipliers.
-- Logistics Solver: Global optimization of min sum d_i c_ij x_ij + M sum u_i executing in <25 ms directly in the browser thread.
+- Logistics Solver: Global optimization of min sum d_i c_ij x_ij + M sum u_i executing in under 25 ms directly in the browser thread.
 - Retention Engine: Fundamental absorbing Markov matrix N = (I - Q)^-1 tracking state absorption probabilities.
 - Deterministic NLP Command Bar: Client-side command parser interpreting natural language instructions (e.g., 'Set vans to 3', 'Floods hit Katigorah').
 
 3. Cryptographic Governance & Data Security:
 - Ingestion Pseudonymization: Raw caller telephone numbers are salted and SHA-256 hashed immediately upon CSV upload; raw PII is never stored.
 - Immutable Audit Ledger: Append-only hash chain H_k = SHA-256(R_k || H_{k-1}) anchored by Genesis block c1055f18... Any retroactive record alteration breaks verification instantly.
-- Small-Cell Masking: Automatic Primary (n < 10) and Secondary Complementary suppression to prevent algebraic subtraction leaks.
+- Small-Cell Masking: Automatic Primary (n under 10) and Secondary Complementary suppression to prevent algebraic subtraction leaks.
 
 4. Infrastructure & Hosting:
 - Currently live on Vercel Edge. Built without proprietary cloud lock-in; containerizable via standard Docker for deployment on MeghRaj State Data Centre (SDC) or NIC servers behind Nginx.
@@ -148,7 +148,7 @@ Stage 4: Institutional Integration & Field Pilot (Subsequent Grant Scope):
 
 ## 6. DEVELOPMENT TIMELINE & MILESTONES
 
-*Word Count:* **247 / 500 words**
+*Word Count:* **249 / 500 words**
 
 ```text
 Current Status: The core platform architecture, mathematical engines, user interface, and automated test suite are already developed, tested, and operational at https://mhdss.vercel.app/.
@@ -172,7 +172,7 @@ The subsequent 24-week (6-month) grant roadmap focuses on institutional integrat
   Deliverable: Active Operational Pilot Planning in Cachar & Kamrup.
 
 - Weeks 21–24 (Milestone 5 — Empirical Impact Evaluation & Statewide Rollout):
-  Audit field performance against baseline metrics (target: >25% travel-time reduction, >30% retention recovery); finalize administrator training manuals; deliver production deployment to NHM Assam.
+  Audit field performance against baseline metrics (target: over 25% travel-time reduction, over 30% retention recovery); finalize administrator training manuals; deliver production deployment to NHM Assam.
   Deliverable: Final Field Impact Evaluation Dossier & Statewide Scaling Blueprint.
 ```
 
@@ -241,7 +241,7 @@ Key Specialist Competencies Demonstrated:
 
 ## 9. TESTING, VALIDATION & EVIDENCE
 
-*Word Count:* **236 / 500 words**
+*Word Count:* **239 / 500 words**
 
 ```text
 We have substantiated the system through comprehensive automated unit testing and an empirical operational benchmark on Cachar District, Assam (1.17M population across 8 rural revenue circles):
@@ -250,11 +250,11 @@ We have substantiated the system through comprehensive automated unit testing an
 - Status Quo (Headquarters Bias): Vans stationed intuitively at Silchar town hospital result in an average rural patient travel time of 51.2 minutes.
 - AMH-DSS Optimized Placement: Siting vans at Sonai BPHC and Katigorah CHC drops mean travel time to 35.3 minutes.
 - Validated Impact: 31.0% empirical reduction in patient travel time with zero unserved demand.
-- Computational Speed: Solves globally in <25 ms in the browser, enabling live interactive scenario re-planning during district meetings.
+- Computational Speed: Solves globally in under 25 ms in the browser, enabling live interactive scenario re-planning during district meetings.
 
 2. Surveillance Sensitivity & Disaster Stress-Testing:
 - Poisson Tail Hypotheses: Evaluated at alpha = 0.01 with continuity-corrected Gaussian residual Z-scores.
-- Disaster Stress Test (Barak Flood Preset): Correctly flags acute spikes (Z = 3.65, p < 0.0001 in Cachar) while remaining resilient against false alarms during normal seasonal variations.
+- Disaster Stress Test (Barak Flood Preset): Correctly flags acute spikes (Z = 3.65, p below 0.0001 in Cachar) while remaining resilient against false alarms during normal seasonal variations.
 
 3. Cryptographic Audit Chain Verification:
 - Genesis Verification: Verified against Genesis block hash c1055f18...
@@ -262,7 +262,7 @@ We have substantiated the system through comprehensive automated unit testing an
 
 4. Test Suite & Codebase Stability:
 - 15/15 automated unit tests pass in 500ms (`bun test`).
-- Production build compiles cleanly in <800ms (`tsc -b && vite build`) with zero TypeScript errors or console warnings.
+- Production build compiles cleanly in under 800 ms (`tsc -b && vite build`) with zero TypeScript errors or console warnings.
 ```
 
 ---
@@ -281,7 +281,7 @@ The system incorporates rigorous legal and technical safeguards to comply with n
 
 2. Technical Privacy Safeguards:
 - Salted SHA-256 Pseudonymization: Raw telephone numbers and names are cryptographically hashed upon CSV ingestion using the native WebCrypto API. Raw PII never touches persistent storage.
-- Deterministic Small-Cell Suppression: Any query returning n < 10 for a geographic circle is automatically masked (Primary Suppression). Secondary Complementary Suppression masks the next-smallest cell to algebraically prevent subtraction leaks against marginal totals.
+- Deterministic Small-Cell Suppression: Any query returning n under 10 for a geographic circle is automatically masked (Primary Suppression). Secondary Complementary Suppression masks the next-smallest cell to algebraically prevent subtraction leaks against marginal totals.
 - Role-Based Access Control (RBAC):
   * State Director: Strictly sees macro-level choropleths, aggregated indicators, and funnel percentages.
   * District Officer: Sees block-level summaries, clinic capacities, and van routes.
@@ -296,7 +296,7 @@ The system incorporates rigorous legal and technical safeguards to comply with n
 
 ## 11. INNOVATION & DIFFERENTIATION
 
-*Word Count:* **247 / 500 words**
+*Word Count:* **250 / 500 words**
 
 ```text
 Basis of Innovation:
@@ -307,7 +307,7 @@ Conventional health IT portals in India are retrospective dashboards—they show
 Conventional portals show where clinics operated last month. AMH-DSS mathematically calculates where mobile health vans must be deployed next month to achieve spatial equity and minimize patient travel barriers.
 
 2. Closed-Loop Care Retention (Rescue vs Attrition):
-Tele-MANAS currently functions as an open-loop helpline where >94% of referred patients disappear. AMH-DSS transforms it into an active care continuum by detecting stalled referrals (>14 days) and empowering human counsellors to rescue defaulting patients.
+Tele-MANAS currently functions as an open-loop helpline where over 94% of referred patients disappear. AMH-DSS transforms it into an active care continuum by detecting stalled referrals (over 14 days) and empowering human counsellors to rescue defaulting patients.
 
 3. Local-First Cryptographic Architecture:
 Executes 100% client-side in the browser with zero cloud round-trip latency. Governed by an immutable SHA-256 forward-linked audit chain where every administrative action and parameter mutation is tamper-evident.
@@ -315,7 +315,7 @@ Executes 100% client-side in the browser with zero cloud round-trip latency. Gov
 Comparative Matrix:
 - Paradigm: Conventional = Descriptive / Historical; AMH-DSS = Prescriptive / Mathematical Optimization.
 - Van Scheduling: Conventional = Subjective intuition / HQ bias; AMH-DSS = Two-Phase Simplex LP (proven 31.0% travel time cut).
-- Referral Retention: Conventional = Open-loop / >94% drop-off; AMH-DSS = Closed-loop Absorbing Markov tracker.
+- Referral Retention: Conventional = Open-loop / over 94% drop-off; AMH-DSS = Closed-loop Absorbing Markov tracker.
 - Anomaly Detection: Conventional = Static threshold / noise; AMH-DSS = Exact discrete Poisson tail with ASDMA flood multipliers.
 - Privacy & Auditing: Conventional = Simple password / CSV leaks; AMH-DSS = Salted SHA-256 hashing, RBAC, and tamper-evident block chain.
 - Software Dependencies: Zero proprietary vendor lock-in; built entirely on modern open-source standards (React, TypeScript, Tailwind).
@@ -325,7 +325,7 @@ Comparative Matrix:
 
 ## 12. RESOURCES, RISKS & PILOT VALIDATION
 
-*Word Count:* **236 / 500 words**
+*Word Count:* **238 / 500 words**
 
 ```text
 Indicative Budget Drivers (6-Month Field Validation & Rollout):
@@ -343,13 +343,13 @@ Key Risks & Structured Mitigations:
 3. Peripheral Connectivity Deficits:
    - Mitigation: Single-page application executes 100% client-side in the browser, functioning smoothly offline once loaded.
 4. Privacy Re-Identification:
-   - Mitigation: Salted SHA-256 pseudonymization on ingest, RBAC, and deterministic small-cell suppression (n < 10).
+   - Mitigation: Salted SHA-256 pseudonymization on ingest, RBAC, and deterministic small-cell suppression (n under 10).
 
 Pilot Validation Plan:
 - Pilot Sites: Kamrup Metropolitan (Urban/Peri-Urban density) and Cachar District (Rural/Riverine/Tea-Garden terrain).
 - Target Validation Metrics:
-  1. Travel Impedance: Maintain >25% reduction in rural patient transit time.
-  2. Retention Rescue: Achieve >30% recovery rate among consenting stalled referrals.
+  1. Travel Impedance: Maintain over 25% reduction in rural patient transit time.
+  2. Retention Rescue: Achieve over 30% recovery rate among consenting stalled referrals.
   3. System Integrity: Zero privacy breaches and 100% SHA-256 audit chain verification.
 ```
 
