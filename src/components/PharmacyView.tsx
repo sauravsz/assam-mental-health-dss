@@ -3,15 +3,16 @@ import { useScenarioData } from '../engine/scenarioDataContext'
 import { ArrowRight, CheckCircle2, Pill, AlertTriangle, ShieldCheck, RefreshCw } from 'lucide-react'
 
 export const PharmacyView = () => {
-  const { drugMetrics, drugRecommendations } = useScenarioData()
+  const { drugMetrics, drugRecommendations, dispatchDrugTransfer } = useScenarioData()
   const [dispatchedIds, setDispatchedIds] = useState<string[]>([])
 
   const critical = drugMetrics.filter((m) => m.daysOfCover < 15)
   const low = drugMetrics.filter((m) => m.daysOfCover >= 15 && m.daysOfCover < 30)
   const safe = drugMetrics.filter((m) => m.daysOfCover >= 30)
 
-  const handleSimulateDispatch = (transferId: string) => {
-    setDispatchedIds((prev) => [...prev, transferId])
+  const handleSimulateDispatch = (recommendation: typeof drugRecommendations[0]) => {
+    setDispatchedIds((prev) => [...prev, recommendation.id])
+    dispatchDrugTransfer(recommendation)
   }
 
   return (
@@ -234,7 +235,7 @@ export const PharmacyView = () => {
                     <div className="flex items-center justify-between text-[11px] text-muted pt-1">
                       <span>Cover Shift: <strong className="font-mono text-charcoal">{r.donorRemainingDays}d donor</strong> &rarr; <strong className="font-mono text-emerald-700 dark:text-emerald-400">{r.recipientNewDays}d recipient</strong></span>
                       <button
-                        onClick={() => handleSimulateDispatch(r.id)}
+                        onClick={() => handleSimulateDispatch(r)}
                         disabled={isDispatched}
                         className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-colors ${
                           isDispatched

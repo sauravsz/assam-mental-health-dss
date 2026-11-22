@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { DistrictDistress } from '../engine/types'
 import { Waves, Edit3, Activity, ShieldCheck, MapPin } from 'lucide-react'
 import { useScenarioData } from '../engine/scenarioDataContext'
+import { AssamChoroplethMap } from './AssamChoroplethMap'
 
 interface StatePolicyViewProps {
   districts: DistrictDistress[]
@@ -16,7 +17,7 @@ export const StatePolicyView = ({
   updateDistrictCalls,
   toggleDistrictFlood,
 }: StatePolicyViewProps) => {
-  const { selectedDistrictFilter } = useScenarioData()
+  const { selectedDistrictFilter, setSelectedDistrictFilter } = useScenarioData()
   const [selectedZone, setSelectedZone] = useState<string>('All')
 
   const scopedDistricts = selectedDistrictFilter === 'All Districts'
@@ -261,6 +262,13 @@ export const StatePolicyView = ({
           </div>
         </section>
       </div>
+
+      {/* Interactive Assam Geospatial District Choropleth Map */}
+      <AssamChoroplethMap
+        districts={districts}
+        selectedDistrict={selectedDistrictFilter}
+        onSelectDistrict={setSelectedDistrictFilter}
+      />
 
       {/* Full Statewide District Ledger & Evaluator Drawer */}
       <div className="card p-5 sm:p-6 space-y-4">

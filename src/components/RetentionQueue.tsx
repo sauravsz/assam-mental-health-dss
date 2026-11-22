@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import type { ReferralRecord } from '../engine/types'
 import { applySmallCellSuppression } from '../engine/referralData'
 import { useScenarioData } from '../engine/scenarioDataContext'
-import { ShieldCheck, Search, CheckCircle2, ChevronDown, ChevronUp, Phone, Home, PlusCircle, Edit3, HeartHandshake, AlertCircle } from 'lucide-react'
+import { ShieldCheck, Search, CheckCircle2, ChevronDown, ChevronUp, Phone, Home, PlusCircle, Edit3, HeartHandshake, AlertCircle, Clock, X, UserCheck } from 'lucide-react'
 
 interface RetentionQueueProps {
   records: ReferralRecord[]
@@ -29,6 +29,7 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
   const itemsPerPage = 10
   const [showTechnicalDetails, setShowTechnicalDetails] = useState<boolean>(false)
   const [activeRecordForAction, setActiveRecordForAction] = useState<ReferralRecord | null>(null)
+  const [selectedRecordForJourney, setSelectedRecordForJourney] = useState<ReferralRecord | null>(null)
   const [actionNotes, setActionNotes] = useState<string>('')
   const [showAddForm, setShowAddForm] = useState<boolean>(false)
 
@@ -410,13 +411,23 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
                       </span>
                     </td>
                     <td className="py-3 px-3 text-right whitespace-nowrap">
-                      <button
-                        onClick={() => setActiveRecordForAction(r)}
-                        className="bg-charcoal hover:opacity-90 text-paper px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5"
-                      >
-                        <Phone className="w-3 h-3" />
-                        <span>Check In</span>
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => setSelectedRecordForJourney(r)}
+                          className="bg-container hover:bg-hairline text-charcoal border border-hairline px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1"
+                          title="View longitudinal care trajectory"
+                        >
+                          <Clock className="w-3 h-3 text-muted" />
+                          <span>Journey</span>
+                        </button>
+                        <button
+                          onClick={() => setActiveRecordForAction(r)}
+                          className="bg-charcoal hover:opacity-90 text-paper px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1.5"
+                        >
+                          <Phone className="w-3 h-3" />
+                          <span>Check In</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -497,6 +508,179 @@ export const RetentionQueue = ({ records, setRecords, isEditMode, onOutcomeLogge
           )}
         </div>
       </div>
+
+      {/* Patient Journey Timeline Modal */}
+      {selectedRecordForJourney && (
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-card rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-hairline space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-hairline pb-3">
+              <div>
+                <span className="eyebrow">Longitudinal Markov Care Trajectory</span>
+                <h3 className="text-base font-bold text-charcoal flex items-center gap-2 mt-0.5">
+                  <span>Case {selectedRecordForJourney.id}</span>
+                  <span className="font-mono text-xs font-normal text-muted">
+                    ({selectedRecordForJourney.callerHash.slice(0, 15)}...)
+                  </span>
+                </h3>
+              </div>
+              <button
+                onClick={() => setSelectedRecordForJourney(null)}
+                className="text-muted hover:text-charcoal p-1.5 rounded-lg hover:bg-container cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Statutory Compliance & Demographics Ribbon */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <div className="p-2.5 rounded-xl bg-container border border-hairline">
+                <span className="text-[10px] text-muted block uppercase tracking-wider font-semibold">Location</span>
+                <span className="font-semibold text-charcoal block mt-0.5">{selectedRecordForJourney.block}</span>
+                <span className="text-[11px] text-muted">{selectedRecordForJourney.district}</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-container border border-hairline">
+                <span className="text-[10px] text-muted block uppercase tracking-wider font-semibold">Profile</span>
+                <span className="font-semibold text-charcoal block mt-0.5">{selectedRecordForJourney.language}</span>
+                <span className="text-[11px] text-muted">{selectedRecordForJourney.gender}, {selectedRecordForJourney.ageBand}</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-container border border-hairline">
+                <span className="text-[10px] text-muted block uppercase tracking-wider font-semibold">Diagnosis (mhGAP)</span>
+                <span className="font-semibold text-charcoal block mt-0.5">{selectedRecordForJourney.mhgapCode}</span>
+                <span className="text-[11px] text-muted">Tier-{selectedRecordForJourney.tierReached} Triage</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200">
+                <span className="text-[10px] uppercase tracking-wider font-semibold flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> Statutory Consent
+                </span>
+                <span className="font-semibold text-[11px] block mt-0.5">Recorded &amp; Salted</span>
+                <span className="text-[10px] text-emerald-700 dark:text-emerald-300">MHCA §23 &middot; DPDP</span>
+              </div>
+            </div>
+
+            {/* Stepper Timeline */}
+            <div className="p-4 rounded-xl bg-container border border-hairline space-y-4">
+              <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider">
+                Absorbing Markov Progression ({selectedRecordForJourney.daysStalled} Days Elapsed)
+              </h4>
+
+              <div className="relative pl-6 space-y-5 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-hairline">
+                {/* Step 1 */}
+                <div className="relative">
+                  <span className="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center text-[10px] font-bold">1</span>
+                  <div className="text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-charcoal">Tele-MANAS Helpline Inflow</span>
+                      <span className="font-mono text-muted text-[11px]">Day 0</span>
+                    </div>
+                    <p className="text-muted text-[11px] mt-0.5">
+                      Citizen placed toll-free call to 14416 in {selectedRecordForJourney.language}. Inbound screening identified acute distress symptoms. Salted SHA-256 identifier generated on ingest.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="relative">
+                  <span className="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-bold">2</span>
+                  <div className="text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-charcoal">Specialist Triage Escalation (Tier 2)</span>
+                      <span className="font-mono text-muted text-[11px]">Day 2</span>
+                    </div>
+                    <p className="text-muted text-[11px] mt-0.5">
+                      Escalated to clinical psychologist for mental healthcare assessment under {selectedRecordForJourney.mhgapCode}. Immediate de-escalation counselling provided.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="relative">
+                  <span className="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-purple-500 text-white flex items-center justify-center text-[10px] font-bold">3</span>
+                  <div className="text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-charcoal">Clinic Referral Directive</span>
+                      <span className="font-mono text-muted text-[11px]">Day 5</span>
+                    </div>
+                    <p className="text-muted text-[11px] mt-0.5">
+                      Patient assigned in-person psychiatric evaluation at <strong className="text-charcoal">{selectedRecordForJourney.assignedFacility}</strong> or nearest DMHP mobile outreach van.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 4 */}
+                <div className="relative">
+                  <span className="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-rose-500 text-white flex items-center justify-center text-[10px] font-bold">4</span>
+                  <div className="text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-rose-700 dark:text-rose-400">Care Attrition Cliff &mdash; Stalled Flag</span>
+                      <span className="font-mono text-rose-700 dark:text-rose-400 text-[11px] font-bold">Day 14+</span>
+                    </div>
+                    <p className="text-muted text-[11px] mt-0.5">
+                      No clinical attendance logged within statutory 14-day window. Absorbing Markov matrix identifies case at high risk of permanent default without proactive navigation.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 5 */}
+                <div className="relative">
+                  <span className={`absolute -left-6 top-0.5 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                    selectedRecordForJourney.status === 'Resolved' || selectedRecordForJourney.status === 'Facility Visit Confirmed'
+                      ? 'bg-emerald-500 text-white'
+                      : 'bg-charcoal text-paper'
+                  }`}>5</span>
+                  <div className="text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-charcoal">Closed-Loop Resolution State</span>
+                      <span className="font-mono text-muted text-[11px]">Day {selectedRecordForJourney.daysStalled}</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-muted text-[11px]">Current Status:</span>
+                      <span className="font-bold px-2 py-0.5 rounded text-[11px] bg-card border border-hairline text-charcoal">
+                        {selectedRecordForJourney.status}
+                      </span>
+                    </div>
+                    <p className="text-muted text-[11px] mt-1">
+                      {selectedRecordForJourney.lastContactNote || 'Pending primary counsellor check-in call.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Counsellor Clinical Protocol Guidance */}
+            <div className="p-3.5 rounded-xl bg-card border border-hairline text-xs space-y-1.5">
+              <span className="font-bold text-charcoal flex items-center gap-1.5">
+                <UserCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                Human Counsellor Follow-up Directives
+              </span>
+              <ul className="list-disc pl-4 text-muted text-[11px] space-y-1">
+                <li>Zero robocalls: Follow-up must be conducted by human clinical staff under MHCA 2017 &sect;23.</li>
+                <li>Conduct intake greeting in {selectedRecordForJourney.language} with caller consent confirmation.</li>
+                <li>Verify accessibility barriers (transit fare, monsoon riverine disruption, or clinic hours).</li>
+              </ul>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-hairline">
+              <button
+                onClick={() => setSelectedRecordForJourney(null)}
+                className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-container hover:bg-hairline text-charcoal border border-hairline cursor-pointer"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  const rec = selectedRecordForJourney
+                  setSelectedRecordForJourney(null)
+                  setActiveRecordForAction(rec)
+                }}
+                className="btn-primary text-xs px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 cursor-pointer"
+              >
+                <Phone className="w-3 h-3" />
+                <span>Open Check-In Dialog</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Action Dialog */}
       {activeRecordForAction && (

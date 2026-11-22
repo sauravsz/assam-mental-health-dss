@@ -4,6 +4,7 @@ import { solveCampAllocation } from './solver'
 import { verifyAuditChain, appendAuditLog, simulateTamper, INITIAL_AUDIT_LOGS } from './auditLogger'
 import { CACHAR_BLOCKS, CACHAR_FACILITIES, TRAVEL_TIME_MATRIX } from './cacharData'
 import { SCENARIO_PRESETS } from './scenarioPresets'
+import { computeDrugBurnMetrics } from './drugPlanner'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { ScenarioProvider } from './scenarioDataContext'
@@ -99,6 +100,20 @@ describe('Scenario Presets', () => {
     expect(kamrup?.callsLast30Days).toBe(620)
     const { zScore } = computePoissonTail(kamrup!.callsLast30Days, kamrup!.poissonExpected)
     expect(zScore).toBeGreaterThan(3.0)
+  })
+})
+
+describe('Drug Burn & Lateral Rebalancing Engine', () => {
+  it('computes facility stock burn rates and generates valid surplus-to-deficit recommendations', () => {
+    const { metrics, recommendations } = computeDrugBurnMetrics(CACHAR_BLOCKS, CACHAR_FACILITIES)
+    expect(metrics.length).toBe(18) // 6 facilities * 3 essential medicines
+    expect(recommendations.length).toBeGreaterThan(0)
+
+    for (const rec of recommendations) {
+      expect(rec.unitsToTransfer).toBeGreaterThan(0)
+      expect(rec.donorRemainingDays).toBeGreaterThanOrEqual(30)
+      expect(rec.recipientNewDays).toBeGreaterThanOrEqual(25)
+    }
   })
 })
 

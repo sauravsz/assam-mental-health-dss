@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
-import type { Block, Facility, DistrictDistress, ReferralRecord, UserRole, AuditLogEntry, FacilityDrugStock } from './types'
+import type { Block, Facility, DistrictDistress, ReferralRecord, UserRole, AuditLogEntry, FacilityDrugStock, DrugTransferRecommendation } from './types'
 import { CACHAR_BLOCKS, CACHAR_FACILITIES } from './cacharData'
 import { computePoissonTail } from './stateSurveillance'
 import { generateSyntheticStalledReferrals } from './referralData'
@@ -303,7 +303,58 @@ const [blocks, setBlocks] = useState<Block[]>(() => {
     )
   }
 
-    const { metrics: drugMetrics, recommendations: drugRecommendations } = computeDrugBurnMetrics(blocks, facilities, customDrugStocks)
+  const dispatchDrugTransfer = useCallback(
+    (rec: DrugTransferRecommendation) => {
+      setActivePresetId('custom')
+      const donorFac = facilities.find((f) => f.name === rec.fromFacilityName)
+      const recipientFac = facilities.find((f) => f.name === rec.toFacilityName)
+      if (!donorFac || !recipientFac) return
+
+      setCustomDrugStocks((prev) => {
+        const donorStock = prev[donorFac.id] || DEFAULT_FACILITY_STOCKS[donorFac.id] || { haloperidol: 500, fluoxetine: 1000, valproate: 600 }
+        const recipientStock = prev[recipientFac.id] || DEFAULT_FACILITY_STOCKS[recipientFac.id] || { haloperidol: 500, fluoxetine: 1000, valproate: 600 }
+
+        const newDonorVal = Math.max(0, donorStock[rec.drugName] - rec.unitsToTransfer)
+        const newRecipientVal = recipientStock[rec.drugName] + rec.unitsToTransfer
+
+        return {
+          ...prev,
+          [donorFac.id]: {
+            ...donorStock,
+            [rec.drugName]: newDonorVal,
+          },
+          [recipientFac.id]: {
+            ...recipientStock,
+            [rec.drugName]: newRecipientVal,
+          },
+        }
+      })
+
+      // Update facility medicineStock status badge for the recipient
+      setFacilities((prev) =>
+        prev.map((f) => {
+          if (f.id === recipientFac.id) {
+            return {
+              ...f,
+              medicineStock: {
+                ...f.medicineStock,
+                [rec.drugName]: 'Adequate',
+              },
+            }
+          }
+          return f
+        })
+      )
+
+      logAction(
+        'LATERAL_DRUG_DISPATCH',
+        `Dispatched ${rec.unitsToTransfer} units of ${rec.drugName} from ${rec.fromFacilityName} to ${rec.toFacilityName} (Order ${rec.id})`
+      )
+    },
+    [facilities, logAction]
+  )
+
+  const { metrics: drugMetrics, recommendations: drugRecommendations } = computeDrugBurnMetrics(blocks, facilities, customDrugStocks)
 
   const simulateTamperAction = useCallback(() => {
     setAuditLogs((prev) => simulateTamper(prev))
@@ -342,6 +393,7 @@ const computedDistricts = computeDistrictDistressList(rawDistricts)
     customDrugStocks,
     drugMetrics,
     drugRecommendations,
+    dispatchDrugTransfer,
     logAction,
     simulateTamper: simulateTamperAction,
     ingestCsv,
