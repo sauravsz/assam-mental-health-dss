@@ -22,8 +22,14 @@ Operational Decision Support System for Government of Assam — National Health 
   3. *Executive Decision Memo:* Print-optimized official Government of Assam Health & Family Welfare Department Decision Memo (`ExecutiveDecisionMemo.tsx`) with `@media print` A4 letterhead styles.
 
 ## Current State & Next Steps
-- Status: Production build passed and pushed to GitHub `main`. 14/14 Vitest tests pass in 290ms, Vite production bundle compiled in 1.2s. Live at `mhdss.vercel.app`.
+- Status: Production build passed and verified (15/15 Vitest tests pass in ~500ms, Vite bundle compiled in ~800ms).
+- Recent Deliverables (22 Nov 2026):
+  1. *Illustrated Component Guide:* Restructured from 31 fragmented pages down to a dense, continuous 17-page guide (`docs/AMH-DSS_Component_Guide.typ`, `docs/AMH-DSS_Component_Guide.pdf`) with framed screenshots and atomic captions.
+  2. *Interactive Assam Choropleth Map:* Embedded responsive SVG choropleth (`AssamChoroplethMap.tsx`) in Surveillance displaying real-time Poisson Z-score topology across Brahmaputra and Barak river corridors with click-to-filter interaction.
+  3. *Longitudinal Patient Journey Modal:* Added 5-stage Absorbing Markov care progression modal (`RetentionQueue.tsx`) detailing Tele-MANAS intake, clinical triage, facility directives, attrition alerts, and statutory consent under MHCA 2017 §23 & DPDP Act 2023.
+  4. *Reactive Pharmacy Rebalancing Loop:* Implemented live state persistence (`dispatchDrugTransfer`) in `scenarioDataContext.tsx` that shifts clinic inventory, updates days-of-cover bars, and appends dispatch events to the SHA-256 audit ledger.
+  5. *Repository Diet:* Removed dead scaffold assets (`react.svg`, `vite.svg`) and expanded unit test suite to 15 tests.
 - Next Actions:
-  1. Verify live deployment on Vercel (`mhdss.vercel.app`) once Vercel Edge build settles.
+  1. Push commits to `origin/main` to trigger Vercel edge deployment at `mhdss.vercel.app`.
   2. Cross-check Proposal PDF figures with the MBA faculty advisor before portal upload.
   3. Final submission to the NHM Assam portal (closes 25 November 2026).
