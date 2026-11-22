@@ -1,16 +1,20 @@
 #set page(
   paper: "a4",
-  margin: (top: 2.2cm, bottom: 2.2cm, left: 2.2cm, right: 2.2cm),
-  header: align(right)[
-    #text(size: 8.5pt, fill: rgb("#64748b"))[
-      *Assam Mental Health Decision Support System (AMH-DSS)* · Component Guide
+  margin: (top: 1.8cm, bottom: 1.8cm, left: 2.1cm, right: 2.1cm),
+  header: context {
+    if counter(page).get().first() > 1 [
+      #align(right)[
+        #text(size: 8pt, fill: rgb("#64748b"))[
+          *Assam Mental Health Decision Support System (AMH-DSS)* · Component Guide
+        ]
+      ]
     ]
-  ],
+  },
   footer: context {
     let page_number = counter(page).display()
     let total_pages = counter(page).final().first()
     align(center)[
-      #text(size: 8.5pt, fill: rgb("#94a3b8"))[
+      #text(size: 8pt, fill: rgb("#94a3b8"))[
         Page #page_number of #total_pages · Prepared for Saurav Sinha & Soumyodeep Das · Assam University
       ]
     ]
@@ -19,13 +23,13 @@
 
 #set text(
   font: ("Helvetica Neue", "Arial"),
-  size: 10pt,
+  size: 9.3pt,
   fill: rgb("#191c1e"),
   lang: "en",
-  spacing: 118%
+  spacing: 115%
 )
 
-#set par(justify: true, leading: 0.62em)
+#set par(justify: true, leading: 0.56em)
 
 #let primary = rgb("#1f5fbf")
 #let secondary = rgb("#164a96")
@@ -39,71 +43,130 @@
 #let amber-bg = rgb("#fffbeb")
 #let amber-border = rgb("#fcd34d")
 
+#show heading.where(level: 1): it => block(breakable: false, width: 100%)[
+  #v(13pt)
+  #line(length: 100%, stroke: 1pt + border-color)
+  #v(3pt)
+  #it
+  #v(3pt)
+]
+
+#show heading.where(level: 2): it => block(breakable: false, width: 100%)[
+  #v(7pt)
+  #it
+  #v(2.5pt)
+]
+
 #let callout(title, body, fill-color: alert-bg, stroke-color: alert-border) = {
   block(
+    breakable: false,
     fill: fill-color,
-    stroke: (left: 4pt + stroke-color, rest: 1pt + border-color),
-    inset: 10pt,
+    stroke: (left: 3.5pt + stroke-color, rest: 0.5pt + border-color),
+    inset: (x: 10pt, y: 7pt),
     radius: (right: 4pt),
     width: 100%,
-    spacing: 11pt,
+    spacing: 8pt,
     [
-      #text(weight: "bold", size: 10.5pt, fill: secondary)[#title] \
-      #v(3pt)
-      #text(size: 9.5pt)[#body]
+      #text(weight: "bold", size: 9.8pt, fill: secondary)[#title] \
+      #v(2pt)
+      #text(size: 8.9pt)[#body]
     ]
   )
 }
 
-// A three-question block used for every component
-#let component(name, purpose, built, does, note: none) = {
+// A structured three-question component block with framed screenshot
+#let component(
+  name,
+  purpose,
+  built,
+  does,
+  note: none,
+  shot: none,
+  caption: none,
+  shot-width: 82%,
+  shot-max-height: 4.8cm,
+) = {
   block(
     breakable: false,
-    inset: (left: 10pt),
-    stroke: (left: 2.5pt + primary),
-    spacing: 13pt,
+    width: 100%,
+    spacing: 9.5pt,
     [
-      #text(size: 11.5pt, weight: "bold", fill: secondary)[#name] \
-      #v(3pt)
-      #grid(
-        columns: (2.1cm, 1fr),
-        column-gutter: 8pt,
-        row-gutter: 5pt,
-        text(size: 9pt, weight: "bold", fill: rgb("#64748b"))[Why it exists],
-        text(size: 9.5pt)[#purpose],
-        text(size: 9pt, weight: "bold", fill: rgb("#64748b"))[How it is made],
-        text(size: 9.5pt)[#built],
-        text(size: 9pt, weight: "bold", fill: rgb("#64748b"))[What it does],
-        text(size: 9.5pt)[#does],
+      #block(
+        width: 100%,
+        inset: (left: 8pt),
+        stroke: (left: 2.5pt + primary),
+        [
+          #text(size: 10.2pt, weight: "bold", fill: secondary)[#name] \
+          #v(2pt)
+          #grid(
+            columns: (2cm, 1fr),
+            column-gutter: 7pt,
+            row-gutter: 3.8pt,
+            text(size: 8.3pt, weight: "bold", fill: rgb("#64748b"))[Why it exists],
+            text(size: 8.9pt)[#purpose],
+            text(size: 8.3pt, weight: "bold", fill: rgb("#64748b"))[How it is made],
+            text(size: 8.9pt)[#built],
+            text(size: 8.3pt, weight: "bold", fill: rgb("#64748b"))[What it does],
+            text(size: 8.9pt)[#does],
+          )
+          #if note != none [
+            #v(2.5pt)
+            #text(size: 8.4pt, style: "italic", fill: rgb("#475569"))[#note]
+          ]
+        ]
       )
-      #if note != none [
-        #v(3pt)
-        #text(size: 9pt, style: "italic", fill: rgb("#475569"))[#note]
+      #if shot != none [
+        #v(3.5pt)
+        #align(center)[
+          #block(
+            breakable: false,
+            [
+              #block(
+                stroke: 0.5pt + rgb("#cbd5e1"),
+                radius: 3pt,
+                clip: true,
+                fill: rgb("#f8fafc"),
+                inset: 0pt,
+                [
+                  #if shot-max-height != none [
+                    #image(shot, width: shot-width, height: shot-max-height, fit: "contain")
+                  ] else [
+                    #image(shot, width: shot-width)
+                  ]
+                ]
+              )
+              #if caption != none [
+                #v(2pt)
+                #text(size: 7.8pt, fill: rgb("#64748b"))[#caption]
+              ]
+            ]
+          )
+        ]
       ]
     ]
   )
 }
 
 #align(center)[
-  #text(size: 10pt, weight: "bold", fill: primary, tracking: 1.5pt)[
+  #text(size: 9.2pt, weight: "bold", fill: primary, tracking: 1.5pt)[
     GOVERNMENT OF ASSAM · NATIONAL HEALTH MISSION (NHM) · NESFIC 2026
   ] \
   #v(4pt)
-  #text(size: 20pt, weight: "black", fill: dark-slate)[
+  #text(size: 18pt, weight: "black", fill: dark-slate)[
     Every Part of the Website, Explained
   ] \
   #v(2pt)
-  #text(size: 13pt, weight: "medium", fill: rgb("#475569"))[
+  #text(size: 11.5pt, weight: "medium", fill: rgb("#475569"))[
     A Section-by-Section Component Guide in Plain English
   ] \
-  #v(6pt)
-  #text(size: 9.5pt, fill: rgb("#64748b"))[
+  #v(4pt)
+  #text(size: 8.8pt, fill: rgb("#64748b"))[
     *For Saurav Sinha & Soumyodeep Das* \
     Assam University, Silchar · Department of Business Administration · 14 November 2026
   ]
 ]
 
-#v(14pt)
+#v(6pt)
 
 #callout(
   "How to read this guide",
@@ -112,7 +175,7 @@
     *why it exists* (the problem it solves), *how it is made* (what it is built out of, in ordinary words), and
     *what it does* (what you see when you use it).
     \
-    #v(2pt)
+    #v(1.5pt)
     Technical words are avoided on purpose. Where a real term is unavoidable, it is explained the first time it appears.
     Section numbers match the order of the tabs along the top of the website, so you can read this beside the live site.
   ],
@@ -120,7 +183,7 @@
   stroke-color: primary,
 )
 
-#v(6pt)
+#v(4pt)
 
 #outline(title: [Contents], indent: auto, depth: 2)
 
@@ -168,6 +231,10 @@ view can read, so changing a number in one place updates the others immediately.
     shared numbers down to whichever view is showing.
   ],
   note: "This is the only file that knows all seven views exist. Each view knows nothing about the others.",
+  shot: "guide-shots/header-full.png",
+  caption: [The frame as a user sees it: the strip that never moves, the seven tabs, and the view area below.],
+  shot-width: 96%,
+  shot-max-height: 1.8cm,
 )
 
 #component(
@@ -188,8 +255,6 @@ view can read, so changing a number in one place updates the others immediately.
   ],
   note: "If something on two different screens ever disagreed, this file would be where to look.",
 )
-
-#pagebreak()
 
 = The Top Strip (Header)
 
@@ -212,9 +277,31 @@ The part that never moves. It is doing four jobs at once, which is why it looks 
     how many patients are waiting.
   ],
   note: "The counter on the Retention tab is live — it drops from 321 to 320 the moment a counsellor logs a check-in.",
+  shot: "guide-shots/header-full.png",
+  caption: [The top strip in light mode. Upper row: compliance, role, district, integrity light, theme switch.],
+  shot-width: 96%,
+  shot-max-height: 1.8cm,
 )
 
 == The small chips in the upper row
+
+#align(center)[
+  #block(
+    breakable: false,
+    [
+      #block(
+        stroke: 0.5pt + rgb("#cbd5e1"),
+        radius: 3pt,
+        clip: true,
+        fill: rgb("#f8fafc"),
+        inset: 0pt,
+        image("guide-shots/header-chips.png", width: 85%, height: 1.5cm, fit: "contain")
+      )
+      #v(2pt)
+      #text(size: 7.8pt, fill: rgb("#64748b"))[The utility chips in the upper row: compliance badge, role picker, district scope, SHA-256 chain status, and light/dark theme switch.]
+    ]
+  )
+]
 
 #component(
   "The role picker (State Director / District Officer / Counsellor)",
@@ -281,9 +368,11 @@ The part that never moves. It is doing four jobs at once, which is why it looks 
     remembered after a refresh.
   ],
   note: "Both palettes were checked so that text stays readable against its background in either mode. The dark mode is not just the light mode inverted.",
+  shot: "guide-shots/header-dark.png",
+  caption: [The same header in dark mode. Every surface and badge swaps; no text becomes unreadable.],
+  shot-width: 96%,
+  shot-max-height: 1.8cm,
 )
-
-#pagebreak()
 
 = Tab 1 — Overview
 
@@ -307,6 +396,10 @@ The "morning briefing" screen. Its job is to answer "is anything wrong today, an
     of stock). Each card also carries a one- or two-word verdict such as "Action prompt" or "Human follow-up".
   ],
   note: "The four cards answer four different questions on purpose: how much demand, where it is unusual, whether patients are being lost, and whether treatment can continue.",
+  shot: "guide-shots/ov-kpi-cards.png",
+  caption: [The four cards. Each shows a count, one plain sentence, a share bar, and a one-word verdict.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -327,6 +420,10 @@ The "morning briefing" screen. Its job is to answer "is anything wrong today, an
     Surveillance screen for the complete table.
   ],
   note: "The Z figure looks technical but means something simple: how surprising this number is. Z = 6.3 means 'this basically does not happen by chance'.",
+  shot: "guide-shots/ov-surge-list.png",
+  caption: [Flagged districts ranked by how surprising their call volume is, each with the evidence beside it.],
+  shot-width: 80%,
+  shot-max-height: 4.5cm,
 )
 
 #component(
@@ -344,9 +441,11 @@ The "morning briefing" screen. Its job is to answer "is anything wrong today, an
     Turns observation into action: "here is the problem, here is the screen where you fix it". Without these the
     Overview would be a report; with them it is a starting point.
   ],
+  shot: "guide-shots/ov-hero.png",
+  caption: [The action panels convert a finding into one next step, with a button to the screen that performs it.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
-
-#pagebreak()
 
 = Tab 2 — Surveillance
 
@@ -372,6 +471,10 @@ The detection engine. This screen answers "which districts are genuinely unusual
     Each row states plainly whether it exceeded the threshold.
   ],
   note: "This deliberately does not diagnose anyone. It flags a place and time for a human to look into. That distinction is stated on the screen itself.",
+  shot: "guide-shots/sur-alerts.png",
+  caption: [Districts that clear the threshold, each stating plainly that it exceeded it.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -388,6 +491,10 @@ The detection engine. This screen answers "which districts are genuinely unusual
     Lets a district officer find their area quickly, and makes it obvious when a whole region is moving together
     rather than one district spiking alone.
   ],
+  shot: "guide-shots/sur-zones.png",
+  caption: [The three regions, each with its district count and whether it is currently unusual.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -406,9 +513,11 @@ The detection engine. This screen answers "which districts are genuinely unusual
     evaluator tour uses to demonstrate the system under stress.
   ],
   note: "These are demonstration scenarios, clearly labelled as such. They are not predictions of real events.",
+  shot: "guide-shots/sur-ledger.png",
+  caption: [The full statewide table behind the alerts: every district, its expected calls, and its score.],
+  shot-width: 80%,
+  shot-max-height: 4.5cm,
 )
-
-#pagebreak()
 
 = Tab 3 — Van Siting
 
@@ -433,6 +542,10 @@ The planning engine. This screen answers "we have two mobile health vans and eig
     average travel instead of 51.2.
   ],
   note: "The key phrase on screen is 'Optimal'. It means no other arrangement of two vans produces a lower total travel time. That is a guarantee, not an estimate.",
+  shot: "guide-shots/van-impact.png",
+  caption: [The naive headquarters-first layout beside the calculated placement, with the resulting travel times.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -449,6 +562,10 @@ The planning engine. This screen answers "we have two mobile health vans and eig
     Shows which villages feed into which camp. A reader can see at once whether the eastern blocks are being served or
     left to travel far.
   ],
+  shot: "guide-shots/van-map.png",
+  caption: [Dotted lines are the routes assigned by the calculation. Two camp locations are marked active.],
+  shot-width: 80%,
+  shot-max-height: 4.5cm,
 )
 
 #component(
@@ -464,6 +581,7 @@ The planning engine. This screen answers "we have two mobile health vans and eig
     Makes the before-and-after explicit, so the 31.0% improvement can be verified by reading two numbers rather than
     trusting one.
   ],
+  note: "The comparison proves that the 31.0% saving comes from global optimization rather than arbitrary reallocation.",
 )
 
 #component(
@@ -481,9 +599,11 @@ The planning engine. This screen answers "we have two mobile health vans and eig
     Lets anyone audit the inputs and watch the recommendation change when resources change. Increasing the van count
     changes the recommended locations, which is exactly the comparison a decision-maker needs.
   ],
+  shot: "guide-shots/van-fleet.png",
+  caption: [The van budget control. Changing the number re-runs the whole placement immediately.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
-
-#pagebreak()
 
 = Tab 4 — Pharmacy
 
@@ -505,6 +625,10 @@ The supply screen. This answers "which clinic is about to run out, and what do w
     many lines fall in each band — currently 13 lines comfortable, 2 low, and 3 critical, out of 18 lines in total.
   ],
   note: "The 15-day line is the important one. It is set to allow enough time for a physical transfer to happen before the shelf is empty.",
+  shot: "guide-shots/ph-inventory.png",
+  caption: [Every facility and medicine with its days remaining, coloured by band.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -523,6 +647,10 @@ The supply screen. This answers "which clinic is about to run out, and what do w
     one in deficit — with the resulting days-of-cover at both ends shown, so the effect of the move is visible before
     it is approved.
   ],
+  shot: "guide-shots/ph-rebalance.png",
+  caption: [A donor, a recipient, and a quantity — with the resulting cover at both ends shown before dispatch.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -539,9 +667,8 @@ The supply screen. This answers "which clinic is about to run out, and what do w
     Converts a suggestion into a recorded action. Once pressed, the button reads "Dispatched" and is no longer
     clickable, so the same transfer cannot be double-ordered.
   ],
+  note: "The feedback eliminates double-dispatch risk in busy district pharmacies.",
 )
-
-#pagebreak()
 
 = Tab 5 — Retention
 
@@ -563,6 +690,10 @@ The follow-up screen. This answers "who has been lost, and has anybody actually 
     worth staff time.
   ],
   note: "The funnel is the argument for the whole retention feature. Without it, the worklist looks like bureaucracy rather than rescue.",
+  shot: "guide-shots/ret-funnel.png",
+  caption: [The drop-off from 10,000 callers to about 320 completing care — the reason the queue exists.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -579,6 +710,7 @@ The follow-up screen. This answers "who has been lost, and has anybody actually 
     Shows whether the team is making progress. Logging a check-in moves a patient out of the first counter and into the
     second, so the numbers visibly shift as work is done — 321 waiting and 96 in field becomes 320 and 97.
   ],
+  note: "Counters are reactive and update instantly as counsellors record follow-up calls.",
 )
 
 #component(
@@ -596,6 +728,10 @@ The follow-up screen. This answers "who has been lost, and has anybody actually 
     not chased twice and the case history is complete.
   ],
   note: "The language column exists because advice in the wrong language is not advice. It is there to be used when making the call.",
+  shot: "guide-shots/ret-worklist.png",
+  caption: [Case reference, village, language and need, days stalled, clinic, and a single action button.],
+  shot-width: 80%,
+  shot-max-height: 4.5cm,
 )
 
 #component(
@@ -614,6 +750,10 @@ The follow-up screen. This answers "who has been lost, and has anybody actually 
     The two outcomes that mean "still needs us" keep the case open; the two that mean "resolved either way" close it.
   ],
   note: "Only two of the four outcomes actually clear a case from the queue. That is deliberate — getting in touch is not the same as getting care.",
+  shot: "guide-shots/ret-checkin-dialog.png",
+  caption: [Four fixed outcomes. Only two of them clear the case from the queue.],
+  shot-width: 58%,
+  shot-max-height: 4.6cm,
 )
 
 #component(
@@ -633,9 +773,11 @@ The follow-up screen. This answers "who has been lost, and has anybody actually 
     says so instead of showing a misleading zero.
   ],
   note: "This is the part of the system most worth understanding. It is the difference between a demo and something a government could actually deploy.",
+  shot: "guide-shots/ret-rolegate.png",
+  caption: [State Director and District Officer see totals plus the restriction notice; the patient rows are withheld.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
-
-#pagebreak()
 
 = Tab 6 — Audit
 
@@ -658,6 +800,10 @@ The trust screen. This answers "can we prove nobody quietly changed the record".
     entry's own fingerprint alongside the previous one so the linking is visible, not just asserted.
   ],
   note: "The word is tamper-*evident*, not tamper-proof. Nothing can stop someone editing a file; the point is that the edit can never be hidden.",
+  shot: "guide-shots/audit-chain.png",
+  caption: [Chain verification with the result stated plainly, and the entry-level hashes below.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -673,6 +819,10 @@ The trust screen. This answers "can we prove nobody quietly changed the record".
   [
     Provides a complete, readable history of every change made in the session, newest first.
   ],
+  shot: "guide-shots/audit-log.png",
+  caption: [Every recorded action with its role, scope, description and the two fingerprints.],
+  shot-width: 80%,
+  shot-max-height: 4.5cm,
 )
 
 #component(
@@ -693,8 +843,6 @@ The trust screen. This answers "can we prove nobody quietly changed the record".
   note: "This is the strongest single thing on the site to show an evaluator. It converts a claim into a demonstration in about two seconds.",
 )
 
-#pagebreak()
-
 = Tab 7 — Method
 
 The honesty screen. This answers "how do you know, and what can this not do".
@@ -714,6 +862,10 @@ The honesty screen. This answers "how do you know, and what can this not do".
     Lets a technical reviewer verify the method without slowing down an operator. The working screens link here instead
     of embedding maths.
   ],
+  shot: "guide-shots/meth-formulas.png",
+  caption: [Each engine's idea in one sentence, then the actual expression in a monospaced box.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
 
 #component(
@@ -732,9 +884,11 @@ The honesty screen. This answers "how do you know, and what can this not do".
     before real deployment.
   ],
   note: "The limitations section is not a weakness in a submission. It is usually the section that makes reviewers trust the rest.",
+  shot: "guide-shots/meth-limitations.png",
+  caption: [What the system does not claim, stated on its own page rather than hidden in a footnote.],
+  shot-width: 80%,
+  shot-max-height: 4.4cm,
 )
-
-#pagebreak()
 
 = The Overlay Tools
 
@@ -757,6 +911,10 @@ Things that appear on top of whichever tab you are on, rather than being tabs th
     of what it does understand rather than failing silently.
   ],
   note: "It answers with a confirmation message naming exactly what it changed, so a mistyped command cannot quietly alter a figure.",
+  shot: "guide-shots/nl-commandbar.png",
+  caption: [Type an instruction; the bar names exactly what it changed.],
+  shot-width: 80%,
+  shot-max-height: 3.5cm,
 )
 
 #component(
@@ -776,6 +934,10 @@ Things that appear on top of whichever tab you are on, rather than being tabs th
     between a reviewer poking at a screen and a reviewer being shown a coherent argument.
   ],
   note: "Each stop names which of the challenge's criteria it demonstrates, so the connection to the brief is explicit rather than implied.",
+  shot: "guide-shots/tour-panel.png",
+  caption: [A floating walkthrough naming which challenge criterion each stop demonstrates.],
+  shot-width: 70%,
+  shot-max-height: 4.6cm,
 )
 
 #component(
@@ -795,9 +957,11 @@ Things that appear on top of whichever tab you are on, rather than being tabs th
     white paper — the navigation, tabs and buttons are deliberately removed from the printed page.
   ],
   note: "The memo is generated from live data rather than hand-written, so it can never disagree with what the screens currently show.",
+  shot: "guide-shots/memo-modal.png",
+  caption: [The generated directive: reference number, headline figures, four numbered sections, attestation.],
+  shot-width: 52%,
+  shot-max-height: 4.8cm,
 )
-
-#pagebreak()
 
 = The Machinery Underneath
 
@@ -856,17 +1020,16 @@ The parts a user never sees. Worth knowing because this is where the system actu
   note: "This is the piece to point at when asked 'how would this work with real data'. The answer is already built.",
 )
 
-#pagebreak()
-
 = Quick Reference
 
 == Which screen answers which question
 
 #table(
   columns: (3.4cm, 1fr),
-  stroke: none,
+  stroke: (x, y) => if y == 0 { (bottom: 1.5pt + secondary) } else { (bottom: 0.5pt + border-color) },
+  fill: (col, row) => if row == 0 { light-bg } else if calc.even(row) { rgb("#fafafa") } else { none },
   align: (left, left),
-  inset: (x: 6pt, y: 5pt),
+  inset: (x: 8pt, y: 5.5pt),
   table.header(
     [*Tab*], [*The question it answers*],
   ),
@@ -879,15 +1042,16 @@ The parts a user never sees. Worth knowing because this is where the system actu
   [Method], [How does it work, and what can it not do?],
 )
 
-#v(10pt)
+#v(6pt)
 
 == Which tool to use when
 
 #table(
-  columns: (4.2cm, 1fr),
-  stroke: none,
+  columns: (3.8cm, 1fr),
+  stroke: (x, y) => if y == 0 { (bottom: 1.5pt + secondary) } else { (bottom: 0.5pt + border-color) },
+  fill: (col, row) => if row == 0 { light-bg } else if calc.even(row) { rgb("#fafafa") } else { none },
   align: (left, left),
-  inset: (x: 6pt, y: 5pt),
+  inset: (x: 8pt, y: 5.5pt),
   table.header(
     [*Tool*], [*Use it when*],
   ),
@@ -898,7 +1062,7 @@ The parts a user never sees. Worth knowing because this is where the system actu
   [Role picker], [You need to show that privacy is enforced, or to unlock the patient list],
 )
 
-#v(10pt)
+#v(8pt)
 
 #callout(
   "The one-sentence summary of the whole site",
